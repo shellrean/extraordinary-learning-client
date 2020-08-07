@@ -4,6 +4,9 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
+import './core/plugins/bootstrap-vue'
+import './core/plugins/inline-svg'
+
 Vue.config.productionTip = false
 
 new Vue({
