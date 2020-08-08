@@ -1,8 +1,5 @@
 <template>
-	<div class="aside aside-left d-flex flex-column flex-row-auto" id="kt_aside">
-		<!--begin::Aside Menu-->
-		<KTBrand></KTBrand>
-
+	<div class="aside aside-left d-flex flex-column flex-row-auto" id="kt_aside" ref="kt_aside">
 		<div class="aside-menu-wrapper flex-column-fluid" id="kt_aside_menu_wrapper">
 			<div
 			    ref="kt_aside_menu"
@@ -27,12 +24,24 @@ import KTMenu from "@/components/aside/Menu"
 import KTBrand from "@/components/brand/Brand"
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
+import KTLayoutAside from "@/assets/js/layout/base/aside.js";
+import KTLayoutAsideMenu from "@/assets/js/layout/base/aside-menu.js";
+
 export default {
 	name: 'Aside',
 	components: {
 		KTMenu,
 		KTBrand,
 		VuePerfectScrollbar
+	},
+	mounted() {
+		this.$nextTick(() => {
+	      // Init Aside
+	      KTLayoutAside.init(this.$refs["kt_aside"]);
+
+	      // Init Aside Menu
+	      KTLayoutAsideMenu.init(this.$refs["kt_aside_menu"]);
+	    });
 	}
 }
 </script>

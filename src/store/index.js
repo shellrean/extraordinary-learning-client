@@ -1,15 +1,64 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+
+import auth from './auth.store'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+    state: {
+        errors: [],
+        isLoading: false,
+        token: localStorage.getItem('token'),
+        baseURL: ''
+    },
+    getters: {
+        isAuth: state => {
+  		    return state.token != "null" && state.token != null
+        },
+        isLoading: state => {
+  		    return state.isLoading
+        },
+        baseURL: state => {
+  		    return state.baseURL
+        }
+    },
+    mutations: {
+        SET_TOKEN(state, payload) {
+            state.token = payload
+        },
+        SET_ERRORS(state, payload) {
+            state.errors = payload
+        },
+        CLEAR_ERROR(state, payload) {
+            state.errors = []
+        },
+        SET_LOADING(state, payload) {
+            state.isLoading = payload
+        },
+        SET_BASEURL(state, payload) {
+            state.baseURL = payload
+        }
+    },
+    actions: {
+        getConfig({ commit }) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    let network = await axios.get(`/static/config.json`, {
+                        headers: {
+                            'Accept' : 'application/json'
+                        }
+                    })
+                    commit('SET_BASEURL', network.data.URL)
+                    resolve(network.data)
+                } catch (error) {
+                    reject(error.response.data)
+                }
+            })
+        }
+    },
+    modules: {
+        auth
+    }
 })

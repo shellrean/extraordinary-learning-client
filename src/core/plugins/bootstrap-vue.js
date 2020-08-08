@@ -1,5 +1,8 @@
 import Vue from 'vue'
+import { 
+	ToastPlugin, 
+	ModalPlugin
+} from 'bootstrap-vue'
 
-import { SidebarPlugin } from 'bootstrap-vue'
-
-Vue.use(SidebarPlugin)
+Vue.use(ToastPlugin)
+Vue.use(ModalPlugin)

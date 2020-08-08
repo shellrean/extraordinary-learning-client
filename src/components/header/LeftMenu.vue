@@ -1,6 +1,6 @@
 <template>
 	<div class="d-none d-lg-flex align-items-center mr-3">
- 		<button class="btn btn-icon aside-toggle ml-n3 mr-10" @click="showAside">
+ 		<button class="btn btn-icon aside-toggle ml-n3 mr-10" id="kt_aside_desktop_toggle" ref="kt_aside_desktop_toggle">
 			<span class="svg-icon svg-icon-xxl svg-icon-dark-75">
 				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 					<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -26,22 +26,11 @@
 </template>
 <script>
 import SearchBar from '@/components/header/SearchBar'
+
 export default {
 	name: 'LeftMenu',
 	components: {
 		SearchBar
-	},
-	methods: {
-		showAside() {
-			let aside = document.getElementById('kt_aside')
-			aside.classList.add('aside-on')
-
-			let overlay = document.createElement("div");
-			let flexer = document.getElementById('kt_body_content')
-			overlay.classList.add('aside-overlay')
-
-			flexer.appendChild(overlay)
-		}
 	}
 }
 </script>
