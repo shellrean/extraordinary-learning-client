@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 
 import auth from './auth.store'
+import user from './user.store'
 
 Vue.use(Vuex)
 
@@ -59,6 +60,7 @@ export default new Vuex.Store({
         }
     },
     modules: {
-        auth
+        auth,
+        user
     }
 })

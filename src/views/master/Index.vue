@@ -32,7 +32,7 @@ import KTFooter from '@/components/footer/Footer'
 import KTHeaderMobile from '@/components/header/HeaderMobile'
 
 export default {
-	name: 'Coba',
+	name: 'Master',
 	components: {
 		KTHeader,
 		KTAside,

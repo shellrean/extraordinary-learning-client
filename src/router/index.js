@@ -44,6 +44,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  store.commit('CLEAR_ERRORS')
   if (to.matched.some(record => record.meta.requiresAuth)) {
     let auth = store.getters.isAuth
     if(!auth) {
@@ -54,6 +55,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+router.afterEach(() => {
+  store.commit('SET_LOADING', false)
 })
 
 export default router
