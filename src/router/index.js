@@ -44,7 +44,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  store.commit('CLEAR_ERRORS')
+  store.commit('CLEAR_ERROR')
   if (to.matched.some(record => record.meta.requiresAuth)) {
     let auth = store.getters.isAuth
     if(!auth) {

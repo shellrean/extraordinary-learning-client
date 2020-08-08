@@ -16,15 +16,6 @@
 </template>
 <script>
 export default {
-	name: 'Brand',
-	methods: {
-		closeAside() {
-			let aside = document.getElementById('kt_aside')
-			aside.classList.remove('aside-on')
-
-			let overlay = document.querySelector('.aside-overlay')
-			overlay.remove()
-		}
-	}
+	name: 'Brand'
 }
 </script>

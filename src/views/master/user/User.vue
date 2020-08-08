@@ -4,18 +4,28 @@
 			<div class="card card-custom">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Teachers</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage teachers in your school</span>
+						<span class="card-label font-weight-bolder text-dark">Guru Pengajar</span>
+						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage guru pengajar sekolah anda</span>
 					</h3>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="light-primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm mr-2">
-								<i class="flaticon-download"></i>
-								Export
+								<span class="svg-icon svg-icon">
+						          <inline-svg
+						            class="svg-icon"
+						            src="/media/svg/icons/Design/PenAndRuller.svg"
+						          />
+						        </span>
+								Import
 							</b-button>
 							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
-								<i class="flaticon-plus"></i>
-								New Record
+								<span class="svg-icon svg-icon">
+						          <inline-svg
+						            class="svg-icon"
+						            src="/media/svg/icons/Design/Flatten.svg"
+						          />
+						        </span>
+								Tambah guru
 							</b-button>
 						</div>
 					</div>
@@ -27,7 +37,7 @@
 								<div class="row align-items-center">
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
-											<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
+											<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" v-model="search"/>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
 											</span>
@@ -46,13 +56,14 @@
                         :items="teachers.data"
                         >
                         	<template v-slot:cell(no)="row">
-                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="row.item.id"></span></span>
+                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="teachers.from+row.index"></span></span>
                         	</template>
                         	<template v-slot:cell(user)="row">
                         		<span style="width: 250px;">
                         			<div class="d-flex align-items-center">
-                        				<div class="symbol symbol-40 symbol-sm flex-shrink-0">									
-                        					<img class="" src="/media/users/100_13.jpg" alt="photo">								
+                        				<div class="symbol symbol-40 symbol-light-warning symbol-sm flex-shrink-0">									
+                        					<img class="" src="/media/users/100_13.jpg" alt="photo" v-if="row.item.details != null && typeof row.item.details.avatar != 'undefined' && row.item.settings.avatar != ''">
+                        					<span class="symbol-label font-size-h4 font-weight-bold" v-else>{{ row.item.name.charAt(0) }}</span>								
                         				</div>								
                         				<div class="ml-4">									
                         					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.name"></div>									
@@ -62,7 +73,7 @@
                         		</span>
                         	</template>
                         	<template v-slot:cell(status)="row">
-                        		<span class="label label-lg font-weight-bold  label-light-info label-inline">Active</span>
+                        		<span class="label label-lg font-weight-bold  label-light-info label-inline">{{ row.item.isactive == 0 ? 'In- active' : 'Active' }}</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
                         		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
@@ -70,13 +81,29 @@
                         		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
                         	</template>
                     	</b-table>
-                    	<div class="mt-3">
+                    	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					        v-model="currentPage"
-					        :total-rows="rows"
-					        :per-page="perPage"
+					      	pills 
+					        v-model="page"
+					        :total-rows="teachers.total"
+					        :per-page="teachers.per_page"
+					        :disabled="isLoading"
 					        last-number
 					      ></b-pagination>
+					      <div class="d-flex align-items-center py-3">
+								<div class="d-flex align-items-center" v-if="isLoading">
+									<div class="mr-2 text-muted">Loading...</div>
+									<div class="spinner spinner-primary mr-10"></div>
+								</div>
+								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+								<span class="text-muted">Menampilkan {{ teachers.data.length }} dari {{ teachers.total }} records</span>
+							</div>
 					    </div>
 					</div>
 				</div>
@@ -127,6 +154,7 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
 import { BButton, BTable, BPagination } from 'bootstrap-vue'
+import _ from 'lodash'
 
 export default {
 	name: 'UserDataMaster',
@@ -143,20 +171,14 @@ export default {
 				email: '',
 				password: '',
 			},
-			rows: 100,
-	        perPage: 1,
-	        currentPage: 5,
-			users: {
-				data: [
-					{ name: 'Shellrean' }
-				]
-			},
+	        perPage: 10,
 			fields: [
 				{ key: 'no', label: '#' },
 				{ key: 'user', label: 'User', shortable: true },
 				{ key: 'status', label: 'Status' },
 				{ key: 'actions', label: 'Aksi' }
-			]
+			],
+			search: ''
 		}
 	},
 	computed: {
@@ -164,7 +186,15 @@ export default {
 		...mapState(['errors']),
 		...mapState('user', {
 			teachers: state => state.teachers
-		})
+		}),
+		page: {
+            get() {
+                return this.$store.state.user.page
+            },
+            set(val) {
+                this.$store.commit('user/SET_PAGE', val)
+            }
+        }
 	},
 	methods: {
 		...mapActions('user', ['createNewTeacher', 'getTeacherDataTable']),
@@ -178,6 +208,7 @@ export default {
 		async submitNewTeacher() {
 			try {
 				await this.createNewTeacher(this.data)
+				this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
 				this.$bvModal.hide('modal-create')
 				this.clearForm()
 				this.$store.commit('CLEAR_ERROR')
@@ -188,9 +219,20 @@ export default {
 	},
 	async created() {
 		try {
-			await this.getTeacherDataTable({})
+			 this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
+		}
+	},
+	watch: {
+		page() {
+			this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+		},
+		search:  _.debounce(function (value) {
+            this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+        }, 500),
+		perPage() {
+			this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
 		}
 	}
 }

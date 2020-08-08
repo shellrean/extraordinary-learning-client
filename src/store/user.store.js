@@ -2,6 +2,7 @@ import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	authenticated: {},
+	teachers: {},
 	page: 1
 })
 
@@ -11,6 +12,9 @@ const mutations = {
 	},
 	ASSIGN_DATA_TABLE_TEACHER(state, payload) {
 		state.teachers = payload
+	},
+	SET_PAGE(state, payload) {
+		state.page = payload
 	}
 }
 
