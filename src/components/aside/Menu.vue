@@ -58,7 +58,7 @@
                         </li>
                     </router-link>
                     <router-link
-                        to="/wizard/wizard-1"
+                        :to="{ name: 'master.student.index' }"
                         v-slot="{ href, navigate, isActive, isExactActive }"
                     >
                         <li
@@ -79,7 +79,7 @@
                         </li>
                     </router-link>
                     <router-link
-                        to="/wizard/wizard-1"
+                        :to="{ name: 'master.classroom.index' }"
                         v-slot="{ href, navigate, isActive, isExactActive }"
                     >
                         <li
@@ -143,7 +143,7 @@
           </li>
         </router-link>
         <router-link
-          to="/mater"
+          :to="{ name: 'task.index' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
         >
           <li

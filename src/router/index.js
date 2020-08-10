@@ -2,7 +2,30 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
 
-import Home from '../views/Home.vue'
+const Login = () => import('@/views/auth/Login')
+const Dashboard = () => import('@/views/dashboard/Dashboard')
+const Layout = () => import('@/views/layout/App')
+const MasterIndex = () => import('@/views/master/Index')
+
+const UserIndex = () => import('@/views/master/user/Index')
+const UserData = () => import('@/views/master/user/User')
+
+const StudentIndex = () => import('@/views/master/student/Index')
+const StudentData = () => import('@/views/master/student/Student')
+
+const ClassroomIndex = () => import('@/views/master/classroom/Index')
+const ClassroomData = () => import('@/views/master/classroom/Classroom')
+
+const SubjectIndex = () => import('@/views/master/subject/Index')
+const SubjectData = () => import('@/views/master/subject/Subject')
+
+const LectureIndex = () => import('@/views/lecture/Index')
+const LectureData = () => import('@/views/lecture/Lecture')
+const LectureAdd = () => import('@/views/lecture/Add')
+const LectureView = () => import('@/views/lecture/View')
+
+const TaskIndex = () => import('@/views/task/Index')
+const TaskData = () => import('@/views/task/Task')
 
 Vue.use(VueRouter)
 
@@ -10,60 +33,99 @@ Vue.use(VueRouter)
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/auth/Login')
+    component: Login
   },
   {
-    path: '/dashboard',
-    name: 'home',
-    component: Home,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/master',
-    component: () => import('@/views/master/Index'),
+    path: '/',
+    component: Layout,
     children: [
       {
-        path: 'user',
-        component: () => import('@/views/master/user/Index'),
+        path: '/dashboard',
+        name: 'home',
+        component: Dashboard,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'master',
+        component: MasterIndex,
         children: [
           {
-            path: '',
-            name: 'master.user.index',
-            component: () => import('@/views/master/user/User')
+            path: 'user',
+            component: UserIndex,
+            children: [
+              {
+                path: '',
+                name: 'master.user.index',
+                component: UserData
+              }
+            ]
+          },
+          {
+            path: 'student',
+            component: StudentIndex,
+            children: [
+              {
+                path: '',
+                name: 'master.student.index',
+                component: StudentData
+              }
+            ]
+          },
+          {
+            path: 'clasroom',
+            component: ClassroomIndex,
+            children: [
+              {
+                path: '',
+                name: 'master.classroom.index',
+                component: ClassroomData
+              }
+            ]
+          },
+          {
+            path: 'subject',
+            component: SubjectIndex,
+            children: [
+              {
+                path: '',
+                name: 'master.subject.index',
+                component: SubjectData
+              }
+            ]
           }
         ]
       },
       {
-        path: 'subject',
-        component: () => import('@/views/master/subject/Index'),
+        path: 'lecture',
+        component: LectureIndex,
         children: [
           {
             path: '',
-            name: 'master.subject.index',
-            component: () => import('@/views/master/subject/Subject')
+            name: 'lecture.index',
+            component: LectureData
+          },
+          {
+            path: 'add',
+            name: 'lecture.add',
+            component: LectureAdd
+          },
+          {
+            path: ':id',
+            name: 'lecture.view',
+            component: LectureView
           }
         ]
-      }
-    ]
-  },
-  {
-    path: '/lecture',
-    component: () => import('@/views/lecture/Index'),
-    children: [
-      {
-        path: '',
-        name: 'lecture.index',
-        component: () => import('@/views/lecture/Lecture')
       },
       {
-        path: 'add',
-        name: 'lecture.add',
-        component: () => import('@/views/lecture/Add')
-      },
-      {
-        path: ':id',
-        name: 'lecture.view',
-        component: () => import('@/views/lecture/View')
+        path: 'task',
+        component: TaskIndex,
+        children: [
+          {
+            path: '',
+            name: 'task.index',
+            component: TaskData
+          }
+        ]
       }
     ]
   }

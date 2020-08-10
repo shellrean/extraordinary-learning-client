@@ -4,10 +4,14 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
+import PerfectScrollbar from "perfect-scrollbar";
+window.PerfectScrollbar = PerfectScrollbar;
+
 import './core/plugins/bootstrap-vue'
 import './core/plugins/inline-svg'
 import './core/plugins/metronic'
 import './core/plugins/ck-editor'
+import './core/plugins/perfect-scrollbar'
 
 Vue.config.productionTip = false
 
