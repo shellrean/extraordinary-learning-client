@@ -1,9 +1,29 @@
 <template>
-	<div class="d-flex flex-column-fluid">
-		<div class="container">
-			<div class="card card-custom">
-				<div class="card-body" v-html="lecture.body">
-					
+	<div>
+		<div class="d-flex flex-column-fluid">
+			<div class="container">
+				<div class="d-flex flex-row">
+					<div class="flex-row-fluid ml-lg-8">	
+						<div class="card card-custom">
+							<div class="card-header flex-wrap border-0 pt-6 pb-0">
+									<h3 class="card-title align-items-start flex-column">
+									<span class="card-label font-weight-bolder text-dark">{{ lecture.title }}</span>
+									<span class="text-muted mt-1 font-weight-bold font-size-sm">12 Agustus 2020</span>
+								</h3>
+							</div>
+							<div class="card-body" v-html="lecture.body">
+								
+							</div>
+						</div>
+						<div class="card card-custom">
+							<div class="card-body">
+								<DianComment />
+							</div>
+						</div>
+					</div>
+					<div class="flex-row-auto offcanvas-mobile w-300px w-xl-325px">
+						<DianOnlineStudent />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -11,8 +31,15 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import DianComment from '@/components/lecture/Comment'
+import DianOnlineStudent from '@/components/lecture/OnlineStudent'
+
 export default {
 	name: 'LectureView',
+	components: {
+		DianComment,
+		DianOnlineStudent
+	},
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState('lecture',['lecture']),
