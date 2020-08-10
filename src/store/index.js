@@ -4,6 +4,8 @@ import axios from 'axios'
 
 import auth from './auth.store'
 import user from './user.store'
+import lecture from './lecture.store'
+import subject from './subject.store'
 
 Vue.use(Vuex)
 
@@ -61,6 +63,8 @@ export default new Vuex.Store({
     },
     modules: {
         auth,
-        user
+        user,
+        lecture,
+        subject
     }
 })

@@ -100,7 +100,7 @@
                         </li>
                     </router-link>
                     <router-link
-                        to="/wizard/wizard-1"
+                        :to="{ name: 'master.subject.index'}"
                         v-slot="{ href, navigate, isActive, isExactActive }"
                     >
                         <li
@@ -124,7 +124,7 @@
             </div>
         </li>
         <router-link
-          to="/mater"
+          :to="{ name: 'lecture.index' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
         >
           <li

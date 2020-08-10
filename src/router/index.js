@@ -32,6 +32,38 @@ Vue.use(VueRouter)
             component: () => import('@/views/master/user/User')
           }
         ]
+      },
+      {
+        path: 'subject',
+        component: () => import('@/views/master/subject/Index'),
+        children: [
+          {
+            path: '',
+            name: 'master.subject.index',
+            component: () => import('@/views/master/subject/Subject')
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/lecture',
+    component: () => import('@/views/lecture/Index'),
+    children: [
+      {
+        path: '',
+        name: 'lecture.index',
+        component: () => import('@/views/lecture/Lecture')
+      },
+      {
+        path: 'add',
+        name: 'lecture.add',
+        component: () => import('@/views/lecture/Add')
+      },
+      {
+        path: ':id',
+        name: 'lecture.view',
+        component: () => import('@/views/lecture/View')
       }
     ]
   }

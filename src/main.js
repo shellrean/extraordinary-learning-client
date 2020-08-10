@@ -7,6 +7,7 @@ import store from './store'
 import './core/plugins/bootstrap-vue'
 import './core/plugins/inline-svg'
 import './core/plugins/metronic'
+import './core/plugins/ck-editor'
 
 Vue.config.productionTip = false
 
