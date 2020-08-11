@@ -6,6 +6,7 @@ import store from './store'
 
 import PerfectScrollbar from "perfect-scrollbar";
 window.PerfectScrollbar = PerfectScrollbar;
+import Permissions from './core/mixins/permission.js'
 
 import './core/plugins/bootstrap-vue'
 import './core/plugins/inline-svg'
@@ -14,6 +15,7 @@ import './core/plugins/ck-editor'
 import './core/plugins/perfect-scrollbar'
 
 Vue.config.productionTip = false
+Vue.mixin(Permissions)
 
 import { mapActions, mapGetters } from 'vuex'
 

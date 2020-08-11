@@ -6,6 +6,7 @@ import auth from './auth.store'
 import user from './user.store'
 import lecture from './lecture.store'
 import subject from './subject.store'
+import classroom from './classroom.store'
 
 Vue.use(Vuex)
 
@@ -65,6 +66,7 @@ export default new Vuex.Store({
         auth,
         user,
         lecture,
-        subject
+        subject,
+        classroom
     }
 })

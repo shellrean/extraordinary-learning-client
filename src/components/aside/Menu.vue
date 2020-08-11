@@ -28,6 +28,7 @@
         data-menu-toggle="hover"
         class="menu-item menu-item-submenu"
         v-bind:class="{ 'menu-item-open': hasActiveChildren('/master') }"
+        v-if="$role('0')"
         >
             <a href="#" class="menu-link menu-toggle">
                 <i class="menu-icon flaticon2-cube"></i>
@@ -124,6 +125,25 @@
             </div>
         </li>
         <router-link
+          :to="{ name: 'master.classroom.me' }"
+          v-slot="{ href, navigate, isActive, isExactActive }"
+        >
+          <li
+            aria-haspopup="true"
+            data-menu-toggle="hover"
+            class="menu-item"
+            :class="[
+              isActive && 'menu-item-active',
+              isExactActive && 'menu-item-active'
+            ]"
+          >
+            <a :href="href" class="menu-link" @click="navigate">
+              <i class="menu-icon flaticon2-protection"></i>
+              <span class="menu-text">Kelas</span>
+            </a>
+          </li>
+        </router-link>
+        <router-link
           :to="{ name: 'lecture.index' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
         >
@@ -203,13 +223,14 @@
             </a>
           </li>
         </router-link>
-        <li class="menu-section">
+        <li class="menu-section" v-if="$role('0')">
             <h4 class="menu-text">System</h4>
             <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
         </li>
         <router-link
           to="/mater"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('0')"
         >
           <li
             aria-haspopup="true"

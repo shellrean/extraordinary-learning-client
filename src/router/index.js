@@ -15,6 +15,8 @@ const StudentData = () => import('@/views/master/student/Student')
 
 const ClassroomIndex = () => import('@/views/master/classroom/Index')
 const ClassroomData = () => import('@/views/master/classroom/Classroom')
+const ClassroomMe = () => import('@/views/master/classroom/ClassroomMe')
+const ClassroomDashboard = () => import('@/views/master/classroom/Dashboard')
 
 const SubjectIndex = () => import('@/views/master/subject/Index')
 const SubjectData = () => import('@/views/master/subject/Subject')
@@ -79,6 +81,16 @@ Vue.use(VueRouter)
                 path: '',
                 name: 'master.classroom.index',
                 component: ClassroomData
+              },
+              {
+                path: 'me',
+                name: 'master.classroom.me',
+                component: ClassroomMe
+              },
+              {
+                path: ':id/dashboard',
+                name: 'master.classroom.dashboard',
+                component: ClassroomDashboard
               }
             ]
           },

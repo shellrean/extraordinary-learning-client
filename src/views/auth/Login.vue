@@ -47,13 +47,13 @@
 									</div>
 								</div>
 
-								<form class="form text-left" id="kt_login_signin_form">
+								<form class="form text-left" @submit.prevent="postLogin">
 									<div class="form-group py-2 m-0">
 										<input class="form-control h-auto border-0 px-0 placeholder-dark-75" type="text" placeholder="Email" autocomplete="off" :class="{ 'is-invalid' : errors.email }" v-model="data.email" />
 										<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
 									</div>
 									<div class="form-group py-2 border-top m-0">
-										<input class="form-control h-auto border-0 px-0 placeholder-dark-75" type="Password" placeholder="Password" name="password" :class="{ 'is-invalid' : errors.password }" v-model="data.password" />
+										<input class="form-control h-auto border-0 px-0 placeholder-dark-75" type="Password" placeholder="Password" :class="{ 'is-invalid' : errors.password }" v-model="data.password" />
 										<div class="invalid-feedback" v-if="errors.password">{{ errors.password[0] }} </div>
 									</div>
 									<div class="text-center mt-15">
@@ -106,8 +106,12 @@ export default {
 			this.$router.push({ name: 'home' })
 		}
 	},
-	destroy() {
-		this.getUserLogin()
+	async destroy() {
+		try {
+			await this.getUserLogin()
+		} catch (error) {
+
+		}
 	}
 }
 </script>
