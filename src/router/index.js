@@ -40,12 +40,12 @@ Vue.use(VueRouter)
   {
     path: '/',
     component: Layout,
+    meta: { requiresAuth: true },
     children: [
       {
         path: '/dashboard',
         name: 'home',
         component: Dashboard,
-        meta: { requiresAuth: true }
       },
       {
         path: 'master',

@@ -62,7 +62,7 @@ const actions = {
 			try {
 				let network = await $axios.post(`lectures`, state.lecture)
 
-				commit('CLEAR_ERROR')
+				commit('CLEAR_ERROR', true, { root: true })
 				commit('CLEAR_FORM_LECTURE', true)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)

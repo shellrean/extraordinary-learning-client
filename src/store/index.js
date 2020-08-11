@@ -7,6 +7,7 @@ import user from './user.store'
 import lecture from './lecture.store'
 import subject from './subject.store'
 import classroom from './classroom.store'
+import channel from './channel.store'
 
 Vue.use(Vuex)
 
@@ -67,6 +68,7 @@ export default new Vuex.Store({
         user,
         lecture,
         subject,
-        classroom
+        classroom,
+        channel
     }
 })

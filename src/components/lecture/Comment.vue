@@ -3,7 +3,7 @@
 		<div class="d-flex py-5" v-for="comment in comments.data">
 			<div class="symbol symbol-40 symbol-light-primary mr-5 mt-1">
 				<span class="symbol-label">
-					M
+					{{ comment.user.name.charAt(0) }}
 				</span>
 			</div>
 			<div class="d-flex flex-column flex-row-fluid">
@@ -39,22 +39,31 @@ export default {
 	name: 'CommentLecture',
 	data() {
 		return {
-			content: ''
+			content: '',
+			channel:''
 		}
 	},
 	computed: {
 		...mapGetters(['isLoading']),
-		...mapState('lecture',['comments'])
+		...mapState('user',['authenticated']),
+		...mapState('lecture',['comments']),
+		...mapState('channel',['socket'])
 	},
 	methods: {
 		...mapActions('lecture',['getDataComments', 'createNewComment']),
 		async submit() {
 			try {
-				this.createNewComment({
+				let provider = this.createNewComment({
 					lecture_id: this.$route.params.id,
 					content: this.content
 				})
-				this.getDataComments(this.$route.params.id)
+				this.socket.emit('comment', {
+					comment: {
+						content: this.content,
+						user: this.authenticated
+					}
+				})
+				// this.getDataComments(this.$route.params.id)
 				this.content = ''
 			} catch (error) {
 
@@ -63,10 +72,16 @@ export default {
 	},
 	async created() {
 		try {
+			this.channel = 'lecture_'+this.$route.params.id
 			await this.getDataComments(this.$route.params.id)
 		} catch (error) {
 
 		}
-	}
+	},
+	mounted() {
+		this.socket.on('comment_'+this.channel, (comment) => {
+			this.comments.data.push(comment)
+		})
+	},
 }
 </script>
