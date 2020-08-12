@@ -12,8 +12,8 @@
 								<a href="#">
 									<img src="/img/logo.ico" class="max-h-75px" alt="" />
 								</a>
-								<h3 class="mb-8 mt-22 font-weight-bold">SMK NUSANTARA 1</h3>
-								<p class="mb-15 text-muted font-weight-bold">nusantara1@shellrean.sch.id | 090394849933</p>
+								<h3 class="mb-8 mt-22 font-weight-bold">SMK NEGERI  43 JAKARTA</h3>
+								<p class="mb-15 text-muted font-weight-bold">info@smkn43jkt.sch.id | -</p>
 							</div>
 							<!--end:Aside Content-->
 						</div>

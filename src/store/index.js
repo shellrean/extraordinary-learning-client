@@ -16,7 +16,7 @@ export default new Vuex.Store({
         errors: [],
         isLoading: false,
         token: localStorage.getItem('token'),
-        baseURL: ''
+        baseURL: 'https://dian-api.shellrean.com'
     },
     getters: {
         isAuth: state => {
@@ -43,22 +43,22 @@ export default new Vuex.Store({
             state.isLoading = payload
         },
         SET_BASEURL(state, payload) {
-            state.baseURL = payload
+            // state.baseURL = payload
         }
     },
     actions: {
         getConfig({ commit }) {
             return new Promise(async (resolve, reject) => {
                 try {
-                    let network = await axios.get(`/static/config.json`, {
-                        headers: {
-                            'Accept' : 'application/json'
-                        }
-                    })
-                    commit('SET_BASEURL', network.data.URL)
-                    resolve(network.data)
+                    // let network = await axios.get(`/static/config.json`, {
+                    //     headers: {
+                    //         'Accept' : 'application/json'
+                    //     }
+                    // })
+                    // commit('SET_BASEURL', network.data.URL)
+                    // resolve(network.data)
                 } catch (error) {
-                    reject(error.response.data)
+                    // reject(error.response.data)
                 }
             })
         }
