@@ -16,7 +16,7 @@ export default new Vuex.Store({
         errors: [],
         isLoading: false,
         token: localStorage.getItem('token'),
-        baseURL: 'https://dian-api.shellrean.com'
+        baseURL: 'http://localhost:8000'
     },
     getters: {
         isAuth: state => {
@@ -56,9 +56,9 @@ export default new Vuex.Store({
                     //     }
                     // })
                     // commit('SET_BASEURL', network.data.URL)
-                    // resolve(network.data)
+                    resolve('oke')
                 } catch (error) {
-                    // reject(error.response.data)
+                    reject('error')
                 }
             })
         }
