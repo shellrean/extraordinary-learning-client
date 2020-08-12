@@ -82,8 +82,9 @@ export default {
 			let removeIndex = this.users.map(function(item) { 
 				return item.id; 
 			}).indexOf(user.id);
-			console.log(removeIndex)
-			this.users.splice(removeIndex,1)
+			if(removeIndex != -1) {
+				this.users.splice(removeIndex,1)
+			}
 		})
 	},
 	destroyed() {
