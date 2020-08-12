@@ -2,8 +2,8 @@
 	<div>
 		<div class="d-flex flex-column-fluid">
 			<div class="container">
-				<div class="d-flex flex-row">
-					<div class="flex-row-fluid ml-lg-8">	
+				<div class="row">
+					<div class="col-md-8">	
 						<div class="card card-custom">
 							<div class="card-header flex-wrap border-0 pt-6 pb-0">
 									<h3 class="card-title align-items-start flex-column">
@@ -21,7 +21,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="flex-row-auto offcanvas-mobile w-300px w-xl-325px">
+
+					<div class="col-md-4">
 						<DianOnlineStudent />
 					</div>
 				</div>
