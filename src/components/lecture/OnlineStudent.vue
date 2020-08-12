@@ -49,8 +49,8 @@ export default {
 	async created() {
 		try {
 			this.channel = 'lecture_'+this.$route.params.id
-			await this.getUserOnChannel('lecture_'+this.channel)
-			this.setUserToChannel('lecture_'+this.channel)
+			await this.getUserOnChannel(this.channel)
+			this.setUserToChannel(this.channel)
 			if(typeof this.authenticated.name != 'undefined') {
 				this.socket.emit('getin', {
 					user: this.authenticated,
