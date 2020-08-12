@@ -12,7 +12,7 @@
 						<!---- -->
 					</div>
 					<div class="d-flex flex-center">
-						<button class="btn btn-primary font-weight-bolder font-size-sm py-3 px-14">Mulai Kelas</button>
+						<router-link :to="{ name: 'master.classroom.live', params: { id: $route.params.id }}" class="btn btn-primary font-weight-bolder font-size-sm py-3 px-14">Mulai Kelas</router-link>
 					</div>
 					<div class="d-flex flex-center mt-2">
 						<router-link :to="{ name:'master.classroom.me' }" class="btn btn-light-primary font-weight-bolder font-size-sm py-3 px-14">

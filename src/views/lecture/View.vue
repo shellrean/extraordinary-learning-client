@@ -8,7 +8,7 @@
 							<div class="card-header flex-wrap border-0 pt-6 pb-0">
 									<h3 class="card-title align-items-start flex-column">
 									<span class="card-label font-weight-bolder text-dark">{{ lecture.title }}</span>
-									<span class="text-muted mt-1 font-weight-bold font-size-sm">12 Agustus 2020</span>
+									<span class="text-muted mt-1 font-weight-bold font-size-sm">18 Agustus 2020</span>
 								</h3>
 							</div>
 							<div class="card-body" v-html="lecture.body">

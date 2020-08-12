@@ -6,7 +6,8 @@ const state = () => ({
 	lecture: {
 		title: '',
 		body: '',
-		subject_id: ''
+		subject_id: '',
+		isactive: false
 	},
 	page: 1
 })
@@ -22,14 +23,16 @@ const mutations = {
 		state.lecture = {
 			title: payload.title,
 			body: payload.body,
-			subject_id: payload.subject_id
+			subject_id: payload.subject_id,
+			isactive: payload.isactive
 		}
 	},
 	CLEAR_FORM_LECTURE(state, payload) {
 		state.lecture = {
 			title: '',
 			body: '',
-			subject_id: ''
+			subject_id: '',
+			isactive: false
 		}
 	},
 	SET_PAGE(state, payload) {
