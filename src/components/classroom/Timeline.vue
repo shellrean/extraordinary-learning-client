@@ -12,29 +12,29 @@
 						</span>
 					</div>
 					<div class="d-flex flex-column flex-grow-1">
-						<a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">WWII Quiz Pt 1</a>
+						<router-link :to="{ name: 'lecture.view', params: { id: lecture.lecture.id }}" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">{{ lecture.lecture.title }}</router-link>
 						<div class="d-flex">
 							<div class="d-flex align-items-center pr-5">
 								<span class="svg-icon svg-icon-md svg-icon-primary pr-1">
 									<inline-svg class="svg-icon" src="/media/svg/icons/Home/Clock.svg" />
 								</span>
-								<span class="text-muted font-weight-bold">Due 04 Sep</span>
+								<span class="text-muted font-weight-bold">{{ lecture.created_at }}</span>
 							</div>
 							<div class="d-flex align-items-center">
 								<span class="svg-icon svg-icon-md svg-icon-primary pr-1">
 									<inline-svg class="svg-icon" src="/media/svg/icons/Layout/Layout-arrange.svg" />
 								</span>
-								<span class="text-muted font-weight-bold">P1 U.S. History</span>
+								<span class="text-muted font-weight-bold">{{ lecture.lecture.subject_id }}</span>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="pt-3">
-					<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">Outlines keep you honest. They stop you from indulging in poorly thought-out metaphors about driving and keep you focused on the overall structure of your post</p>
+					<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">{{ lecture.body}}</p>
 				</div>
 			</div>
 		</div>
-		<div class="card card-custom gutter-b">
+		<div class="card card-custom gutter-b" v-if="classroom_lectures.length == 0">
 			<div class="card-body">
 				<div class="text-center">
 					<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">

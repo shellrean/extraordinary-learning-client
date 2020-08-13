@@ -17,7 +17,8 @@ const ClassroomIndex = () => import('@/views/master/classroom/Index')
 const ClassroomData = () => import('@/views/master/classroom/Classroom')
 const ClassroomMe = () => import('@/views/master/classroom/ClassroomMe')
 const ClassroomDashboard = () => import('@/views/master/classroom/Dashboard')
-const ClassroomLive = () => import('@/views/master/classroom/Live')
+const ClassroomLive = () => import('@/views/master/classroom/ClassroomLive')
+const ClassroomLiveAdd = () => import('@/views/master/classroom/ClassroomLiveAdd')
 
 const SubjectIndex = () => import('@/views/master/subject/Index')
 const SubjectData = () => import('@/views/master/subject/Subject')
@@ -98,9 +99,14 @@ Vue.use(VueRouter)
                 component: ClassroomDashboard
               },
               {
-                path: ':id/live',
+                path: 'live/:id',
                 name: 'master.classroom.live',
                 component: ClassroomLive
+              },
+              {
+                path: ':id/live/add',
+                name: 'master.classroom.live.add',
+                component: ClassroomLiveAdd
               }
             ]
           },

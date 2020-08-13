@@ -13,6 +13,7 @@ import './core/plugins/inline-svg'
 import './core/plugins/metronic'
 import './core/plugins/ck-editor'
 import './core/plugins/perfect-scrollbar'
+import './core/plugins/youtube'
 
 Vue.config.productionTip = false
 Vue.mixin(Permissions)

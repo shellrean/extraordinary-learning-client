@@ -154,14 +154,28 @@ const actions = {
 			}
 		})
 	},
-	getDataLectureClassroom({ comment }, payload) {
-		comment('SET_LOADING', true, { root: true })
+	getDataLectureClassroom({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
 				let network = await $axios.get(`lectures/classrooms/${payload}`)
 
 				commit('ASSIGN_DATA_LECTURES_CLASSROOM', network.data.data)
 				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	shareeLectureToClassroom({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async (resolve, reject) => {
+			try {
+				let network = await $axios.post(`lectures/${payload.id}/sharee`, payload.data)
+
+				commit('SET_LOADING', false, { root: true})
 				resolve(network.data)
 			} catch (error) {
 				commit('SET_LOADING', false, { root: true })

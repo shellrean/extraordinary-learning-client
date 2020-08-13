@@ -41,10 +41,10 @@ export default {
 		this.meetConfig = {
 			apiKey: API_KEY,
 		      apiSecret: API_SECRET,
-		      meetingNumber: '2682642912',
+		      meetingNumber: '76342052607',
 		      userName: 'Web User',
-		      passWord: "E1ATYf",
-			leaveUrl: "http://www.zoom.us",
+		      passWord: "bHhCbC9LRXJJckRqMVg3S092YWRkdz09",
+			leaveUrl: "http://localhost:8080/classrooms/1",
       
      		 role: 0
 		}
@@ -57,8 +57,8 @@ export default {
 		});
 
     ZoomMtg.init({
-      leaveUrl: "http://www.zoom.us",
-      isSupportAV: true,
+      leaveUrl:"http://localhost:8080/classrooms/1",
+      // isSupportAV: true,
       success: () => {
         ZoomMtg.join({
           meetingNumber: this.meetConfig.meetingNumber,

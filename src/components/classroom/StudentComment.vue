@@ -13,7 +13,6 @@
 			<div class="d-flex flex-column flex-row-fluid">
 				<div class="d-flex align-items-center flex-wrap">
 					<a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder pr-6">{{ comment.user.name }}</a>
-					<span class="text-muted font-weight-normal flex-grow-1 font-size-sm">{{ comment.created_at }}</span>
 				</div>
 				<span class="text-dark-75 font-size-sm font-weight-normal pt-1">{{ comment.content }}</span>
 			</div>
@@ -55,15 +54,15 @@ export default {
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState('user',['authenticated']),
-		...mapState('lecture',['comments']),
+		...mapState('classroom',['comments']),
 		...mapState('channel',['socket'])
 	},
 	methods: {
-		...mapActions('lecture',['getDataComments', 'createNewComment']),
+		...mapActions('classroom',['getDataComments', 'createNewComment']),
 		async submit() {
 			try {
 				let provider = this.createNewComment({
-					lecture_id: this.$route.params.id,
+					classroom_live_id: this.$route.params.id,
 					content: this.content
 				})
 				this.socket.emit('comment', {
@@ -72,7 +71,6 @@ export default {
 						user: this.authenticated
 					}
 				})
-				// this.getDataComments(this.$route.params.id)
 				this.content = ''
 			} catch (error) {
 
@@ -87,10 +85,26 @@ export default {
 	},
 	async created() {
 		try {
-			this.channel = 'lecture_'+this.$route.params.id
+			this.channel = 'classlive_'+this.$route.params.id
 			await this.getDataComments(this.$route.params.id)
+			if(typeof this.authenticated.name != 'undefined') {
+				this.socket.emit('getin', {
+					user: this.authenticated,
+					channel: this.channel,
+					token: this.token
+				});
+			}
 		} catch (error) {
 
+		}
+	},
+	watch: {
+		authenticated() {
+			this.socket.emit('getin', {
+				user: this.authenticated,
+				channel: this.channel,
+				token: this.token
+			});
 		}
 	},
 	mounted() {
