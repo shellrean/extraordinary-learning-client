@@ -1,25 +1,22 @@
 import $axios from '@/core/services/api.service'
-import io from 'socket.io-client'
 
 const state = () => ({
-	users: [],
-	socket: io(process.env.VUE_APP_SOCKET),
+	abcents: []
 })
 
 const mutations = {
-	ASSIGN_DATA_USERS_CHANNEL(state, payload) {
-		state.users = payload
+	ASSIGN_DATA_ABCENTS(state, payload) {
+		state.abcents = payload
 	}
 }
 
 const actions = {
-	getUserOnChannel({ commit }, payload) {
+	storeAbcentToday({ commit }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.get(`channels/${payload}/user`)
+				let network = await $axios.post('abcents', payload)
 
-				commit('ASSIGN_DATA_USERS_CHANNEL', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
@@ -28,12 +25,13 @@ const actions = {
 			}
 		})
 	},
-	setUserToChannel({ commit }, payload) {
+	getAbcentToday({ commit }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.post(`channels/${payload}/user`)
+				let network = await $axios.get(`abcents/subject/${payload.subject_id}/classroom/${payload.classroom_id}/today`)
 
+				commit('ASSIGN_DATA_ABCENTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {

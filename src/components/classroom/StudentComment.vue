@@ -87,24 +87,8 @@ export default {
 		try {
 			this.channel = 'classlive_'+this.$route.params.id
 			await this.getDataComments(this.$route.params.id)
-			if(typeof this.authenticated.name != 'undefined') {
-				this.socket.emit('getin', {
-					user: this.authenticated,
-					channel: this.channel,
-					token: this.token
-				});
-			}
 		} catch (error) {
 
-		}
-	},
-	watch: {
-		authenticated() {
-			this.socket.emit('getin', {
-				user: this.authenticated,
-				channel: this.channel,
-				token: this.token
-			});
 		}
 	},
 	mounted() {

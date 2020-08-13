@@ -18,7 +18,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="card-body" >
+							<div class="card-body" v-html="classlive.body">
 								
 							</div>
 
@@ -32,7 +32,7 @@
 					<div class="col-md-6">
 						<div class="card-body" ><!-- 
 							<youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube> -->
-							<iframe id="mainIframe" src="https://zoom.us/wc/2682642912/join?prefer=1&pwd=E1ATYf&&un=zhangc" allow="microphone;camera"  sandbox="allow-forms allow-scripts allow-same-origin"  style="height: 100vh;width: 100%;"  frameborder="0"></iframe>
+							<!-- <iframe id="mainIframe" src="https://zoom.us/wc/2682642912/join?prefer=1&pwd=E1ATYf&&un=zhangc" allow="microphone;camera"  sandbox="allow-forms allow-scripts allow-same-origin"  style="height: 100vh;width: 100%;"  frameborder="0"></iframe> -->
    									
 								<!-- <LiveFrame /> -->
 							
@@ -64,26 +64,54 @@ export default {
 	},
 	computed: {
 		...mapGetters(['isLoading']),
+		...mapState('user',['authenticated']),
 		...mapState('classroom',['classlive']),
+		...mapState('abcent',['abcents']),
 		player() {
-      // return this.$refs.youtube.player
-    }
+      		// return this.$refs.youtube.player
+    	}
 	},
 	methods: {
-		...mapActions('classroom',['storeLiveClassroom', 'getDataliveClassroom']),
+		...mapActions('classroom',['storeLiveClassroom', 'getDataliveClassroom', 'getDataStudents']),
+		...mapActions('abcent',['getAbcentToday','storeAbcentToday']),
 		playVideo() {
       		this.player.playVideo()
     	},
-    playing() {
-      console.log('\o/ we are watching!!!')
-    }
+    	playing() {
+      		console.log('\o/ we are watching!!!')
+    	}
 	},
 	async created() {
 		try {
+			await this.getDataStudents(this.$route.params.id)
 			await this.getDataliveClassroom(this.$route.params.id)
 	      	// this.videoId = this.$youtube.getIdFromUrl('https://youtu.be/n7DtD2hfolI')
 		} catch (error) {
 
+		}
+	},
+	watch: {
+		async classlive() {
+			try {
+				await this.getAbcentToday({
+					subject_id: this.classlive.subject_id,
+					classroom_id: this.classlive.classroom_id
+				})
+
+				let index = this.abcents.map(function(item) { 
+					return item.id; 
+				}).indexOf(this.authenticated.id);
+
+				if(index == '' || index == -1) {
+					await this.storeAbcentToday({
+						isabcent: true,
+						subject_id: this.classlive.subject_id,
+						classroom_id: this.classlive.classroom_id,
+					})
+				}
+			} catch (error) {
+
+			}
 		}
 	}
 }

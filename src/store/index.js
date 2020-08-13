@@ -8,6 +8,7 @@ import lecture from './lecture.store'
 import subject from './subject.store'
 import classroom from './classroom.store'
 import channel from './channel.store'
+import abcent from './abcent.store'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,7 @@ export default new Vuex.Store({
         errors: [],
         isLoading: false,
         token: localStorage.getItem('token'),
-        baseURL: 'http://localhost:8000'
+        baseURL: process.env.VUE_APP_URL
     },
     getters: {
         isAuth: state => {
@@ -69,6 +70,7 @@ export default new Vuex.Store({
         lecture,
         subject,
         classroom,
-        channel
+        channel,
+        abcent
     }
 })
