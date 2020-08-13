@@ -44,6 +44,10 @@ Vue.use(VueRouter)
     meta: { requiresAuth: true },
     children: [
       {
+        path: '',
+        redirect: '/dashboard'
+      },
+      {
         path: '/dashboard',
         name: 'home',
         component: Dashboard,

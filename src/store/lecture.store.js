@@ -2,6 +2,7 @@ import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	lectures: [],
+	classroom_lectures: [],
 	comments: [],
 	lecture: {
 		title: '',
@@ -18,6 +19,9 @@ const mutations = {
 	},
 	ASSIGN_DATA_COMMENTS(state, payload) {
 		state.comments = payload
+	},
+	ASSIGN_DATA_LECTURES_CLASSROOM(state, payload) {
+		state.classroom_lectures = payload
 	},
 	ASSIGN_FORM(state, payload) {
 		state.lecture = {
@@ -142,6 +146,21 @@ const actions = {
 			try {
 				let network = await $axios.post(`lectures/${payload.lecture_id}/comment`, payload)
 
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataLectureClassroom({ comment }, payload) {
+		comment('SET_LOADING', true, { root: true })
+		return new Promise(async (resolve, reject) => {
+			try {
+				let network = await $axios.get(`lectures/classrooms/${payload}`)
+
+				commit('ASSIGN_DATA_LECTURES_CLASSROOM', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
