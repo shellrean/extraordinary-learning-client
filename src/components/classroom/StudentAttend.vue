@@ -32,7 +32,7 @@
 		<div class="card card-custom bg-light-success gutter-b">
 			<!--begin::Header-->
 			<div class="card-header border-0">
-				<h3 class="card-title font-weight-bolder text-success">Siswa & Guru di channel {{users.length }}</h3>
+				<h3 class="card-title font-weight-bolder text-success">Siswa & Guru di channel &nbsp;<span class="badge badge-info">{{users.length }}</span></h3>
 			</div>
 			<!--end::Header-->
 			<!--begin::Body-->
@@ -40,7 +40,7 @@
 				<!--begin::Item-->
 				<div class="d-flex align-items-center mb-10" v-for="user in users">
 					<!--begin::Symbol-->
-					<div class="symbol symbol-40 symbol-light-warning mr-5">
+					<div class="symbol symbol-40 symbol-light-info mr-5">
 						<div class="symbol-label">
 							{{ user.name.charAt(0) }}
 						</div>
@@ -48,7 +48,7 @@
 					<!--end::Symbol-->
 					<!--begin::Text-->
 					<div class="d-flex flex-column font-weight-bold">
-						<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{{ user.name }}</a>
+						<a href="#" class="text-dark text-hover-info mb-1 font-size-lg">{{ user.name }}</a>
 						<span class="text-muted">{{ user.email }}</span>
 					</div>
 					<!--end::Text-->
@@ -73,7 +73,7 @@
    					</textarea>
    				</div>
    				<template v-slot:modal-footer="{ cancel }">
-			      <b-button size="sm" variant="primary" >
+			      <b-button size="sm" variant="primary" :disabled="isLoading" @click="submit">
 			        {{ isLoading ? 'Processing...' : 'Simpan' }}
 			      </b-button>
 			      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
@@ -101,7 +101,8 @@ export default {
 					type: '',
 					desc: ''
 				}
-			}
+			},
+			id_set: ''
 		}
 	},
 	computed: {
@@ -111,11 +112,43 @@ export default {
 		...mapState('channel',['users','socket']),
 		...mapState('classroom',['students']),
 		...mapState('abcent',['abcents']),
+		...mapState('classroom',['classlive']),
 	},
 	methods: {
 		...mapActions('channel', ['getUserOnChannel', 'setUserToChannel']),
+		...mapActions('abcent', ['storeAbcentToday','getAbcentToday']),
+		clearForm() {
+			this.id_set = ''
+			this.data = {
+				details: {
+					type: '',
+					desc: ''
+				}
+			}
+		},
 		desert(id) {
+			this.id_set = id
 			this.$bvModal.show('modal-desc')
+		},
+		async submit() {
+			try {
+				await this.storeAbcentToday({
+					user_id: this.id_set,
+					subject_id: this.classlive.subject_id,
+					classroom_id: this.classlive.classroom_id,
+					isabcent: false,
+					desc: this.data.details.desc,
+					details: this.data.details
+				})
+				this.$bvModal.hide('modal-desc')
+				this.clearForm()
+				this.getAbcentToday({
+					subject_id: this.classlive.subject_id,
+					classroom_id: this.classlive.classroom_id
+				})
+			} catch (error) {
+				console.log(error)
+			}
 		}
 	},
 	async created() {

@@ -30,6 +30,8 @@ const LectureView = () => import('@/views/lecture/View')
 
 const TaskIndex = () => import('@/views/task/Index')
 const TaskData = () => import('@/views/task/Task')
+const TaskAdd = () => import('@/views/task/Add')
+const TaskView = () => import('@/views/task/View')
 
 Vue.use(VueRouter)
 
@@ -152,6 +154,16 @@ Vue.use(VueRouter)
             path: '',
             name: 'task.index',
             component: TaskData
+          },
+          {
+            path: 'add',
+            name: 'task.add',
+            component: TaskAdd
+          },
+          {
+            path: ':id',
+            name: 'task.view',
+            component: TaskView
           }
         ]
       }

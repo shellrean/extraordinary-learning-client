@@ -14,6 +14,7 @@ import './core/plugins/metronic'
 import './core/plugins/ck-editor'
 import './core/plugins/perfect-scrollbar'
 import './core/plugins/youtube'
+import './core/plugins/sweetalert.js'
 
 Vue.config.productionTip = false
 Vue.mixin(Permissions)
@@ -32,7 +33,7 @@ new Vue({
   	...mapActions(['getConfig'])
   },
   async created() {
-  	await this.getConfig()
+  	// await this.getConfig()
   	if (this.isAuth) {
   		try {
         await this.getUserLogin()

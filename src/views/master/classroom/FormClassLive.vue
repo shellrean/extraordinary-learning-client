@@ -13,6 +13,25 @@
 		<div class="col-md-4">
 			<div class="card card-custom">
 				<div class="card-body">
+					<div class="form-group">
+						<label>Type</label>
+						<select class="form-control" v-model="classlive.settings.type">
+							<option value="youtube">Youtube</option>
+							<option value="zoom">Zoom Meet</option>
+						</select>
+					</div>
+					<div class="form-group" v-if="classlive.settings.type == 'youtube'">
+						<label>Link youtube</label>
+						<input type="text" class="form-control" v-model="classlive.settings.link">
+					</div>
+					<div class="form-group" v-if="classlive.settings.type == 'zoom'">
+						<label>ID Meeting</label>
+						<input type="text" class="form-control" v-model="classlive.settings.id_meet" name="">
+					</div>
+					<div class="form-group" v-if="classlive.settings.type == 'zoom'">
+						<label>Meet Password</label>
+						<input type="text" class="form-control" v-model="classlive.settings.password">
+					</div>
 					<div class="form-group" v-if="typeof subjects.data != 'undefined'">
 						<label>Pelajaran</label>
 						<select class="form-control" v-model="classlive.subject_id">

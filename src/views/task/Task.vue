@@ -4,8 +4,8 @@
 			<div class="card card-custom">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Materi Pembelajaran</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage materi pembelajaran</span>
+						<span class="card-label font-weight-bolder text-dark">Tugas</span>
+						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage tugas</span>
 					</h3>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
@@ -18,7 +18,7 @@
 						        </span>
 								Import
 							</b-button>
-							<b-button variant="primary" :to="{ name: 'lecture.add' }">
+							<b-button variant="primary" :to="{ name: 'task.add' }">
 								<span class="svg-icon svg-icon">
 						          <inline-svg
 						            class="svg-icon"
@@ -47,15 +47,15 @@
 							</div>
 						</div>
 					</div>
-					<div class="table-responsive-md" v-if="typeof lectures.data != 'undefined'">
+					<div class="table-responsive-md" v-if="typeof tasks.data != 'undefined'">
 						<b-table 
                         id="table-transition-example" 
                         show-empty
                         :fields="fields"
-                        :items="lectures.data"
+                        :items="tasks.data"
                         >
                         	<template v-slot:cell(no)="row">
-                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="lectures.from+row.index"></span></span>
+                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="tasks.from+row.index"></span></span>
                         	</template>
 
                         	<template v-slot:cell(status)="row">
@@ -63,7 +63,7 @@
                         	</template>
                         	<template v-slot:cell(actions)="row">
                         		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2" :to="{ name: 'lecture.view', params: { id: row.item.id }}"><i class="flaticon-medical"></i></b-button>
+                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2" :to="{ name: 'task.view', params: { id: row.item.id }}"><i class="flaticon-medical"></i></b-button>
                         		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
                         	</template>
                     	</b-table>
@@ -71,8 +71,8 @@
 					      <b-pagination
 					      	pills 
 					        v-model="page"
-					        :total-rows="lectures.total"
-					        :per-page="lectures.per_page"
+					        :total-rows="tasks.total"
+					        :per-page="tasks.per_page"
 					        :disabled="isLoading"
 					        last-number
 					      ></b-pagination>
@@ -88,7 +88,7 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
-								<span class="text-muted">Menampilkan {{ lectures.data.length }} dari {{ lectures.total }} records</span>
+								<span class="text-muted">Menampilkan {{ tasks.data.length }} dari {{ tasks.total }} records</span>
 							</div>
 					    </div>
                     </div>
@@ -122,23 +122,21 @@ export default {
 	},
 	computed: {
 		...mapGetters(['isLoading']),
-		...mapState('lecture', {
-			lectures: state => state.lectures
-		}),
+		...mapState('task', ['tasks']),
 		page: {
             get() {
-                return this.$store.state.lecture.page
+                return this.$store.state.task.page
             },
             set(val) {
-                this.$store.commit('lecture/SET_PAGE', val)
+                this.$store.commit('task/SET_PAGE', val)
             }
         },
 	},
 	methods: {
-		...mapActions('lecture', ['getDataLectures']),
+		...mapActions('task', ['getDataTasks']),
 		async changeData() {
 			try {
-				await this.getDataLectures({ perPage: this.perPage, search: this.search })
+				await this.getDataTasks({ perPage: this.perPage, search: this.search })
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}

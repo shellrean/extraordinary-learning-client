@@ -12,7 +12,10 @@
 								</h3>
 								<div class="card-toolbar">
 									<div class="form-group">
-										<button class="btn btn-warning">
+										<button class="btn btn-light-success mr-2" v-b-modal.modal-abcent>
+											Lihat absen
+										</button>
+										<button class="btn btn-warning" @click="closeClass">
 											Tutup Kelas
 										</button>
 									</div>
@@ -30,9 +33,9 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="card-body" ><!-- 
-							<youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube> -->
-							<!-- <iframe id="mainIframe" src="https://zoom.us/wc/2682642912/join?prefer=1&pwd=E1ATYf&&un=zhangc" allow="microphone;camera"  sandbox="allow-forms allow-scripts allow-same-origin"  style="height: 100vh;width: 100%;"  frameborder="0"></iframe> -->
+						<div class="card-body" v-if="typeof classlive.settings != 'undefined'">
+							<youtube v-if="classlive.settings.type == 'youtube'" :video-id="videoId" ref="youtube" @playing="playing"></youtube>
+							<iframe id="mainIframe" v-if="classlive.settings.type == 'zoom' && typeof authenticated.name != 'undefined'" :src="`https://zoom.us/wc/${classlive.settings.id_meet}/join?prefer=1&pwd=${classlive.settings.password}&&un=${authenticated.name}`" allow="microphone;camera"  sandbox="allow-forms allow-scripts allow-same-origin"  style="height: 100vh;width: 100%;"  frameborder="0"></iframe>
    									
 								<!-- <LiveFrame /> -->
 							
@@ -42,6 +45,22 @@
 				</div>
 			</div>
 		</div>
+		<b-modal id="modal-abcent" title="Absen hari ini" size="lg">
+			<b-table 
+                show-empty
+                :fields="fields"
+                :items="filteredAbcent"
+            >
+            	<template v-slot:cell(no)="row">
+                    <span style="width: 40px;">
+                    	<span class="font-weight-bolder" v-text="row.index+1"></span>
+                    </span>
+                </template>
+                <template v-slot:cell(isattend)="row">
+                    <span class="badge badge-info">{{ row.item.isabcent ? 'Hadir' : 'Tidak hadir' }}</span>
+                </template>
+            </b-table>
+		</b-modal>
 	</div>
 </template>
 <script>
@@ -54,7 +73,13 @@ export default {
 	name: 'ClassroomLive',
 	data() {
 		return {
-			videoId: ''
+			videoId: '',
+			fields: [
+				{ key: 'no', label: '#' },
+				{ key: 'user.name', label: 'Nama' },
+				{ key: 'isattend', label: 'Status' },
+				{ key: 'desc', label: 'Keterangan' }
+			]
 		}
 	},
 	components: {
@@ -67,25 +92,51 @@ export default {
 		...mapState('user',['authenticated']),
 		...mapState('classroom',['classlive']),
 		...mapState('abcent',['abcents']),
+		filteredAbcent() {
+			return this.abcents.filter(item => item.user.role == '2')
+		},
 		player() {
       		// return this.$refs.youtube.player
     	}
 	},
 	methods: {
-		...mapActions('classroom',['storeLiveClassroom', 'getDataliveClassroom', 'getDataStudents']),
+		...mapActions('classroom',['storeLiveClassroom', 'getDataliveClassroom', 'getDataStudents', 'stopLiveClassroom']),
 		...mapActions('abcent',['getAbcentToday','storeAbcentToday']),
 		playVideo() {
       		this.player.playVideo()
     	},
     	playing() {
-      		console.log('\o/ we are watching!!!')
+
+    	},
+    	closeClass() {
+    		this.$swal({
+                title: 'Informasi',
+                text: "Kelas akan ditutup, pastikan seluruh siswa sudah terabsen",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+                if (result.value) {
+                   try {
+                   		await this.stopLiveClassroom(this.$route.params.id)
+
+                   		this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id }})
+                   } catch (error) {
+
+                   }
+                }
+            })
     	}
 	},
 	async created() {
 		try {
 			await this.getDataStudents(this.$route.params.id)
 			await this.getDataliveClassroom(this.$route.params.id)
-	      	// this.videoId = this.$youtube.getIdFromUrl('https://youtu.be/n7DtD2hfolI')
+			if(this.classlive.settings.type == 'youtube') {
+				this.videoId = this.$youtube.getIdFromUrl(this.classlive.settings.link)
+			}
 		} catch (error) {
 
 		}
