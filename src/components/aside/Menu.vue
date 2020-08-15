@@ -127,6 +127,7 @@
         <router-link
         :to="{ name: 'info.index' }"
         v-slot="{ href, navigate, isActive, isExactActive }"
+        v-if="$role('0')"
       >
         <li
           aria-haspopup="true"
@@ -146,6 +147,7 @@
       <router-link
         :to="{ name: 'event.index'}"
         v-slot="{ href, navigate, isActive, isExactActive }"
+        v-if="$role('0')"
       >
         <li
           aria-haspopup="true"
@@ -162,6 +164,26 @@
           </a>
         </li>
       </router-link>
+       <router-link
+          :to="{ name: 'master.subject.me' }"
+          v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('1')"
+        >
+          <li
+            aria-haspopup="true"
+            data-menu-toggle="hover"
+            class="menu-item"
+            :class="[
+              isActive && 'menu-item-active',
+              isExactActive && 'menu-item-active'
+            ]"
+          >
+            <a :href="href" class="menu-link" @click="navigate">
+              <i class="menu-icon flaticon-time-2"></i>
+              <span class="menu-text">Mata Pelajaran</span>
+            </a>
+          </li>
+        </router-link>
         <router-link
           :to="{ name: 'master.classroom.me' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
@@ -177,7 +199,7 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon2-protection"></i>
+              <i class="menu-icon flaticon-presentation"></i>
               <span class="menu-text">Kelas</span>
             </a>
           </li>

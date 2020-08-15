@@ -7,6 +7,19 @@
 						<span class="card-label font-weight-bolder text-dark">Kelas</span>
 						<span class="text-muted mt-1 font-weight-bold font-size-sm">Kelas saya mengajar</span>
 					</h3>
+					<div class="card-toolbar">
+						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
+							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
+								<span class="svg-icon svg-icon">
+						          <inline-svg
+						            class="svg-icon"
+						            src="/media/svg/icons/Design/Flatten.svg"
+						          />
+						        </span>
+								Tambah kelas
+							</b-button>
+						</div>
+					</div>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive-md" >
@@ -49,6 +62,34 @@
 				</div>
 			</div>
 		</div>
+		<b-modal id="modal-create" title="Tambah kelas" size="lg">
+			<form class="form pt-9">
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">Kelas</label>
+					<div class="col-lg-9 col-xl-6">
+						<select class="form-control form-control-lg form-control-solid">
+							<option :value="classroom.id" v-for="classroom in classrooms.data">{{ classroom.name }}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">Matpel</label>
+					<div class="col-lg-9 col-xl-6">
+						<select class="form-control form-control-lg form-control-solid">
+							<option :value="subject.id" v-for="subject in subjects.data">{{ subject.name }}</option>
+						</select>
+					</div>
+				</div>
+			</form>
+			<template v-slot:modal-footer="{ cancel }">
+		      <b-button size="sm" variant="primary" @click="" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Simpan' }}
+		      </b-button>
+		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+		        Cancel
+		      </b-button>
+		    </template>
+		</b-modal>
 	</div>
 </template>
 <script>
@@ -76,10 +117,12 @@ export default {
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState(['errors']),
-		...mapState('classroom',['myclassrooms'])
+		...mapState('classroom',['myclassrooms', 'classrooms']),
+		...mapState('subject', ['subjects']),
 	},
 	methods: {
-		...mapActions('classroom', ['getDataClassromMine']),
+		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms']),
+		...mapActions('subject', ['getDataSubjects']),
 		async changeData() {
 			try {
 				await this.getDataClassromMine()
@@ -90,6 +133,8 @@ export default {
 	},
 	created() {
 		this.changeData()
+		this.getDataClassrooms({ perPage: 100 })
+		this.getDataSubjects({ perPage: 200 })
 	}
 }
 </script>

@@ -22,6 +22,7 @@ const ClassroomLiveAdd = () => import('@/views/master/classroom/ClassroomLiveAdd
 
 const SubjectIndex = () => import('@/views/master/subject/Index')
 const SubjectData = () => import('@/views/master/subject/Subject')
+const SubjectMe = () => import('@/views/master/subject/SubjectMe')
 
 const LectureIndex = () => import('@/views/lecture/Index')
 const LectureData = () => import('@/views/lecture/Lecture')
@@ -133,6 +134,11 @@ Vue.use(VueRouter)
                 path: '',
                 name: 'master.subject.index',
                 component: SubjectData
+              },
+              {
+                path: 'me',
+                name: 'master.subject.me',
+                component: SubjectMe
               }
             ]
           }
