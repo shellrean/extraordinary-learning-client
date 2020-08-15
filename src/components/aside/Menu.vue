@@ -31,7 +31,7 @@
         v-if="$role('0')"
         >
             <a href="#" class="menu-link menu-toggle">
-                <i class="menu-icon flaticon2-cube"></i>
+                <i class="menu-icon flaticon-imac"></i>
                 <span class="menu-text">Data master</span>
             </a>
             <div class="menu-submenu">
@@ -125,8 +125,47 @@
             </div>
         </li>
         <router-link
+        :to="{ name: 'info.index' }"
+        v-slot="{ href, navigate, isActive, isExactActive }"
+      >
+        <li
+          aria-haspopup="true"
+          data-menu-toggle="hover"
+          class="menu-item"
+          :class="[
+            isActive && 'menu-item-active',
+            isExactActive && 'menu-item-active'
+          ]"
+        >
+          <a :href="href" class="menu-link" @click="navigate">
+            <i class="menu-icon flaticon-information"></i>
+            <span class="menu-text">Informasi</span>
+          </a>
+        </li>
+      </router-link>
+      <router-link
+        :to="{ name: 'event.index'}"
+        v-slot="{ href, navigate, isActive, isExactActive }"
+      >
+        <li
+          aria-haspopup="true"
+          data-menu-toggle="hover"
+          class="menu-item"
+          :class="[
+            isActive && 'menu-item-active',
+            isExactActive && 'menu-item-active'
+          ]"
+        >
+          <a :href="href" class="menu-link" @click="navigate">
+            <i class="menu-icon flaticon-event-calendar-symbol"></i>
+            <span class="menu-text">Kegiatan</span>
+          </a>
+        </li>
+      </router-link>
+        <router-link
           :to="{ name: 'master.classroom.me' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('1')"
         >
           <li
             aria-haspopup="true"
@@ -146,6 +185,7 @@
         <router-link
           :to="{ name: 'lecture.index' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('1')"
         >
           <li
             aria-haspopup="true"
@@ -165,6 +205,7 @@
         <router-link
           :to="{ name: 'task.index' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('1')"
         >
           <li
             aria-haspopup="true"
@@ -181,31 +222,12 @@
             </a>
           </li>
         </router-link>
-        <router-link
-          to="/mater"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-        >
-          <li
-            aria-haspopup="true"
-            data-menu-toggle="hover"
-            class="menu-item"
-            :class="[
-              isActive && 'menu-item-active',
-              isExactActive && 'menu-item-active'
-            ]"
-          >
-            <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon2-folder"></i>
-              <span class="menu-text">Filemedia</span>
-            </a>
-          </li>
-        </router-link>
         <li class="menu-section">
             <h4 class="menu-text">Reporting</h4>
             <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
         </li>
         <router-link
-          to="/mater"
+          :to="{ name: 'report.abcent' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
         >
           <li
@@ -219,7 +241,7 @@
           >
             <a :href="href" class="menu-link" @click="navigate">
               <i class="menu-icon flaticon2-box-1"></i>
-              <span class="menu-text">Report materi</span>
+              <span class="menu-text">Report absensi</span>
             </a>
           </li>
         </router-link>
@@ -228,7 +250,7 @@
             <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
         </li>
         <router-link
-          to="/mater"
+          :to="{ name: 'setting.dashboard' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
           v-if="$role('0')"
         >

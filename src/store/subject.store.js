@@ -16,6 +16,7 @@ const mutations = {
 	},
 	ASSIGN_FORM_SUBJECT(state, payload) {
 		state.subject = {
+			id: payload.id,
 			name: payload.name,
 			description: payload.description,
 			settings: payload.settings
@@ -23,6 +24,7 @@ const mutations = {
 	},
 	CLEAR_FORM_SUBJECT(state, payload) {
 		state.subject = {
+			id: '',
 			name: '',
 			description: '',
 			settings: {}
@@ -57,7 +59,7 @@ const actions = {
 			try {
 				let network = await $axios.post(`subjects`, state.subject)
 
-				commit('CLEAR_FORM_SUBJECT'),
+				commit('CLEAR_FORM_SUBJECT')
 				commit('CLEAR_ERROR', true, { root: true })
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
@@ -89,8 +91,9 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.put(`subjects/${payload}`, state.subject)
+				let network = await $axios.put(`subjects/${state.subject.id}`, state.subject)
 
+				commit('CLEAR_FORM_SUBJECT')
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
@@ -104,6 +107,20 @@ const actions = {
 		return new Promise(async(resolve, reject) => {
 			try {
 				let network = await $axios.delete(`subjects/${payload}`)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	importDataSubject({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async (resolve, reject) => {
+			try {
+				let network = await $axios.post(`subjects/import`, payload)
 
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)

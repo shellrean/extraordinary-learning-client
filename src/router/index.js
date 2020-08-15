@@ -33,6 +33,19 @@ const TaskData = () => import('@/views/task/Task')
 const TaskAdd = () => import('@/views/task/Add')
 const TaskView = () => import('@/views/task/View')
 
+const ReportIndex = () => import('@/views/report/Index')
+const ReportAbcent = () => import('@/views/report/Abcent')
+
+const SettingIndex = () => import('@/views/setting/Index')
+const SettingDashboard = () => import('@/views/setting/Dashboard')
+const SettingSchool = () => import('@/views/setting/School')
+
+const EventIndex = () => import('@/views/event/Index')
+const EventData = () => import('@/views/event/Event')
+
+const InfoIndex = () => import('@/views/info/Index')
+const InfoData = () => import('@/views/info/Info')
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -126,6 +139,28 @@ Vue.use(VueRouter)
         ]
       },
       {
+        path: 'info',
+        component: InfoIndex,
+        children: [
+          {
+            path: '',
+            name: 'info.index',
+            component: InfoData
+          }
+        ]
+      },
+      {
+        path: 'event',
+        component: EventIndex,
+        children: [
+          {
+            path: '',
+            name: 'event.index',
+            component: EventData
+          }
+        ]
+      },
+      {
         path: 'lecture',
         component: LectureIndex,
         children: [
@@ -164,6 +199,33 @@ Vue.use(VueRouter)
             path: ':id',
             name: 'task.view',
             component: TaskView
+          }
+        ]
+      },
+      {
+        path: 'report',
+        component: ReportIndex,
+        children: [
+          {
+            path: 'abcent',
+            name: 'report.abcent',
+            component: ReportAbcent
+          }
+        ]
+      },
+      {
+        path: 'setting',
+        component: SettingIndex,
+        children: [
+          {
+            path: '',
+            name: 'setting.dashboard',
+            component: SettingDashboard
+          },
+          {
+            path: 'school',
+            name: 'setting.school',
+            component: SettingSchool
           }
         ]
       }

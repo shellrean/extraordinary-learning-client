@@ -106,6 +106,26 @@ const actions = {
 				reject(error.response.data)
 			}
 		})
+	},
+	sendTask({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			let id = payload.id
+			let data = payload.data
+			try {
+				let network = await $axios.post(`tasks/${id}/collect`, data, {
+					headers: {
+			            'content-type': 'multipart/form-data'
+			        }
+				})
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
 	}
 }
 

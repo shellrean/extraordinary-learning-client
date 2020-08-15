@@ -2,6 +2,7 @@ import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	classrooms: [],
+	classroom: {},
 	classlives: [],
 	classlive: {
 		settings: {
@@ -10,10 +11,14 @@ const state = () => ({
 	},
 	myclassrooms: [],
 	students: [],
-	comments: []
+	comments: [],
+	page: 1
 })
 
 const mutations = {
+	ASSIGN_DATA_CLASSROOMS(state, payload) {
+		state.classrooms = payload
+	},
 	ASSIGN_DATA_MY_CLASSROOMS(state, payload) {
 		state.myclassrooms = payload
 	},
@@ -28,10 +33,92 @@ const mutations = {
 	},
 	ASSIGN_DATA_STUDENTS(state, payload) {
 		state.students = payload
+	},
+	ASSIGN_DATA_CLASSROOM(state, payload) {
+		state.classroom = payload
+	},
+	CLEAR_CLASSROOM(state, payload) {
+		state.classroom = {}
+	},
+	SET_PAGE(state, payload) {
+		state.page = payload
 	}
 }
 
 const actions = {
+	getDataClassrooms({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.get(`classrooms`)
+
+				commit('ASSIGN_DATA_CLASSROOMS', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataClassroom({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.get(`classrooms/${payload}`)
+
+				commit('ASSIGN_DATA_CLASSROOM', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	deleteDataClassroom({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.delete(`classrooms/${payload}`)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)				
+			}
+		})
+	},
+	createNewClassroom({ commit, state }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.post(`classrooms`, state.classroom)
+
+				commit('CLEAR_CLASSROOM')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	importClassroom({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async (resolve, reject) => {
+			try {
+				let network = await $axios.post(`classrooms/import`, payload)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	getDataClassromMine({ commit }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {

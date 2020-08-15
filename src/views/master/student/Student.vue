@@ -9,7 +9,7 @@
 					</h3>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-							<b-button variant="light-primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm mr-2">
+							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
 								<span class="svg-icon svg-icon">
 						          <inline-svg
 						            class="svg-icon"
@@ -47,16 +47,16 @@
 							</div>
 						</div>
 					</div>
-					<div class="table-responsive-md" v-if="typeof teachers.data != 'undefined'">
+					<div class="table-responsive-md" v-if="typeof students.data != 'undefined'">
 						<b-table 
                         id="table-transition-example" 
                         :tbody-transition-props="transProps"
                         show-empty
                         :fields="fields"
-                        :items="teachers.data"
+                        :items="students.data"
                         >
                         	<template v-slot:cell(no)="row">
-                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="teachers.from+row.index"></span></span>
+                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="students.from+row.index"></span></span>
                         	</template>
                         	<template v-slot:cell(user)="row">
                         		<span style="width: 250px;">
@@ -76,17 +76,16 @@
                         		<span class="label label-lg font-weight-bold  label-light-info label-inline">{{ row.item.isactive == 0 ? 'In- active' : 'Active' }}</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-medical"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
+                        		<b-button size="sm" @click="getUserData(row.item.id)" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
+                        		<b-button @click="deleteStudent(row.item.id)" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
 					      	pills 
 					        v-model="page"
-					        :total-rows="teachers.total"
-					        :per-page="teachers.per_page"
+					        :total-rows="students.total"
+					        :per-page="students.per_page"
 					        :disabled="isLoading"
 					        last-number
 					      ></b-pagination>
@@ -102,21 +101,21 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
-								<span class="text-muted">Menampilkan {{ teachers.data.length }} dari {{ teachers.total }} records</span>
+								<span class="text-muted">Menampilkan {{ students.data.length }} dari {{ students.total }} records</span>
 							</div>
 					    </div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah guru" size="lg">
+		<b-modal id="modal-create" title="Tambah peserta" size="lg">
 			<form class="form pt-9">
 				<div class="form-group row">
 					<label class="col-xl-3 col-lg-9 text-right col-form-label">
 						Nama
 					</label>
 					<div class="col-lg-9 col-xl-6">
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="data.name" :class="{ 'is-invalid' : errors.name }">
+						<input type="text" class="form-control form-control-lg form-control-solid" v-model="student.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -125,7 +124,7 @@
 						Email
 					</label>
 					<div class="col-lg-9 col-xl-6">
-						<input type="email" class="form-control form-control-lg form-control-solid" v-model="data.email" :class="{ 'is-invalid' : errors.email }">
+						<input type="email" class="form-control form-control-lg form-control-solid" v-model="student.email" :class="{ 'is-invalid' : errors.email }">
 						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -134,14 +133,71 @@
 						Password
 					</label>
 					<div class="col-lg-9 col-xl-6">
-						<input type="password" class="form-control form-control-lg form-control-solid" v-model="data.password" :class="{ 'is-invalid' : errors.password }">
+						<input type="password" class="form-control form-control-lg form-control-solid" v-model="student.password" :class="{ 'is-invalid' : errors.password }">
 						<div class="invalid-feedback" v-if="errors.password">{{ errors.password[0] }}</div>
 					</div>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submitNewTeacher" :disabled="isLoading">
+		      <b-button size="sm" variant="primary" @click="submitNewStudent" :disabled="isLoading">
 		        {{ isLoading ? 'Processing...' : 'Simpan' }}
+		      </b-button>
+		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+		        Cancel
+		      </b-button>
+		    </template>
+		</b-modal>
+		<b-modal id="modal-edit" title="Edit peserta" size="lg">
+			<form class="form pt-9">
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+						Nama
+					</label>
+					<div class="col-lg-9 col-xl-6">
+						<input type="text" class="form-control form-control-lg form-control-solid" v-model="student.name" :class="{ 'is-invalid' : errors.name }">
+						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+						Email
+					</label>
+					<div class="col-lg-9 col-xl-6">
+						<input type="email" class="form-control form-control-lg form-control-solid" v-model="student.email" :class="{ 'is-invalid' : errors.email }">
+						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+						Status
+					</label>
+					<div class="col-lg-9 col-xl-6">
+						<select class="form-control" v-model="student.isactive">
+							<option value="1">Aktif</option>
+							<option value="0">Tidak aktif</option>
+						</select>
+					</div>
+				</div>
+			</form>
+			<template v-slot:modal-footer="{ cancel }">
+		      <b-button size="sm" variant="primary" @click="updateData" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Simpan' }}
+		      </b-button>
+		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+		        Cancel
+		      </b-button>
+		    </template>
+		</b-modal>
+		<b-modal id="modal-import" title="Import peserta" size="lg">
+			<b-form-file
+		      v-model="file"
+		      :state="Boolean(file)"
+		      placeholder="Choose a file excel or drop it here..."
+		      drop-placeholder="Drop file here..."
+		    ></b-form-file>
+			<template v-slot:modal-footer="{ cancel }">
+		      <b-button size="sm" variant="primary" @click="upload" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Upload' }}
 		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
@@ -153,13 +209,13 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination } from 'bootstrap-vue'
+import { BButton, BTable, BPagination, BFormFile } from 'bootstrap-vue'
 import _ from 'lodash'
 
 export default {
 	name: 'UserDataMaster',
 	components: {
-		BButton, BTable, BPagination
+		BButton, BTable, BPagination, BFormFile
 	},
 	data() {
 		return {
@@ -171,10 +227,11 @@ export default {
 				email: '',
 				password: '',
 			},
+			file: null,
 	        perPage: 10,
 			fields: [
 				{ key: 'no', label: '#' },
-				{ key: 'user', label: 'User', shortable: true },
+				{ key: 'user', label: 'Peserta', shortable: true },
 				{ key: 'status', label: 'Status' },
 				{ key: 'actions', label: 'Aksi' }
 			],
@@ -184,20 +241,21 @@ export default {
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState(['errors']),
-		...mapState('user', {
-			teachers: state => state.teachers
-		}),
+		...mapState('user',['student','students']),
 		page: {
             get() {
-                return this.$store.state.user.page
+                return this.$store.state.user.student_page
             },
             set(val) {
-                this.$store.commit('user/SET_PAGE', val)
+                this.$store.commit('user/SET_STUDENT_PAGE', val)
             }
         }
 	},
 	methods: {
-		...mapActions('user', ['createNewTeacher', 'getTeacherDataTable']),
+		...mapActions('user', ['createNewStudent', 'getDataStudents','deleteUser', 'getStudent', 'updateStudent', 'importStudent']),
+		changeData() {
+			this.getDataStudents({ search: this.search, perPage: this.perPage })
+		},
 		clearForm() {
 			this.data = {
 				name: '',
@@ -205,34 +263,88 @@ export default {
 				password: ''
 			}
 		},	
-		async submitNewTeacher() {
+		async submitNewStudent() {
 			try {
-				await this.createNewTeacher(this.data)
-				this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+				await this.createNewStudent(this.data)
+				this.changeData()
 				this.$bvModal.hide('modal-create')
 				this.clearForm()
 				this.$store.commit('CLEAR_ERROR')
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
+		},
+		deleteStudent(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Peserta akan dihapus beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+                if (result.value) {
+                   try {
+                   		await this.deleteUser(id)
+                   		this.changeData()
+                   } catch (error) {
+                   		this.$bvToast.toast(error.message, errorToas())
+                   }
+                }
+            })
+		},
+		async getUserData(id) {
+			try {
+				await this.getStudent(id)
+
+				this.$bvModal.show('modal-edit')
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async updateData() {
+			try {
+				await this.updateStudent()
+
+				this.$bvModal.hide('modal-edit')
+				this.changeData()
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async upload() {
+			try {
+				let formData = new FormData()
+				formData.append('file', this.file)
+
+				await this.importStudent(formData)
+
+				this.$bvModal.hide('modal-import')
+				this.file = null
+
+				this.changeData()
+			} catch (error) {	
+				this.$bvToast.toast(error.message, errorToas())
+			}
 		}
 	},
 	async created() {
 		try {
-			 this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+			this.changeData()
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {
 		page() {
-			this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+			this.changeData()
 		},
 		search:  _.debounce(function (value) {
-            this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+            this.changeData()
         }, 500),
 		perPage() {
-			this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+			this.changeData()
 		}
 	}
 }

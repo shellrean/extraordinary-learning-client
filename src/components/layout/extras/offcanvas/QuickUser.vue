@@ -20,7 +20,6 @@
 		    >
 		    	<h3 class="font-weight-bold m-0">
 		    		User Profile
-		    		<small class="text-muted font-size-sm ml-2">12 messages</small>
 		    	</h3>
 		    	<a
 		          href="#"
@@ -35,19 +34,23 @@
 				<!--begin::Header-->
 				<div class="d-flex align-items-center mt-5">
 					<div class="symbol symbol-100 mr-5">
-						<div class="symbol-label" style="background-image:url('assets/media/users/300_21.jpg')"></div>
+						<div class="symbol-label" style="background-image:url('/media/users/default.jpg')"></div>
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">James Jones</a>
-						<div class="text-muted mt-1">Application Developer</div>
+						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ authenticated.name }}</a>
+						<div class="text-muted mt-1">
+							<span v-if="authenticated.role == '0'">Administrator</span>
+							<span v-if="authenticated.role == '1'">Guru</span>
+							<span v-if="authenticated.role == '2'">Siswa</span>
+						</div>
 						<div class="navi mt-2">
 							<a href="#" class="navi-item">
 								<span class="navi-link p-0 pb-2">
 									<span class="navi-icon mr-1">
-										</span>
+										<i class="flaticon-email"></i>
 									</span>
-									<span class="navi-text text-muted text-hover-primary">jm@softplus.com</span>
+									<span class="navi-text text-muted text-hover-primary">{{ authenticated.email }}</span>
 								</span>
 							</a>
 							<a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5" @click="logout" :disabled="isLoading">{{ isLoading ? 'Processing...': 'Sign Out' }}</a>
@@ -59,7 +62,7 @@
 	</div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import KTLayoutQuickUser from "@/assets/js/layout/extended/quick-user.js";
 import KTOffcanvas from "@/assets/js/components/offcanvas.js";
 
@@ -69,7 +72,8 @@ export default {
     	KTLayoutQuickUser.init(this.$refs["kt_quick_user"]);
   	},
   	computed: {
-  		...mapGetters(['isLoading'])
+  		...mapGetters(['isLoading']),
+  		...mapState('user',['authenticated'])
   	},
   	methods: {
   		...mapActions('auth',['loggedOut']),

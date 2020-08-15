@@ -1,0 +1,3 @@
+<template>
+	<rotuer-view />
+</template>

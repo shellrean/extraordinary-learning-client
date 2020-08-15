@@ -9,7 +9,7 @@
 					</h3>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-							<b-button variant="light-primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm mr-2">
+							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
 								<span class="svg-icon svg-icon">
 						          <inline-svg
 						            class="svg-icon"
@@ -76,9 +76,8 @@
                         		<span class="label label-lg font-weight-bold  label-light-info label-inline">{{ row.item.isactive == 0 ? 'In- active' : 'Active' }}</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-medical"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
+                        		<b-button @click="getUserData(row.item.id)" :disabled="isLoading" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
+                        		<b-button @click="deleteTeacher(row.item.id)" :disabled="isLoading"  size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
@@ -148,18 +147,77 @@
 		      </b-button>
 		    </template>
 		</b-modal>
+
+		<b-modal id="modal-edit" title="Edit guru" size="lg">
+			<form class="form pt-9">
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+						Nama
+					</label>
+					<div class="col-lg-9 col-xl-6">
+						<input type="text" class="form-control form-control-lg form-control-solid" v-model="user.name" :class="{ 'is-invalid' : errors.name }">
+						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+						Email
+					</label>
+					<div class="col-lg-9 col-xl-6">
+						<input type="email" class="form-control form-control-lg form-control-solid" v-model="user.email" :class="{ 'is-invalid' : errors.email }">
+						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+						Status
+					</label>
+					<div class="col-lg-9 col-xl-6">
+						<select class="form-control" v-model="user.isactive">
+							<option value="1">Aktif</option>
+							<option value="0">Tidak aktif</option>
+						</select>
+					</div>
+				</div>
+			</form>
+			<template v-slot:modal-footer="{ cancel }">
+		      <b-button size="sm" variant="primary" @click="updateData" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Simpan' }}
+		      </b-button>
+		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+		        Cancel
+		      </b-button>
+		    </template>
+		</b-modal>
+
+		<b-modal id="modal-import" title="Import guru" size="lg">
+			<b-form-file
+		      v-model="file"
+		      :state="Boolean(file)"
+		      placeholder="Choose a file excel or drop it here..."
+		      drop-placeholder="Drop file here..."
+		    ></b-form-file>
+			<template v-slot:modal-footer="{ cancel }">
+		      <b-button size="sm" variant="primary" @click="upload" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Upload' }}
+		      </b-button>
+		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+		        Cancel
+		      </b-button>
+		    </template>
+		</b-modal>
 	</div>
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination } from 'bootstrap-vue'
+import { BButton, BTable, BPagination, BFormFile, BFormCheckbox } from 'bootstrap-vue'
 import _ from 'lodash'
 
 export default {
 	name: 'UserDataMaster',
 	components: {
-		BButton, BTable, BPagination
+		BButton, BTable, BPagination, BFormFile, BFormCheckbox
 	},
 	data() {
 		return {
@@ -171,21 +229,25 @@ export default {
 				email: '',
 				password: '',
 			},
+			file: null,
 	        perPage: 10,
 			fields: [
 				{ key: 'no', label: '#' },
+				{ key: 'id', label: 'ID Pengajar' },
 				{ key: 'user', label: 'User', shortable: true },
 				{ key: 'status', label: 'Status' },
 				{ key: 'actions', label: 'Aksi' }
 			],
-			search: ''
+			search: '',
+			user_id: 0
 		}
 	},
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState(['errors']),
 		...mapState('user', {
-			teachers: state => state.teachers
+			teachers: state => state.teachers,
+			user: state => state.user
 		}),
 		page: {
             get() {
@@ -197,7 +259,7 @@ export default {
         }
 	},
 	methods: {
-		...mapActions('user', ['createNewTeacher', 'getTeacherDataTable']),
+		...mapActions('user', ['createNewTeacher', 'getTeacherDataTable', 'deleteUser', 'getUser', 'updateUser', 'importTeacher']),
 		clearForm() {
 			this.data = {
 				name: '',
@@ -213,6 +275,60 @@ export default {
 				this.clearForm()
 				this.$store.commit('CLEAR_ERROR')
 			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		deleteTeacher(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "User akan dihapus beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+                if (result.value) {
+                   try {
+                   		await this.deleteUser(id)
+                   		this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+                   } catch (error) {
+                   		this.$bvToast.toast(error.message, errorToas())
+                   }
+                }
+            })
+		},
+		async getUserData(id) {
+			try {
+				await this.getUser(id)
+
+				this.$bvModal.show('modal-edit')
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async updateData() {
+			try {
+				await this.updateUser()
+
+				this.$bvModal.hide('modal-edit')
+				this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async upload() {
+			try {
+				let formData = new FormData()
+				formData.append('file', this.file)
+
+				await this.importTeacher(formData)
+
+				this.$bvModal.hide('modal-import')
+				this.file = null
+
+				this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+			} catch (error) {	
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		}
