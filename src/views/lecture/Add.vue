@@ -2,7 +2,7 @@
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
 			<div class="card card-custom">
-				<div class="card-header">
+				<div class="card-header pt-6">
 					<h3 class="card-title align-items-start flex-column">
 						<span class="card-label font-weight-bolder text-dark">Buat materi</span>
 						<span class="text-muted mt-1 font-weight-bold font-size-sm">Materi dari hati & pikiran serta dengan cinta</span>
@@ -25,6 +25,7 @@
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
+import { successToas, errorToas } from '@/core/entities/notif'
 import LectureForm from './Form'
 
 export default {
@@ -42,7 +43,7 @@ export default {
 				await this.createNewLecture()
 				this.$router.push({ name: 'lecture.index' })
 			} catch (error) {
-				
+				this.$bvToast.toast(error.message, errorToas())
 			}
 		}
 	},

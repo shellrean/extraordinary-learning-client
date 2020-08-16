@@ -39,6 +39,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'CommentLecture',
@@ -73,7 +74,7 @@ export default {
 				})
 				this.content = ''
 			} catch (error) {
-
+				this.$bvToast.toast(error.message, errorToas())
 			}
 		},
 		scrollToEnd() {
@@ -88,7 +89,7 @@ export default {
 			this.channel = 'classlive_'+this.$route.params.id
 			await this.getDataComments(this.$route.params.id)
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	mounted() {

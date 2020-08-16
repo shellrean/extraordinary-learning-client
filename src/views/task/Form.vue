@@ -6,27 +6,29 @@
 					<div class="form-group">
 						<label>Body</label>
 						<ckeditor v-model="task.body" v-if="showEditor" :config="editorConfig"></ckeditor>
+						<span class="text-danger" v-if="errors.body">{{ errors.body[0] }}</span>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4">
-			<div clss="card card-custom">
+			<div class="card card-custom">
 				<div class="card-body">
 					<div class="form-group">
 						<label>Judul</label>
-						<input type="text" class="form-control" v-model="task.title">
+						<input type="text" class="form-control form-control-lg form-control-solid" v-model="task.title"  :class="{ 'is-invalid' : errors.title }">
+						<div class="invalid-feedback" v-if="errors.title">{{ errors.title[0] }}</div>
 					</div>
 					<div class="form-group">
-						<label>Type</label>
-						<select class="form-control" v-model="task.type">
+						<label>Jenis tugas</label>
+						<select class="form-control form-control-lg form-control-solid" v-model="task.type"  :class="{ 'is-invalid' : errors.type }">
 							<option value="0">File upload</option>
 						</select>
+						<div class="invalid-feedback" v-if="errors.type">{{ errors.type[0] }}</div>
 					</div>
 					<div class="form-group">
-						<b-form-checkbox v-model="task.isactive" name="check-button" switch size="lg">
-					      Tugas aktif
-					    </b-form-checkbox>
+						<label>Deadline</label>
+						<VueCtkDateTimePicker v-model="task.deadline" format='YYYY-MM-DD hh:mm'/>
 					</div>
 				</div>
 			</div>
@@ -37,11 +39,13 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { BFormCheckbox } from 'bootstrap-vue'
 import store from '@/store'
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 
 export default {
 	name: 'FormTask',
 	components: {
-		BFormCheckbox
+		BFormCheckbox, VueCtkDateTimePicker
 	},
 	data() {
 		return {
@@ -59,7 +63,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('task',['task'])
+		...mapState('task',['task']),
+		...mapState(['errors']),
 	}
 }
 </script>

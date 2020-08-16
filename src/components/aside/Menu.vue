@@ -164,26 +164,6 @@
           </a>
         </li>
       </router-link>
-       <router-link
-          :to="{ name: 'master.subject.me' }"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-          v-if="$role('1')"
-        >
-          <li
-            aria-haspopup="true"
-            data-menu-toggle="hover"
-            class="menu-item"
-            :class="[
-              isActive && 'menu-item-active',
-              isExactActive && 'menu-item-active'
-            ]"
-          >
-            <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon-time-2"></i>
-              <span class="menu-text">Mata Pelajaran</span>
-            </a>
-          </li>
-        </router-link>
         <router-link
           :to="{ name: 'master.classroom.me' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
@@ -240,7 +220,7 @@
           >
             <a :href="href" class="menu-link" @click="navigate">
               <i class="menu-icon flaticon2-notepad"></i>
-              <span class="menu-text">Tasks</span>
+              <span class="menu-text">Tugas</span>
             </a>
           </li>
         </router-link>

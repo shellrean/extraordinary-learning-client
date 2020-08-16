@@ -284,7 +284,7 @@ export default {
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		},
-		async deleteClassroom(id) {
+		deleteClassroom(id) {
 			this.$swal({
                 title: 'Informasi',
                 text: "Kelas akan dihapus beserta dengan data yang terkait",

@@ -4,7 +4,7 @@
 			<div class="card card-custom">
 				<div class="card-header pt-6">
 					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Buat tugas</span>
+						<span class="card-label font-weight-bolder text-dark">Edit tugas</span>
 						<span class="text-muted mt-1 font-weight-bold font-size-sm">Tugas dari hati & pikiran serta dengan cinta</span>
 					</h3>
 					<div class="card-toolbar">
@@ -38,10 +38,10 @@ export default {
 		...mapState('task',['task'])
 	},
 	methods: {
-		...mapActions('task',['createNewTask']),
+		...mapActions('task',['updateDataTask', 'getDataTask']),
 		async submit() {
 			try {
-				await this.createNewTask()
+				await this.updateDataTask()
 				this.$router.push({name: 'task.index' })
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
@@ -49,7 +49,10 @@ export default {
 		}
 	},
 	created() {
-		this.$store.commit('task/CLEAR_DATA_TASK')
+		this.getDataTask(this.$route.params.id)
+		.catch((error) => {
+			this.$bvToast.toast(error.message, errorToas())
+		})
 	}
 }
 </script>

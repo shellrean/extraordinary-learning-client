@@ -28,11 +28,13 @@ const LectureIndex = () => import('@/views/lecture/Index')
 const LectureData = () => import('@/views/lecture/Lecture')
 const LectureAdd = () => import('@/views/lecture/Add')
 const LectureView = () => import('@/views/lecture/View')
+const LectureEdit = () => import('@/views/lecture/Edit')
 
 const TaskIndex = () => import('@/views/task/Index')
 const TaskData = () => import('@/views/task/Task')
 const TaskAdd = () => import('@/views/task/Add')
 const TaskView = () => import('@/views/task/View')
+const TaskEdit = () => import('@/views/task/Edit')
 
 const ReportIndex = () => import('@/views/report/Index')
 const ReportAbcent = () => import('@/views/report/Abcent')
@@ -184,6 +186,11 @@ Vue.use(VueRouter)
             path: ':id',
             name: 'lecture.view',
             component: LectureView
+          },
+          {
+            path: ':id/edit',
+            name: 'lecture.edit',
+            component: LectureEdit
           }
         ]
       },
@@ -205,6 +212,11 @@ Vue.use(VueRouter)
             path: ':id',
             name: 'task.view',
             component: TaskView
+          },
+          {
+            path: ':id/edit',
+            name: 'task.edit',
+            component: TaskEdit
           }
         ]
       },
@@ -257,6 +269,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+
 })
 
 router.afterEach(() => {

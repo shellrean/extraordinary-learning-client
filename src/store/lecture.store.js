@@ -5,6 +5,7 @@ const state = () => ({
 	classroom_lectures: [],
 	comments: [],
 	lecture: {
+		id: '',
 		title: '',
 		body: '',
 		subject_id: '',
@@ -25,6 +26,7 @@ const mutations = {
 	},
 	ASSIGN_FORM(state, payload) {
 		state.lecture = {
+			id: payload.id,
 			title: payload.title,
 			body: payload.body,
 			subject_id: payload.subject_id,
@@ -33,6 +35,7 @@ const mutations = {
 	},
 	CLEAR_FORM_LECTURE(state, payload) {
 		state.lecture = {
+			id: '',
 			title: '',
 			body: '',
 			subject_id: '',
@@ -115,11 +118,15 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.put(`lectures/${payload}`, state.lecture)
+				let network = await $axios.put(`lectures/${state.lecture.id}`, state.lecture)
 
+				commit('CLEAR_ERROR', true, { root: true })
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
 				commit('SET_LOADING', false, { root: true })
 				reject(error.response.data)
 			}

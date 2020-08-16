@@ -6,6 +6,7 @@
 					<div class="form-group">
 						<label>Body</label>
 						<ckeditor v-model="lecture.body" v-if="showEditor" :config="editorConfig"></ckeditor>
+						<span class="text-danger" v-if="errors.body">{{ errors.body[0] }}</span>
 					</div>
 				</div>
 			</div>
@@ -15,18 +16,15 @@
 				<div class="card-body">
 					<div class="form-group" v-if="typeof subjects.data != 'undefined'">
 						<label>Pelajaran</label>
-						<select class="form-control" v-model="lecture.subject_id">
+						<select class="form-control form-control-lg form-control-solid" v-model="lecture.subject_id" :class="{ 'is-invalid' : errors.subject_id }">
 							<option v-for="subject in subjects.data" :value="subject.id">{{ subject.name }}</option>
 						</select>
+						<div class="invalid-feedback" v-if="errors.subject_id">{{ errors.subject_id[0] }}</div>
 					</div>
 					<div class="form-group">
 						<label>Judul</label>
-						<input type="text" class="form-control" v-model="lecture.title">
-					</div>
-					<div class="form-group">
-						<b-form-checkbox v-model="lecture.isactive" name="check-button" switch size="lg">
-					      Materi aktif
-					    </b-form-checkbox>
+						<input type="text" class="form-control form-control-lg form-control-solid" v-model="lecture.title" :class="{ 'is-invalid' : errors.title }"> 
+						<div class="invalid-feedback" v-if="errors.title">{{ errors.title[0] }}</div>
 					</div>
 				</div>
 			</div>
@@ -35,6 +33,7 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { successToas, errorToas } from '@/core/entities/notif'
 import { BFormCheckbox } from 'bootstrap-vue'
 import store from '@/store'
 
@@ -60,6 +59,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['baseURL']),
+		...mapState(['errors']),
 		...mapState('subject',['subjects']),
 		...mapState('lecture', {
 			lecture: state => state.lecture
@@ -72,7 +72,7 @@ export default {
 		try {
 			await this.getDataSubjects({ perPage: 100})
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	}
 }

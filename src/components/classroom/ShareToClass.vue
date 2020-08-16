@@ -8,7 +8,7 @@
 					</span>
 				</div>
 				<span class="text-muted font-weight-bold font-size-lg">
-					Hai bu Amelia, selamat datang di kelas kami
+					{{ authenticated.name }}, selamat datang di kelas kami
 				</span>
 			</div>
 			<div class="d-flex align-items-center">
@@ -79,6 +79,7 @@
 <script >
 import { BButton } from 'bootstrap-vue'
 import { mapGetters, mapState, mapActions } from 'vuex'
+import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'ShareToClassroom',
@@ -95,6 +96,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['isLoading']),
+		...mapState('user', ['authenticated']),
 		...mapState('lecture',['lectures']),
 		...mapState('task',['tasks']),
 	},
@@ -115,24 +117,25 @@ export default {
 				this.lecture_id = ''
 				this.body = ''
 			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
 			}
 		},
 		async submitshareeTask() {
-				try {
-					await this.shareeTask({
-						id: this.task_id,
-						data: {
-							classroom_id: this.$route.params.id,
-							body: this.task_body
-						}
-					})
-					await this.getDataClassroomTasks(this.$route.params.id)
-					this.$bvModal.hide('modal-task')
-					this.task_id = ''
-					this.task_body = ''
-				} catch (error) {
-					console.log(error)
-				}	
+			try {
+				await this.shareeTask({
+					id: this.task_id,
+					data: {
+						classroom_id: this.$route.params.id,
+						body: this.task_body
+					}
+				})
+				await this.getDataClassroomTasks(this.$route.params.id)
+				this.$bvModal.hide('modal-task')
+				this.task_id = ''
+				this.task_body = ''
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}	
 
 		}
 	},
@@ -141,7 +144,7 @@ export default {
 			this.getDataLectures({ perPage: 100 })
 			this.getDataTasks({ perPage: 100 })
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	}
 }

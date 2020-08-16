@@ -87,6 +87,8 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { BButton } from 'bootstrap-vue'
+import { successToas, errorToas } from '@/core/entities/notif'
+
 export default {
 	name: 'OnlineStudent',
 	components: {
@@ -147,7 +149,7 @@ export default {
 					classroom_id: this.classlive.classroom_id
 				})
 			} catch (error) {
-				console.log(error)
+				this.$bvToast.toast(error.message, errorToas())
 			}
 		}
 	},
@@ -164,7 +166,7 @@ export default {
 				});
 			}
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {

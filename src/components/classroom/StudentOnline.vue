@@ -18,7 +18,7 @@
 				<!--end::Symbol-->
 				<!--begin::Text-->
 				<div class="d-flex flex-column font-weight-bold">
-					<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{{ user.name }}</a>
+					<a href="#" class="text-dark text-hover-warning mb-1 font-size-lg">{{ user.name }}</a>
 					<span class="text-muted">{{ user.email }}</span>
 				</div>
 				<!--end::Text-->
@@ -30,6 +30,8 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import { successToas, errorToas } from '@/core/entities/notif'
+
 export default {
 	name: 'OnlineStudent',
 	data() {
@@ -59,7 +61,7 @@ export default {
 				});
 			}
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {

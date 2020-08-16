@@ -2,9 +2,9 @@
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
 			<div class="card card-custom">
-				<div class="card-header flex-wrap border-0 pt-6 pb-0">
+				<div class="card-header flex-wrap border-0 pt-6 pb-6">
 					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Kelas</span>
+						<span class="card-label font-weight-bolder text-dark">Kelas saya</span>
 						<span class="text-muted mt-1 font-weight-bold font-size-sm">Kelas saya mengajar</span>
 					</h3>
 					<div class="card-toolbar">
@@ -21,43 +21,35 @@
 						</div>
 					</div>
 				</div>
-				<div class="card-body">
-					<div class="table-responsive-md" >
-						<b-table 
-                        show-empty
-                        :fields="fields"
-                        :items="myclassrooms"
-                        >
-                        	<template v-slot:cell(no)="row">
-                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="row.index+1"></span></span>
-                        	</template>
-                        	<template v-slot:cell(name)="row">
-                        		<span style="width: 250px;">
-                        			<div class="d-flex align-items-center">
-                        				<div class="symbol symbol-40 symbol-light-info symbol-sm flex-shrink-0">			
-                        					<span class="symbol-label font-size-h4 font-weight-bold"><i class="flaticon-earth-globe "></i></span>
-                        				</div>								
-                        				<div class="ml-4">									
-                        					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.classroom.name"></div>									
-                        					<a href="#" class="text-muted font-weight-bold text-hover-primary" v-text="row.item.subject.name"></a>								
-                        				</div>							
-                        			</div>
-                        		</span>
-                        	</template>
-                        	<template v-slot:cell(actions)="row">
-                        		<b-button :to="{ name: 'master.classroom.dashboard', params: { id: row.item.classroom_id }}" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-buildings"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-clock-1"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-list"></i></b-button>
-                        	</template>
-                    	</b-table>
-                    	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
-					      <div class="d-flex align-items-center py-3">
-								<div class="d-flex align-items-center" v-if="isLoading">
-									<div class="mr-2 text-muted">Loading...</div>
-									<div class="spinner spinner-primary mr-10"></div>
+				<div class="card-body">	
+					<div class="row mt-2">
+						<div class="col-md-4" v-for="grade in groupedClass">
+							<div class="d-flex align-items-center mb-10" v-for="classroom in grade">
+								<div class="symbol symbol-40 symbol-light-primary mr-5">
+									<div class="symbol-label">
+										{{ classroom.classroom.grade }}
+									</div>
 								</div>
+								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
+									<router-link  :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" class="text-dark mb-1 font-size-lg text-hover-primary">
+										{{ classroom.classroom.name }}
+									</router-link>
+									<span class="text-muted">{{ classroom.subject.name }}</span>
+								</div>
+								<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+									<template v-slot:button-content>
+									    <i class="flaticon-more"></i>
+									</template>
+									<b-dropdown-item @click="deleteClassroomSubject(classroom.id)">Hapus</b-dropdown-item>
+								</b-dropdown>
 							</div>
-					    </div>
+						</div>
+						<div class="col-md-12" v-if="groupedClass.length == 0">
+							<div class="text-center">
+								<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+								<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -67,7 +59,7 @@
 				<div class="form-group row">
 					<label class="col-xl-3 col-lg-9 text-right col-form-label">Kelas</label>
 					<div class="col-lg-9 col-xl-6">
-						<select class="form-control form-control-lg form-control-solid">
+						<select class="form-control form-control-lg form-control-solid" v-model="data.classroom_id">
 							<option :value="classroom.id" v-for="classroom in classrooms.data">{{ classroom.name }}</option>
 						</select>
 					</div>
@@ -75,14 +67,14 @@
 				<div class="form-group row">
 					<label class="col-xl-3 col-lg-9 text-right col-form-label">Matpel</label>
 					<div class="col-lg-9 col-xl-6">
-						<select class="form-control form-control-lg form-control-solid">
+						<select class="form-control form-control-lg form-control-solid" v-model="data.subject_id">
 							<option :value="subject.id" v-for="subject in subjects.data">{{ subject.name }}</option>
 						</select>
 					</div>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="" :disabled="isLoading">
+		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
 		        {{ isLoading ? 'Processing...' : 'Simpan' }}
 		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
@@ -94,24 +86,20 @@
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { BButton, BDropdownItem, BDropdown } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination } from 'bootstrap-vue'
-import _ from 'lodash'
 
 export default {
-	name: 'MyClassrooms',
+	name: 'SubjectMe',
 	components: {
-		BButton, BTable, BPagination
+		BButton, BDropdownItem, BDropdown
 	},
 	data() {
 		return {
-			perPage: 10,
-			search: '',
-			fields: [
-				{ key: 'no', label: '#' },
-				{ key: 'name', label: 'Kelas' },
-				{ key: 'actions', label: 'Aksi' }
-			]
+			data: {
+				subject_id: null,
+				classroom_id: null
+			}
 		}
 	},
 	computed: {
@@ -119,22 +107,65 @@ export default {
 		...mapState(['errors']),
 		...mapState('classroom',['myclassrooms', 'classrooms']),
 		...mapState('subject', ['subjects']),
+		groupedClass() {
+			let group = this.myclassrooms.reduce((r, a) => {
+				r[a.classroom.grade] = [...r[a.classroom.grade] || [], a];
+			 	return r;
+			}, {});
+			return Object.values(group)
+		}
 	},
 	methods: {
-		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms']),
+		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms', 'createNewClassroomSubject', 'deleteDataClassroomSubject']),
 		...mapActions('subject', ['getDataSubjects']),
+		clearForm() {
+			this.data = {
+				subject_id: null,
+				classroom_id: null
+			}
+		},
 		async changeData() {
 			try {
 				await this.getDataClassromMine()
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
+		},
+		async submit() {
+			try {
+				await this.createNewClassroomSubject(this.data)
+				this.$bvModal.hide('modal-create')
+				this.clearForm()
+				this.changeData()
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async deleteClassroomSubject(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Kelas akan dihapus beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+            	if (result.value) {
+					try {
+						await this.deleteDataClassroomSubject(id)
+						this.changeData()
+					} catch (error) {	
+						this.$bvToast.toast(error.message, errorToas())
+					}
+            	}	
+            })
 		}
 	},
 	created() {
 		this.changeData()
-		this.getDataClassrooms({ perPage: 100 })
 		this.getDataSubjects({ perPage: 200 })
+		this.getDataClassrooms({ perPage: 100 })
 	}
 }
 </script>

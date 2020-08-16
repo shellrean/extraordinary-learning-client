@@ -9,15 +9,6 @@
 					</h3>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-							<b-button variant="light-primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm mr-2">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/PenAndRuller.svg"
-						          />
-						        </span>
-								Import
-							</b-button>
 							<b-button variant="primary" :to="{ name: 'lecture.add' }">
 								<span class="svg-icon svg-icon">
 						          <inline-svg
@@ -54,17 +45,30 @@
                         :fields="fields"
                         :items="lectures.data"
                         >
-                        	<template v-slot:cell(no)="row">
-                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="lectures.from+row.index"></span></span>
+                        	<template v-slot:cell(title)="row">
+                        		<span>
+                        			<div class="d-flex align-items-center">
+                        				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">					
+                        					<span class="symbol-label font-size-h4 font-weight-bold ">
+                        						<i class="flaticon-earth-globe text-primary"></i>
+                        					</span>								
+                        				</div>								
+                        				<div class="ml-4 d-flex flex-column">									
+                        					<router-link :to="{ name: 'lecture.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.title"></router-link>									
+                        					<span class="text-muted font-weight-bold" v-text="row.item.subject.name"></span>	
+                        				</div>							
+                        			</div>
+                        		</span>
                         	</template>
-
-                        	<template v-slot:cell(status)="row">
-                        		<span class="label label-lg font-weight-bold  label-light-info label-inline">{{ row.item.isactive == 0 ? 'In- active' : 'Active' }}</span>
-                        	</template>
+                        	
                         	<template v-slot:cell(actions)="row">
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2" :to="{ name: 'lecture.view', params: { id: row.item.id }}"><i class="flaticon-medical"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
+                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+									<template v-slot:button-content>
+									    <i class="flaticon-more"></i>
+									</template>
+									<b-dropdown-item :to="{ name: 'lecture.edit', params: { id: row.item.id}}" >Edit</b-dropdown-item>
+									<b-dropdown-item @click="deleteLecture()">Hapus</b-dropdown-item>
+								</b-dropdown>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
@@ -88,7 +92,6 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
-								<span class="text-muted">Menampilkan {{ lectures.data.length }} dari {{ lectures.total }} records</span>
 							</div>
 					    </div>
                     </div>
@@ -100,23 +103,21 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination } from 'bootstrap-vue'
+import { BButton, BTable, BPagination ,BDropdownItem, BDropdown } from 'bootstrap-vue'
 import _ from 'lodash'
 
 export default {
 	name: 'LectureDataMaster',
 	components: {
-		BButton, BTable, BPagination
+		BButton, BTable, BPagination, BDropdownItem, BDropdown
 	},
 	data() {
 		return {
 			search: '',
 			perPage: 10,
 	        fields: [
-				{ key: 'no', label: '#' },
-				{ key: 'title', label: 'Title', shortable: true },
-				{ key: 'status', label: 'Status' },
-				{ key: 'actions', label: 'Aksi' }
+				{ key: 'title', label: 'Materi',thStyle: { display: 'none'} },
+				{ key: 'actions', label: 'Aksi', thStyle: { display: 'none'} }
 			],
 		}
 	},
@@ -135,13 +136,33 @@ export default {
         },
 	},
 	methods: {
-		...mapActions('lecture', ['getDataLectures']),
+		...mapActions('lecture', ['getDataLectures', 'deleteDataLecture']),
 		async changeData() {
 			try {
 				await this.getDataLectures({ perPage: this.perPage, search: this.search })
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
+		},
+		deleteLecture(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Materi akan dihapus beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+                if (result.value) {
+                	try {
+                		await this.deleteDataLecture(id)
+                		this.changeData()
+                	} catch (error) {
+						this.$bvToast.toast(error.message, errorToas())
+					}
+                }
+            })
 		}
 	},
 	created() {

@@ -4,20 +4,11 @@
 			<div class="card card-custom">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Tugas</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage tugas</span>
+						<span class="card-label font-weight-bolder text-dark">Tugas saya</span>
+						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage tugas saya</span>
 					</h3>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-							<b-button variant="light-primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm mr-2">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/PenAndRuller.svg"
-						          />
-						        </span>
-								Import
-							</b-button>
 							<b-button variant="primary" :to="{ name: 'task.add' }">
 								<span class="svg-icon svg-icon">
 						          <inline-svg
@@ -25,7 +16,7 @@
 						            src="/media/svg/icons/Design/Flatten.svg"
 						          />
 						        </span>
-								Tambah materi
+								Tambah tugas
 							</b-button>
 						</div>
 					</div>
@@ -54,17 +45,30 @@
                         :fields="fields"
                         :items="tasks.data"
                         >
-                        	<template v-slot:cell(no)="row">
-                        		<span style="width: 40px;"><span class="font-weight-bolder" v-text="tasks.from+row.index"></span></span>
-                        	</template>
-
-                        	<template v-slot:cell(status)="row">
-                        		<span class="label label-lg font-weight-bold  label-light-info label-inline">{{ row.item.isactive == 0 ? 'In- active' : 'Active' }}</span>
+                       		 <template v-slot:cell(title)="row">
+                        		<span>
+                        			<div class="d-flex align-items-center">
+                        				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">					
+                        					<span class="symbol-label font-size-h4 font-weight-bold ">
+                        						<i class="flaticon-edit-1 text-primary"></i>
+                        					</span>								
+                        				</div>								
+                        				<div class="ml-4 d-flex flex-column">									
+                        					<router-link :to="{ name: 'task.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.title">
+                        						
+                        					</router-link>							
+                        				</div>							
+                        			</div>
+                        		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2" :to="{ name: 'task.view', params: { id: row.item.id }}"><i class="flaticon-medical"></i></b-button>
-                        		<b-button size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
+	                        	<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+									<template v-slot:button-content>
+									    <i class="flaticon-more"></i>
+									</template>
+									<b-dropdown-item :to="{ name: 'task.edit', params: { id: row.item.id }}">Edit</b-dropdown-item>
+									<b-dropdown-item @click="deleteTask(row.item.id)">Hapus</b-dropdown-item>
+								</b-dropdown>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
@@ -88,7 +92,6 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
-								<span class="text-muted">Menampilkan {{ tasks.data.length }} dari {{ tasks.total }} records</span>
 							</div>
 					    </div>
                     </div>
@@ -100,23 +103,21 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination } from 'bootstrap-vue'
+import { BButton, BTable, BPagination, BDropdown, BDropdownItem} from 'bootstrap-vue'
 import _ from 'lodash'
 
 export default {
 	name: 'LectureDataMaster',
 	components: {
-		BButton, BTable, BPagination
+		BButton, BTable, BPagination, BDropdown, BDropdownItem
 	},
 	data() {
 		return {
 			search: '',
 			perPage: 10,
 	        fields: [
-				{ key: 'no', label: '#' },
-				{ key: 'title', label: 'Title', shortable: true },
-				{ key: 'status', label: 'Status' },
-				{ key: 'actions', label: 'Aksi' }
+				{ key: 'title', label: 'Title', thStyle: { display: 'none'} },
+				{ key: 'actions', label: 'Aksi', thStyle: { display: 'none'} }
 			],
 		}
 	},
@@ -133,13 +134,33 @@ export default {
         },
 	},
 	methods: {
-		...mapActions('task', ['getDataTasks']),
+		...mapActions('task', ['getDataTasks', 'deleteDataTask']),
 		async changeData() {
 			try {
 				await this.getDataTasks({ perPage: this.perPage, search: this.search })
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
+		},
+		deleteTask(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Tugas akan dihapus beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+                if (result.value) {
+                	try {
+                		await this.deleteDataTask(id)
+                		this.changeData()
+                	} catch (error) {
+                		this.$bvToast.toast(error.message, errorToas())
+                	}
+                }
+            })
 		}
 	},
 	created() {

@@ -2,6 +2,7 @@ import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	subjects: [],
+	mysubjects: [],
 	subject: {
 		name: '',
 		description: '',
@@ -13,6 +14,9 @@ const state = () => ({
 const mutations = {
 	ASSIGN_DATA_SUBJECTS(state, payload) {
 		state.subjects = payload
+	},
+	ASSIGN_DATA_SUBJECTS_MINE(state, payload) {
+		state.mysubjects = payload
 	},
 	ASSIGN_FORM_SUBJECT(state, payload) {
 		state.subject = {
@@ -53,6 +57,21 @@ const actions = {
 			}
 		})
 	},
+	getDataSubjectsMine({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async (resolve, reject) => {
+			try {
+				let network = await $axios.get(`subjects/mine`)
+
+				commit('ASSIGN_DATA_SUBJECTS_MINE', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	createNewSubject({ commit, state }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
@@ -67,6 +86,20 @@ const actions = {
 				if (error.response && error.response.status == 422) {
 					commit('SET_ERRORS', error.response.data.errors, { root: true })
 				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	createNewSubjectMine({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async (resolve, reject) => {
+			try {
+				let network = await $axios.post(`subjects/mine`, payload)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
 				commit('SET_LOADING', false, { root: true })
 				reject(error.response.data)
 			}
@@ -110,6 +143,20 @@ const actions = {
 
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	removeDataSubjectMe({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.delete(`subjects/mine/${payload}`)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.deata)
 			} catch (error) {
 				commit('SET_LOADING', false, { root: true })
 				reject(error.response.data)

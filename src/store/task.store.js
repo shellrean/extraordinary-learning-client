@@ -8,7 +8,8 @@ const state = () => ({
 		title: '',
 		body: '',
 		type: '',
-		isactive: ''
+		isactive: true,
+		deadline: ''
 	}
 })
 
@@ -21,10 +22,21 @@ const mutations = {
 	},
 	ASSIGN_DATA_TASK(state, payload) {
 		state.task = {
+			id: payload.id,
 			title: payload.title,
 			body: payload.body,
 			type: payload.type,
-			isactive: payload.isactive
+			isactive: payload.isactive,
+			deadline: payload.deadline,
+			created_at: payload.created_at
+		}
+	},
+	CLEAR_DATA_TASK(state, payload) {
+		state.task =  {
+			title: '',
+			body: '',
+			type: '',
+			isactive: true
 		}
 	},
 	SET_PAGE(state, payload) {
@@ -35,10 +47,11 @@ const mutations = {
 const actions = {
 	getDataTasks({ commit, state }, payload) {
 		let perPage = typeof payload.perPage != 'undefined' ? payload.perPage : 10
+		let search = typeof payload.search != 'undefined' ? payload.search : ''
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
-				let network = await $axios.get(`tasks?page=${state.page}&perPage=${perPage}`)
+				let network = await $axios.get(`tasks?page=${state.page}&perPage=${perPage}&q=${search}`)
 
 				commit('ASSIGN_DATA_TASKS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
@@ -85,6 +98,42 @@ const actions = {
 			try {
 				let network = await $axios.post(`tasks`, state.task)
 
+				commit('CLEAR_DATA_TASK')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	updateDataTask({ commit, state }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.put(`tasks/${state.task.id}`, state.task)
+
+				commit('CLEAR_DATA_TASK')
+				commit('SET_LOADING', false, {root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	deleteDataTask({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.delete(`tasks/${payload}`)
+
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
@@ -102,6 +151,9 @@ const actions = {
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
 				commit('SET_LOADING', false, { root: true })
 				reject(error.response.data)
 			}
@@ -122,6 +174,9 @@ const actions = {
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
 				commit('SET_LOADING', false, { root: true })
 				reject(error.response.data)
 			}
