@@ -9,7 +9,8 @@ const state = () => ({
 		title: '',
 		body: '',
 		subject_id: '',
-		isactive: false
+		isactive: false,
+		created_at: ''
 	},
 	page: 1
 })
@@ -30,7 +31,8 @@ const mutations = {
 			title: payload.title,
 			body: payload.body,
 			subject_id: payload.subject_id,
-			isactive: payload.isactive
+			isactive: payload.isactive,
+			created_at: payload.created_at
 		}
 	},
 	CLEAR_FORM_LECTURE(state, payload) {

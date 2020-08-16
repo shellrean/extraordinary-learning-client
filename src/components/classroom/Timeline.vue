@@ -2,16 +2,29 @@
 	<div>
 		<ShareToClass v-if="authenticated.role == '1'"/>
 		<TimelineClassLive />
-		<TimelineLecture />
-		<TimelineTask />
-		
-		<div class="card card-custom gutter-b" v-if="classroom_lectures.length == 0 && classroom_tasks.length == 0 ">
-			<div class="card-body">
-				<div class="text-center">
-					<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+		<b-tabs pills align="center">
+	    	<b-tab title="Materi" active>
+				<TimelineLecture class="mt-5"/>
+				<div class="card card-custom gutter-b mt-5" v-if="classroom_lectures.length == 0 ">
+					<div class="card-body">
+						<div class="text-center">
+							<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+	      	</b-tab>
+	      	<b-tab title="Tugas">
+	    		<TimelineTask class="mt-5"/>
+				<div class="card card-custom gutter-b mt-5" v-if="classroom_tasks.length == 0 ">
+					<div class="card-body">
+						<div class="text-center">
+							<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+						</div>
+					</div>
+				</div>
+	      	</b-tab>
+	    </b-tabs>
+		
 	</div>
 </template>
 <script>
@@ -20,6 +33,7 @@ import ShareToClass from '@/components/classroom/ShareToClass'
 import TimelineClassLive from './TimelineClassLive'
 import TimelineLecture from './TimelineLecture'
 import TimelineTask from './TimelineTask'
+import { BTabs, BTab } from 'bootstrap-vue'
 
 export default {
 	name:'ClassroomTimeline',
@@ -27,7 +41,8 @@ export default {
 		ShareToClass,
 		TimelineClassLive,
 		TimelineLecture,
-		TimelineTask
+		TimelineTask,
+		BTabs, BTab
 	},
 	computed: {
 		...mapGetters(['isLoading']),

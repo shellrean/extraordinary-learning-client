@@ -1,5 +1,5 @@
 <template>
-	<div class="card card-custom bg-light-success card-stretch gutter-b">
+	<div class="card card-custom bg-light-success gutter-b">
 		<!--begin::Header-->
 		<div class="card-header border-0">
 			<h3 class="card-title font-weight-bolder text-success">User Sedang Dichannel</h3>

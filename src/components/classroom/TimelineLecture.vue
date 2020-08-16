@@ -6,7 +6,7 @@
 					<div class="symbol symbol-45 symbol-light mr-5">
 						<span class="symbol-label">
 							<span class="svg-icon svg-icon-lg svg-icon-primary">
-								<inline-svg class="svg-icon" src="/media/svg/icons/General/Clipboard.svg" />
+								<i class="flaticon-notes text-primary"></i>
 							</span>
 						</span>
 					</div>
@@ -15,18 +15,18 @@
 						<div class="d-flex">
 							<div class="d-flex align-items-center pr-5">
 								<span class="svg-icon svg-icon-md svg-icon-primary pr-1">
-									<inline-svg class="svg-icon" src="/media/svg/icons/Home/Clock.svg" />
+									<i class="flaticon-calendar-1 text-primary"></i>
 								</span>
 								<span class="text-muted font-weight-bold">{{ lecture.created_at }}</span>
 							</div>
-							<div class="d-flex align-items-center">
-								<span class="svg-icon svg-icon-md svg-icon-primary pr-1">
-									<inline-svg class="svg-icon" src="/media/svg/icons/Layout/Layout-arrange.svg" />
-								</span>
-								<span class="text-muted font-weight-bold">{{ lecture.lecture.subject_id }}</span>
-							</div>
 						</div>
 					</div>
+					<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+						<template v-slot:button-content>
+							<i class="flaticon-more-v2"></i>
+						</template>
+						<b-dropdown-item @click="">Hapus</b-dropdown-item>
+					</b-dropdown>
 				</div>
 				<div class="pt-3">
 					<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">{{ lecture.body}}</p>
@@ -38,9 +38,13 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
+import { BDropdownItem, BDropdown } from 'bootstrap-vue'
 
 export default {
 	name: 'TimelineLecture',
+	components: {
+		BDropdownItem, BDropdown
+	},
 	computed: {
 		...mapState('lecture',['classroom_lectures']),
 	},

@@ -1,8 +1,12 @@
 <template>
-	<div class="card card-custom bg-light-success card-stretch gutter-b">
+	<div class="card card-custom bg-light-success gutter-b">
 		<!--begin::Header-->
-		<div class="card-header border-0">
-			<h3 class="card-title font-weight-bolder text-success">Siswa & Guru sedang di lobi kelas</h3>
+		<div class="card-header pt-3">
+			<!-- <h3 class="card-title font-weight-bolder text-success">Siswa & Guru sedang di lobi kelas</h3> -->
+			<h3 class="card-title align-items-start flex-column">
+				<span class="card-label font-weight-bolder text-success">Siswa & Guru </span>
+				<span class="text-muted mt-1 font-weight-bold font-size-sm">sedang di lobi kelas</span>
+			</h3>
 		</div>
 		<!--end::Header-->
 		<!--begin::Body-->
@@ -10,15 +14,16 @@
 			<!--begin::Item-->
 			<div class="d-flex align-items-center mb-10" v-for=" user in users">
 				<!--begin::Symbol-->
-				<div class="symbol symbol-40 symbol-light-warning mr-5">
-					<div class="symbol-label">
+				<div class="symbol symbol-40 symbol-light mr-5">
+					<div class="symbol-label text-success">
 						{{ user.name.charAt(0) }}
 					</div>
+					<i class="symbol-badge bg-success"></i>
 				</div>
 				<!--end::Symbol-->
 				<!--begin::Text-->
 				<div class="d-flex flex-column font-weight-bold">
-					<a href="#" class="text-dark text-hover-warning mb-1 font-size-lg">{{ user.name }}</a>
+					<span class="text-dark mb-1 font-size-lg">{{ user.name }}</span>
 					<span class="text-muted">{{ user.email }}</span>
 				</div>
 				<!--end::Text-->

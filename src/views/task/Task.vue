@@ -56,7 +56,8 @@
                         				<div class="ml-4 d-flex flex-column">									
                         					<router-link :to="{ name: 'task.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.title">
                         						
-                        					</router-link>							
+                        					</router-link>
+                        					<span class="text-primary">Deadline {{ row.item.lastsubmit }}</span>				
                         				</div>							
                         			</div>
                         		</span>

@@ -11,7 +11,7 @@
 							<div class="col-xxl-6">
 								<ClassTimeline />
 							</div>
-							<div class="col-xxl-6">
+							<div class="col-xxl-6" v-if="authenticated.role == '1' || authenticated.role == '0'">
 								<ClassStudentLoby />
 							</div>
 						</div>
@@ -25,6 +25,7 @@
 import ClassProfile from '@/components/classroom/Profile'
 import ClassTimeline from '@/components/classroom/Timeline'
 import ClassStudentLoby from '@/components/classroom/StudentOnline'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'ClassroomDashboard',
@@ -32,6 +33,9 @@ export default {
 		ClassProfile,
 		ClassTimeline,
 		ClassStudentLoby
+	},
+	computed: {
+		...mapState('user',['authenticated'])
 	}
 }
 </script>
