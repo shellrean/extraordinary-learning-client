@@ -8435,6 +8435,11 @@ vue-loader@^15.9.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-loading-overlay@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/vue-loading-overlay/-/vue-loading-overlay-3.3.3.tgz#d23ea9f632d13fce49e262e803083baea6149222"
+  integrity sha512-wq07DyzqAtQ7A5Q1VPNMGhFLlSWTGAEdzhXgJqN4Xbr/RKpUYvW3EsdRIiwBXKawracJwnV4lTpqS8HrjI20iA==
+
 vue-perfect-scrollbar@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/vue-perfect-scrollbar/-/vue-perfect-scrollbar-0.2.1.tgz#2fecab975512f7c8c37e1610dee48faf46d649f3"

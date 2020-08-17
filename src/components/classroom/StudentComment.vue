@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<VuePerfectScrollbar
-			class="aside-menu scroll liveclass_comment"
 			style="max-height: 60vh; position: relative;"
 		>
 		<div class="d-flex py-5" v-for="comment in comments.data">

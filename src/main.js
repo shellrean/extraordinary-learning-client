@@ -20,6 +20,7 @@ Vue.config.productionTip = false
 Vue.mixin(Permissions)
 
 import { mapActions, mapGetters } from 'vuex'
+import { successToas, errorToas } from '@/core/entities/notif'
 
 new Vue({
   router,
@@ -32,14 +33,12 @@ new Vue({
     ...mapActions('user', ['getUserLogin']),
   	...mapActions(['getConfig'])
   },
-  async created() {
-  	// await this.getConfig()
+  created() {
   	if (this.isAuth) {
-  		try {
-        await this.getUserLogin()
-  		} catch (error) {
-  			
-  		}
+      this.getUserLogin()
+      .catch((error) => {
+  			this.$bvToast.toast(error.message, errorToas())
+      })
   	}
   }
 }).$mount('#app')

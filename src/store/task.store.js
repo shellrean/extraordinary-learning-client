@@ -10,7 +10,8 @@ const state = () => ({
 		type: '',
 		isactive: true,
 		deadline: ''
-	}
+	},
+	classroom_task_page: 1
 })
 
 const mutations = {
@@ -28,7 +29,8 @@ const mutations = {
 			type: payload.type,
 			isactive: payload.isactive,
 			deadline: payload.deadline,
-			created_at: payload.created_at
+			created_at: payload.created_at,
+			lastsubmit: payload.lastsubmit
 		}
 	},
 	CLEAR_DATA_TASK(state, payload) {
@@ -41,6 +43,9 @@ const mutations = {
 	},
 	SET_PAGE(state, payload) {
 		state.page = payload
+	},
+	SET_CLASSROOM_TASK_PAGE(state, payload) {
+		state.classroom_task_page = payload
 	}
 }
 
@@ -77,11 +82,11 @@ const actions = {
 			}
 		})
 	},
-	getDataClassroomTasks({ commit }, payload) {
+	getDataClassroomTasks({ commit, state }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.get(`classrooms/${payload}/task`)
+				let network = await $axios.get(`classrooms/${payload}/task?page=${state.classroom_task_page}`)
 
 				commit('ASSIGN_DATA_CLASSROOM_TASKS', network.data.data)
 				commit('SET_LOADING', false, { root: true })

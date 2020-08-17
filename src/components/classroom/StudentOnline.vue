@@ -1,7 +1,7 @@
 <template>
 	<div class="card card-custom bg-light-success gutter-b">
 		<!--begin::Header-->
-		<div class="card-header pt-3">
+		<div class="card-header pt-3 border-0">
 			<!-- <h3 class="card-title font-weight-bolder text-success">Siswa & Guru sedang di lobi kelas</h3> -->
 			<h3 class="card-title align-items-start flex-column">
 				<span class="card-label font-weight-bolder text-success">Siswa & Guru </span>
@@ -12,7 +12,10 @@
 		<!--begin::Body-->
 		<div class="card-body pt-2">
 			<!--begin::Item-->
-			<div class="d-flex align-items-center mb-10" v-for=" user in users">
+			<VuePerfectScrollbar
+				style="max-height: 80vh; position: relative;"
+			>
+			<div class="d-flex align-items-center mb-8 mt-2" v-for=" user in users">
 				<!--begin::Symbol-->
 				<div class="symbol symbol-40 symbol-light mr-5">
 					<div class="symbol-label text-success">
@@ -29,6 +32,7 @@
 				<!--end::Text-->
 			</div>
 			<!--end::Item-->
+			</VuePerfectScrollbar>
 		</div>
 		<!--end::Body-->
 	</div>
@@ -36,9 +40,13 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
 	name: 'OnlineStudent',
+	components: {
+		VuePerfectScrollbar
+	},
 	data() {
 		return {
 			channel:''

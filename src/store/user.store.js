@@ -51,12 +51,15 @@ const mutations = {
 
 const actions = {
 	getUserLogin({ commit }) {
+		commit('SET_LOAD_PAGE', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
 				let network = await $axios.get(`user-authenticated`)
 				commit('ASSING_USER_AUTH', network.data.data)
+				commit('SET_LOAD_PAGE', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
+				commit('SET_LOAD_PAGE', false, { root: true })
 				reject(error.response.data)
 			}
 		})

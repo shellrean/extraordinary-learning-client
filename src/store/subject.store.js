@@ -2,6 +2,7 @@ import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	subjects: [],
+	classroom_subjects: [],
 	mysubjects: [],
 	subject: {
 		name: '',
@@ -25,6 +26,9 @@ const mutations = {
 			description: payload.description,
 			settings: payload.settings
 		}
+	},
+	ASSIGN_DATA_CLASSROOM_SUBJECTS(state, payload) {
+		state.classroom_subjects = payload
 	},
 	CLEAR_FORM_SUBJECT(state, payload) {
 		state.subject = {
@@ -112,6 +116,21 @@ const actions = {
 				let network = await $axios.get(`subjects/${payload}`)
 
 				commit('ASSIGN_FORM_SUBJECT', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataClassroomSubjects({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.get(`classrooms/${payload}/subject`)
+
+				commit('ASSIGN_DATA_CLASSROOM_SUBJECTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {

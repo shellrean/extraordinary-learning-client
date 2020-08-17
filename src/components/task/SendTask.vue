@@ -2,8 +2,8 @@
 	<div class="card card-custom">
 		<div class="card-header  flex-wrap border-0 pt-6 pb-0">
 			<h3 class="card-title align-items-start flex-column">
-				<span class="card-label font-weight-bolder text-dark">Kerjakan Tugas</span>
-				<span class="text-primary mt-1 font-weight-bold font-size-sm">Deadline 20 Agustus 2020 Jam 20:00</span>
+				<span class="card-label font-weight-bolder text-dark">Kumpulkan Tugas</span>
+				<span class="text-primary mt-1 font-weight-bold font-size-sm">Batas {{ task.lastsubmit }}</span>
 			</h3>
 			<div class="card-toolbar">
 				<div class="form-group">		
@@ -42,6 +42,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['isLoading']),
+		...mapState('task',['task']),
 	},
 	methods: {
 		...mapActions('task',['sendTask']),

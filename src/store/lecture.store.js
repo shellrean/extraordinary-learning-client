@@ -12,7 +12,8 @@ const state = () => ({
 		isactive: false,
 		created_at: ''
 	},
-	page: 1
+	page: 1,
+	classroom_lecture_page: 1
 })
 
 const mutations = {
@@ -46,6 +47,9 @@ const mutations = {
 	},
 	SET_PAGE(state, payload) {
 		state.page = payload
+	},
+	SET_CLASSROOM_LECTURE_PAGE(state, payload) {
+		state.classroom_lecture_page = payload
 	}
 }
 
@@ -163,11 +167,11 @@ const actions = {
 			}
 		})
 	},
-	getDataLectureClassroom({ commit }, payload) {
+	getDataLectureClassroom({ commit, state }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
-				let network = await $axios.get(`lectures/classrooms/${payload}`)
+				let network = await $axios.get(`classrooms/${payload}/lecture?page=${state.classroom_lecture_page}`)
 
 				commit('ASSIGN_DATA_LECTURES_CLASSROOM', network.data.data)
 				commit('SET_LOADING', false, { root: true })

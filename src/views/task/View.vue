@@ -15,7 +15,7 @@
 								
 							</div>
 						</div>
-						<SendTask />
+						<SendTask v-if="authenticated.role == '2'"/>
 					</div>
 				</div>
 			</div>
@@ -24,6 +24,7 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import { successToas, errorToas } from '@/core/entities/notif'
 import SendTask from '@/components/task/SendTask'
 
 export default {
@@ -33,6 +34,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['isLoading']),
+		...mapState('user', ['authenticated']),
 		...mapState('task',['task']),
 	},
 	methods: {
@@ -42,7 +44,7 @@ export default {
 		try {
 			await this.getDataTask(this.$route.params.id)
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	}
 }

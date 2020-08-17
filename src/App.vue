@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+	<router-view/>
 </template>
 <style lang="scss">
 	@import "~bootstrap-vue/dist/bootstrap-vue.css";

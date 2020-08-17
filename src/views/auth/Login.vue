@@ -94,23 +94,17 @@ export default {
 			try {
 				await this.submit(this.data)
 				if (this.isAuth) {
+					this.getUserLogin()
 					this.$router.push({ name: 'home' })
 				}
 			} catch (error) {
-
+				this.$bvToast.toast(error.message, errorToas())
 			}
 		}
 	},
 	async created() {
 		if(this.isAuth) {
 			this.$router.push({ name: 'home' })
-		}
-	},
-	async destroy() {
-		try {
-			await this.getUserLogin()
-		} catch (error) {
-
 		}
 	}
 }

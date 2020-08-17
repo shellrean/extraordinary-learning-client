@@ -10,7 +10,7 @@
 									<span class="card-label font-weight-bolder text-dark">Live Classroom  <span class="text-success">Online</span></span>
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ classlive.created_at }}></span>
 								</h3>
-								<div class="card-toolbar">
+								<div class="card-toolbar" v-if="authenticated.role == '0' || authenticated.role == '1'">
 									<div class="form-group">
 										<button class="btn btn-light-success mr-2" v-b-modal.modal-abcent>
 											Lihat absen
@@ -40,7 +40,7 @@
 								<!-- <LiveFrame /> -->
 							
 						</div>
-						<StudentAttend />
+						<StudentAttend v-if="authenticated.role == '0' || authenticated.role =='1'"/>
 					</div>
 				</div>
 			</div>

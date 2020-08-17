@@ -2,58 +2,74 @@
 	<div>
 		<div class="card card-custom bg-light-warning gutter-b" >
 			<!--begin::Header-->
-			<div class="card-header border-0">
-				<h3 class="card-title font-weight-bolder text-warning">Siswa tanpa keterangan</h3>
+			<div class="card-header pt-3 border-0">
+				<h3 class="card-title align-items-start flex-column">
+					<span class="card-label font-weight-bolder text-warning">Siswa</span>
+					<span class="text-muted mt-1 font-weight-bold font-size-sm">Tanpa keterangan = {{ no_attends.length }}</span>
+				</h3>
 			</div>
 			<!--end::Header-->
 			<!--begin::Body-->
 			<div class="card-body pt-2">
 				<!--begin::Item-->
-				<div class="d-flex align-items-center mb-10" v-for=" student in no_attends">
+				<VuePerfectScrollbar
+					style="max-height: 40vh; position: relative;"
+				>
+				<div class="d-flex align-items-center mb-8 mt-2" v-for=" student in no_attends">
 					<!--begin::Symbol-->
-					<div class="symbol symbol-40 symbol-light-success mr-5">
-						<div class="symbol-label">
+					<div class="symbol symbol-40 symbol-light mr-5">
+						<div class="symbol-label text-warning">
 							{{ student.student.name.charAt(0) }}
 						</div>
+						<i class="symbol-badge bg-primary"></i>
 					</div>
 					<!--end::Symbol-->
 					<!--begin::Text-->
 					<div class="d-flex flex-column font-weight-bold">
-						<a href="#" @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</a>
+						<span @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</span>
 						<span class="text-muted">{{ student.student.email }}</span>
 					</div>
 					<!--end::Text-->
 				</div>
 				<!--end::Item-->
+				</VuePerfectScrollbar>
 			</div>
 			<!--end::Body-->
 		</div>
 
 		<div class="card card-custom bg-light-success gutter-b">
 			<!--begin::Header-->
-			<div class="card-header border-0">
-				<h3 class="card-title font-weight-bolder text-success">Siswa & Guru di channel &nbsp;<span class="badge badge-info">{{users.length }}</span></h3>
+			<div class="card-header border-0 pt-3">
+				<h3 class="card-title align-items-start flex-column">
+					<span class="card-label font-weight-bolder text-success">Siswa & Guru</span>
+					<span class="text-muted mt-1 font-weight-bold font-size-sm">Sedang di channel = {{ users.length }}</span>
+				</h3>
 			</div>
 			<!--end::Header-->
 			<!--begin::Body-->
 			<div class="card-body pt-2">
+				<VuePerfectScrollbar
+					style="max-height: 40vh; position: relative;"
+				>
 				<!--begin::Item-->
-				<div class="d-flex align-items-center mb-10" v-for="user in users">
+				<div class="d-flex align-items-center mb-8 mt-2" v-for="user in users">
 					<!--begin::Symbol-->
-					<div class="symbol symbol-40 symbol-light-info mr-5">
-						<div class="symbol-label">
+					<div class="symbol symbol-40 symbol-light mr-5">
+						<div class="symbol-label text-success">
 							{{ user.name.charAt(0) }}
 						</div>
+						<i class="symbol-badge bg-success"></i>
 					</div>
 					<!--end::Symbol-->
 					<!--begin::Text-->
 					<div class="d-flex flex-column font-weight-bold">
-						<a href="#" class="text-dark text-hover-info mb-1 font-size-lg">{{ user.name }}</a>
+						<span class="text-dark mb-1 font-size-lg">{{ user.name }}</span>
 						<span class="text-muted">{{ user.email }}</span>
 					</div>
 					<!--end::Text-->
 				</div>
 				<!--end::Item-->
+				</VuePerfectScrollbar>
 			</div>
 			<!--end::Body-->
 			<b-modal id="modal-desc" title="Keterangan siswa" no-close-on-backdrop hide-header-close  no-close-on-esc>
@@ -88,11 +104,12 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { BButton } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
 	name: 'OnlineStudent',
 	components: {
-		BButton
+		BButton, VuePerfectScrollbar
 	},
 	data() {
 		return {

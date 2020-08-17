@@ -29,12 +29,14 @@ const LectureData = () => import('@/views/lecture/Lecture')
 const LectureAdd = () => import('@/views/lecture/Add')
 const LectureView = () => import('@/views/lecture/View')
 const LectureEdit = () => import('@/views/lecture/Edit')
+const LectureStudent = () => import('@/views/lecture/Student')
 
 const TaskIndex = () => import('@/views/task/Index')
 const TaskData = () => import('@/views/task/Task')
 const TaskAdd = () => import('@/views/task/Add')
 const TaskView = () => import('@/views/task/View')
 const TaskEdit = () => import('@/views/task/Edit')
+const TaskStudent = () => import('@/views/task/Student')
 
 const ReportIndex = () => import('@/views/report/Index')
 const ReportAbcent = () => import('@/views/report/Abcent')
@@ -98,7 +100,7 @@ Vue.use(VueRouter)
             ]
           },
           {
-            path: 'clasroom',
+            path: 'classroom',
             component: ClassroomIndex,
             children: [
               {
@@ -125,6 +127,11 @@ Vue.use(VueRouter)
                 path: ':id/live/add',
                 name: 'master.classroom.live.add',
                 component: ClassroomLiveAdd
+              },
+              {
+                path: 'extraordinary',
+                name: 'master.classroom.student',
+                component: ClassroomDashboard
               }
             ]
           },
@@ -183,7 +190,7 @@ Vue.use(VueRouter)
             component: LectureAdd
           },
           {
-            path: ':id',
+            path: ':id/view',
             name: 'lecture.view',
             component: LectureView
           },
@@ -191,6 +198,11 @@ Vue.use(VueRouter)
             path: ':id/edit',
             name: 'lecture.edit',
             component: LectureEdit
+          },
+          {
+            path: 'extraordinary',
+            name: 'lecture.student',
+            component: LectureStudent
           }
         ]
       },
@@ -209,7 +221,7 @@ Vue.use(VueRouter)
             component: TaskAdd
           },
           {
-            path: ':id',
+            path: ':id/view',
             name: 'task.view',
             component: TaskView
           },
@@ -217,6 +229,11 @@ Vue.use(VueRouter)
             path: ':id/edit',
             name: 'task.edit',
             component: TaskEdit
+          },
+          {
+            path: 'extraordinary',
+            name: 'task.student',
+            component: TaskStudent
           }
         ]
       },
@@ -225,7 +242,7 @@ Vue.use(VueRouter)
         component: ReportIndex,
         children: [
           {
-            path: 'abcent',
+            path: 'absent',
             name: 'report.abcent',
             component: ReportAbcent
           }
@@ -262,17 +279,21 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     let auth = store.getters.isAuth
     if(!auth) {
+      store.commit('SET_LOAD_PAGE', true)
       next({ name: 'login' })
     } else {
+      store.commit('SET_LOAD_PAGE', true)
       next()
     }
   } else {
+    store.commit('SET_LOAD_PAGE', true)
     next()
   }
 
 })
 
 router.afterEach(() => {
+  store.commit('SET_LOAD_PAGE', false)
   store.commit('SET_LOADING', false)
 })
 
