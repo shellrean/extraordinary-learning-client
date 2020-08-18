@@ -37,6 +37,8 @@ const TaskAdd = () => import('@/views/task/Add')
 const TaskView = () => import('@/views/task/View')
 const TaskEdit = () => import('@/views/task/Edit')
 const TaskStudent = () => import('@/views/task/Student')
+const TaskResult = () => import('@/views/task/Result')
+const TaskCheck = () => import('@/views/task/Check')
 
 const ReportIndex = () => import('@/views/report/Index')
 const ReportAbcent = () => import('@/views/report/Abcent')
@@ -229,6 +231,16 @@ Vue.use(VueRouter)
             path: ':id/edit',
             name: 'task.edit',
             component: TaskEdit
+          },
+          {
+            path: ':id/check',
+            name: 'task.check',
+            component: TaskCheck
+          },
+          {
+            path: ':id/result',
+            name: 'task.result',
+            component: TaskResult
           },
           {
             path: 'extraordinary',

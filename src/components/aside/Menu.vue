@@ -244,65 +244,26 @@
             </a>
           </li>
         </router-link>
-        <li
-        aria-haspopup="true"
-        data-menu-toggle="hover"
-        class="menu-item menu-item-submenu"
-        v-bind:class="{ 'menu-item-open': hasActiveChildren('/task') }"
-        v-if="$role('1')"
+         <router-link
+          :to="{ name: 'task.index' }"
+          v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('1')"
         >
-            <a href="#" class="menu-link menu-toggle">
-                <i class="menu-icon flaticon-edit-1"></i>
-                <span class="menu-text">Tugas</span>
+          <li
+            aria-haspopup="true"
+            data-menu-toggle="hover"
+            class="menu-item"
+            :class="[
+              isActive && 'menu-item-active',
+              isExactActive && 'menu-item-active'
+            ]"
+          >
+            <a :href="href" class="menu-link" @click="navigate">
+              <i class="menu-icon flaticon-edit-1"></i>
+               <span class="menu-text">Tugas</span>
             </a>
-            <div class="menu-submenu">
-                <span class="menu-arrow"></span>
-                <ul class="menu-subnav">
-                    <router-link
-                        :to="{ name: 'task.index' }"
-                        v-slot="{ href, navigate, isActive, isExactActive }"
-                    >
-                        <li
-                        aria-haspopup="true"
-                        data-menu-toggle="hover"
-                        class="menu-item"
-                        :class="[
-                            isActive && 'menu-item-active',
-                            isExactActive && 'menu-item-active'
-                        ]"
-                        >
-                            <a :href="href" class="menu-link" @click="navigate">
-                                <i class="menu-bullet menu-bullet-dot">
-                                    <span></span>
-                                </i>
-                                <span class="menu-text">daftar</span>
-                            </a>
-                        </li>
-                    </router-link>
-                    <router-link
-                        :to="{ name: 'task.index' }"
-                        v-slot="{ href, navigate, isActive, isExactActive }"
-                    >
-                        <li
-                        aria-haspopup="true"
-                        data-menu-toggle="hover"
-                        class="menu-item"
-                        :class="[
-                            isActive && 'menu-item-active',
-                            isExactActive && 'menu-item-active'
-                        ]"
-                        >
-                            <a :href="href" class="menu-link" @click="navigate">
-                                <i class="menu-bullet menu-bullet-dot">
-                                    <span></span>
-                                </i>
-                                <span class="menu-text">Nilai tugas</span>
-                            </a>
-                        </li>
-                    </router-link>
-                  </ul>
-                </div>
-        </li>
+          </li>
+        </router-link>
         <router-link
           :to="{ name: 'task.student' }"
           v-slot="{ href, navigate, isActive, isExactActive }"

@@ -3,6 +3,7 @@ import $axios from '@/core/services/api.service'
 const state = () => ({
 	tasks: [],
 	classroom_tasks: [],
+	classroom_submit_tasks: [],
 	page: 1,
 	task: {
 		title: '',
@@ -33,6 +34,9 @@ const mutations = {
 			lastsubmit: payload.lastsubmit,
 			status: payload.status
 		}
+	},
+	ASSIGN_DATA_CLASSROOM_SUBMIT_TASKS(state, payload) {
+		state.classroom_submit_tasks = payload
 	},
 	CLEAR_DATA_TASK(state, payload) {
 		state.task =  {
@@ -98,6 +102,24 @@ const actions = {
 			}
 		})
 	},
+	getDataUncheckedTask({ commit, state }, payload) {
+		let task_id = payload.task_id
+		let classroom_id = payload.classroom_id
+
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.get(`tasks/${task_id}/check?c=${classroom_id}`)
+
+				commit('ASSIGN_DATA_CLASSROOM_SUBMIT_TASKS', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	createNewTask({ commit, state}, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
@@ -105,6 +127,23 @@ const actions = {
 				let network = await $axios.post(`tasks`, state.task)
 
 				commit('CLEAR_DATA_TASK')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	createNewTaskResult({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.post(`tasks/result`, payload)
+
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
@@ -139,6 +178,20 @@ const actions = {
 		return new Promise(async(resolve, reject) => {
 			try {
 				let network = await $axios.delete(`tasks/${payload}`)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	deleteDataStudentTask({ commit }, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.delete(`tasks/student/${payload}`)
 
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)

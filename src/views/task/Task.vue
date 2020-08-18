@@ -67,6 +67,8 @@
 									<template v-slot:button-content>
 									    <i class="flaticon-more"></i>
 									</template>
+									<b-dropdown-item :to="{ name: 'task.check', params: { id: row.item.id }}">Koreksi</b-dropdown-item>
+									<b-dropdown-item :to="{ name: 'task.result', params: { id: row.item.id }}">Hasil</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'task.edit', params: { id: row.item.id }}">Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteTask(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
