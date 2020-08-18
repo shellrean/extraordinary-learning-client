@@ -4,6 +4,7 @@ const state = () => ({
 	tasks: [],
 	classroom_tasks: [],
 	classroom_submit_tasks: [],
+	classroom_results: [],
 	page: 1,
 	task: {
 		title: '',
@@ -37,6 +38,9 @@ const mutations = {
 	},
 	ASSIGN_DATA_CLASSROOM_SUBMIT_TASKS(state, payload) {
 		state.classroom_submit_tasks = payload
+	},
+	ASSIGN_DATA_CLASSROOM_RESULTS(state, payload) {
+		state.classroom_results = payload
 	},
 	CLEAR_DATA_TASK(state, payload) {
 		state.task =  {
@@ -94,6 +98,24 @@ const actions = {
 				let network = await $axios.get(`classrooms/${payload}/task?page=${state.classroom_task_page}`)
 
 				commit('ASSIGN_DATA_CLASSROOM_TASKS', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataClassroomTaskResults({ commit }, payload) {
+		let classroom_id = payload.classroom_id ? payload.classroom_id : ''
+		let task_id = payload.task_id ? payload.task_id : ''
+
+		commit('SET_LOADING', true, { root: true })
+		return new Promise(async(resolve, reject) => {
+			try {
+				let network = await $axios.get(`tasks/${task_id}/result?c=${classroom_id}`)
+
+				commit('ASSIGN_DATA_CLASSROOM_RESULTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {

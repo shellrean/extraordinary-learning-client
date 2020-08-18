@@ -30,7 +30,7 @@
 											</span>
 										</div>
 									</div>
-									<button @click="getData" class="btn btn-light-primary px-6 font-weight-bold">Tampilkan</button>
+									<button :disabled="isLoading"  @click="getData" class="btn btn-light-primary px-6 font-weight-bold">Tampilkan</button>
 								</div>
 							</div>
 						</div>
@@ -82,7 +82,7 @@
 			      style="max-height: 60vh; position: relative;"
 			    >
 			    	<div  v-if="typeof use_data.content != 'undefined'">
-						<img :src="`http://localhost:81/storage/attachment/${file}`" class="img-thumbnail" v-for="file in use_data.content.file">
+						<img :src="`${baseURL}/storage/attachment/${file}`" class="img-thumbnail" v-for="file in use_data.content.file">
 			    	</div>
 				</VuePerfectScrollbar>
 				<div class="form-group mb-3">
@@ -129,7 +129,7 @@ export default {
 		point: 0
 	}),
 	computed: {
-		...mapGetters(['isLoading']),
+		...mapGetters(['isLoading','baseURL']),
 		...mapState('task', ['classroom_submit_tasks'])
 	},
 	methods: {

@@ -10,6 +10,7 @@ import classroom from './classroom.store'
 import channel from './channel.store'
 import abcent from './abcent.store'
 import task from './task.store'
+import setting from './setting.store'
 
 Vue.use(Vuex)
 
@@ -80,6 +81,7 @@ export default new Vuex.Store({
         classroom,
         channel,
         abcent,
-        task
+        task,
+        setting
     }
 })
