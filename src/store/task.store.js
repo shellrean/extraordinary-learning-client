@@ -30,7 +30,8 @@ const mutations = {
 			isactive: payload.isactive,
 			deadline: payload.deadline,
 			created_at: payload.created_at,
-			lastsubmit: payload.lastsubmit
+			lastsubmit: payload.lastsubmit,
+			status: payload.status
 		}
 	},
 	CLEAR_DATA_TASK(state, payload) {
