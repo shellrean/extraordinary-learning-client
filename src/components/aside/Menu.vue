@@ -264,6 +264,45 @@
             </a>
           </li>
         </router-link>
+        </router-link>
+        <li
+        aria-haspopup="true"
+        data-menu-toggle="hover"
+        class="menu-item menu-item-submenu"
+        v-bind:class="{ 'menu-item-open': hasActiveChildren('/exam') }"
+        v-if="$role('1')"
+        >
+            <a href="#" class="menu-link menu-toggle">
+                <i class="menu-icon flaticon-list-1"></i>
+                <span class="menu-text">Ulangan</span>
+            </a>
+            <div class="menu-submenu">
+                <span class="menu-arrow"></span>
+                <ul class="menu-subnav">
+                    <router-link
+                        :to="{ name: 'exam.bank' }"
+                        v-slot="{ href, navigate, isActive, isExactActive }"
+                    >
+                        <li
+                        aria-haspopup="true"
+                        data-menu-toggle="hover"
+                        class="menu-item"
+                        :class="[
+                            isActive && 'menu-item-active',
+                            isExactActive && 'menu-item-active'
+                        ]"
+                        >
+                            <a :href="href" class="menu-link" @click="navigate">
+                                <i class="menu-bullet menu-bullet-dot">
+                                    <span></span>
+                                </i>
+                                <span class="menu-text">Banksoal</span>
+                            </a>
+                        </li>
+                    </router-link>
+                  </ul>
+                </div>
+          </li>
         <router-link
           :to="{ name: 'task.student' }"
           v-slot="{ href, navigate, isActive, isExactActive }"

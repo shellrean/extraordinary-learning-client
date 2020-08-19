@@ -31,9 +31,11 @@ new Vue({
   },
   methods: {
     ...mapActions('user', ['getUserLogin']),
+    ...mapActions('setting', ['getDataSettingSchool']),
   	...mapActions(['getConfig'])
   },
   created() {
+    this.getDataSettingSchool()
   	if (this.isAuth) {
       this.getUserLogin()
       .catch((error) => {

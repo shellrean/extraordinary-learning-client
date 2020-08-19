@@ -19,6 +19,7 @@ const ClassroomMe = () => import('@/views/master/classroom/ClassroomMe')
 const ClassroomDashboard = () => import('@/views/master/classroom/Dashboard')
 const ClassroomLive = () => import('@/views/master/classroom/ClassroomLive')
 const ClassroomLiveAdd = () => import('@/views/master/classroom/ClassroomLiveAdd')
+const ClassroomJoin = () => import('@/views/master/classroom/ClassroomJoin')
 
 const SubjectIndex = () => import('@/views/master/subject/Index')
 const SubjectData = () => import('@/views/master/subject/Subject')
@@ -52,6 +53,9 @@ const EventData = () => import('@/views/event/Event')
 
 const InfoIndex = () => import('@/views/info/Index')
 const InfoData = () => import('@/views/info/Info')
+
+const ExamIndex = () => import('@/views/exam/Index')
+const ExamBank = () => import('@/views/exam/Bank')
 
 Vue.use(VueRouter)
 
@@ -134,6 +138,11 @@ Vue.use(VueRouter)
                 path: 'extraordinary',
                 name: 'master.classroom.student',
                 component: ClassroomDashboard
+              },
+              {
+                path: 'join',
+                name: 'master.classroom.join',
+                component: ClassroomJoin
               }
             ]
           },
@@ -273,6 +282,17 @@ Vue.use(VueRouter)
             path: 'school',
             name: 'setting.school',
             component: SettingSchool
+          }
+        ]
+      },
+      {
+        path: 'exam',
+        component: ExamIndex,
+        children: [
+          {
+            path: 'bank',
+            name: 'exam.bank',
+            component: ExamBank
           }
         ]
       }

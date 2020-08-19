@@ -5,15 +5,16 @@
 			<div class="login login-6 login-signin-on login-signin-on d-flex flex-row-fluid" id="kt_login">
 				<div class="d-flex flex-column flex-lg-row flex-row-fluid text-center" style="background-image: url(assets/media/bg/bg-3.jpg);">
 					<!--begin:Aside-->
-					<div class="d-flex w-100 flex-center p-15">
+					<div class="d-flex w-100 flex-center p-15" v-if="typeof school.settings != 'undefined'">
 						<div class="login-wrapper">
 							<!--begin:Aside Content-->
 							<div class="text-dark-75">
 								<a href="#">
-									<img src="/img/logo.ico" class="max-h-75px" alt="" />
+									<img :src="`${baseURL}/storage/${school.settings.logo}`"  class="max-h-75px" v-if="typeof school.settings.logo != 'undefined'">
+									<img src="/img/logo.ico" class="max-h-75px" alt="" v-else />
 								</a>
-								<h3 class="mb-8 mt-22 font-weight-bold">SMK NEGERI  43 JAKARTA</h3>
-								<p class="mb-15 text-muted font-weight-bold">info@smkn43jkt.sch.id | -</p>
+								<h3 class="mb-8 mt-22 font-weight-bold">{{ school.settings.name }}</h3>
+								<p class="mb-15 text-muted font-weight-bold">{{ school.settings.email }}</p>
 							</div>
 							<!--end:Aside Content-->
 						</div>
@@ -84,8 +85,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['isAuth', 'isLoading']),
-		...mapState(['errors'])
+		...mapGetters(['isAuth', 'isLoading', 'baseURL']),
+		...mapState(['errors']),
+		...mapState('setting',['school'])
 	},
 	methods: {
 		...mapActions('auth', ['submit']),

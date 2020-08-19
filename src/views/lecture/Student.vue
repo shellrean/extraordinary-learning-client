@@ -87,6 +87,12 @@ export default {
 		...mapActions('lecture',['getDataLectureClassroom']),
 	},
 	created() {
+		if(typeof this.authenticated.classroom == 'undefined') {
+			if(this.$route.name != 'master.classroom.join') {
+				this.$router.push({ name: 'master.classroom.join' })
+			}
+			return
+		}
 		this.getDataLectureClassroom(this.authenticated.classroom.id)
 		.then((error) => {
 			this.$bvToast.toast(error.message, errorToas())

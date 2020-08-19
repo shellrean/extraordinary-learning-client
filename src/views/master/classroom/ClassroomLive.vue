@@ -8,7 +8,7 @@
 							<div class="card-header flex-wrap border-0 pt-6 pb-0">
 									<h3 class="card-title align-items-start flex-column">
 									<span class="card-label font-weight-bolder text-dark">Live Classroom  <span class="text-success">Online</span></span>
-									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ classlive.created_at }}></span>
+									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ classlive.created_at }}</span>
 								</h3>
 								<div class="card-toolbar" v-if="authenticated.role == '0' || authenticated.role == '1'">
 									<div class="form-group">
@@ -40,7 +40,7 @@
 								<!-- <LiveFrame /> -->
 							
 						</div>
-						<StudentAttend v-if="authenticated.role == '0' || authenticated.role =='1'"/>
+						<StudentAttend/>
 					</div>
 				</div>
 			</div>
@@ -68,6 +68,7 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import StudentAttend from '@/components/classroom/StudentAttend'
 import StudentComment from '@/components/classroom/StudentComment'
+import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'ClassroomLive',
@@ -124,7 +125,7 @@ export default {
 
                    		this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id }})
                    } catch (error) {
-
+                   		this.$bvToast.toast(error.message, errorToas())
                    }
                 }
             })
@@ -132,13 +133,15 @@ export default {
 	},
 	async created() {
 		try {
-			await this.getDataStudents(this.$route.params.id)
+			if(this.authenticated.role == '1' || this.authenticated.role == '0') {
+				await this.getDataStudents(this.$route.params.id)
+			}
 			await this.getDataliveClassroom(this.$route.params.id)
 			if(this.classlive.settings.type == 'youtube') {
 				this.videoId = this.$youtube.getIdFromUrl(this.classlive.settings.link)
 			}
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {
@@ -161,7 +164,7 @@ export default {
 					})
 				}
 			} catch (error) {
-
+				this.$bvToast.toast(error.message, errorToas())
 			}
 		}
 	}

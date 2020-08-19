@@ -12,6 +12,7 @@ const state = () => ({
 	myclassrooms: [],
 	students: [],
 	comments: [],
+	subjects: [],
 	page: 1
 })
 
@@ -36,6 +37,9 @@ const mutations = {
 	},
 	ASSIGN_DATA_CLASSROOM(state, payload) {
 		state.classroom = payload
+	},
+	ASSIGN_DATA_SUBJECTS(state, payload) {
+		state.subjects = payload
 	},
 	CLEAR_CLASSROOM(state, payload) {
 		state.classroom = {}
@@ -255,6 +259,37 @@ const actions = {
 				let network = await $axios.get(`classrooms/${payload}/student`)
 
 				commit('ASSIGN_DATA_STUDENTS', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	joinClassroom({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.post(`classrooms/join`, payload)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataTeacherSubject({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.get(`classrooms/subject/mine`)
+
+				commit('ASSIGN_DATA_SUBJECTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {

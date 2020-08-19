@@ -1,5 +1,5 @@
 <template>
-	<div class="card card-custom bg-light-success gutter-b">
+	<div class="card card-custom bg-light-success gutter-b" v-if="authenticated.role == '1' || authenticated.role == '0'">
 		<!--begin::Header-->
 		<div class="card-header pt-3 border-0">
 			<h3 class="card-title align-items-start flex-column">
@@ -39,6 +39,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'OnlineStudent',
@@ -72,7 +73,7 @@ export default {
 				});
 			}
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {

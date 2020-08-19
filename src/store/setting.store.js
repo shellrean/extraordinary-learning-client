@@ -1,7 +1,8 @@
 import $axios from '@/core/services/api.service'
 
 const state = () => ({
-	setting: {}
+	setting: {},
+	school: {}
 })
 
 const mutations = {
@@ -10,6 +11,9 @@ const mutations = {
 			name: payload.name ? payload.name : '',
 			settings: payload.settings ? payload.settings : {}
 		}
+	},
+	ASSIGN_DATA_SETTING_SCHOOL(state, payload) {
+		state.school = payload
 	}
 }
 
@@ -20,6 +24,20 @@ const actions = {
 				commit('SET_LOADING', true, { root: true })
 				let network = await $axios.get(`settings/${payload}`)
 				commit('ASSIGN_DATA_SETTING', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataSettingSchool({ commit }, payload) {
+		return new Promise(async(resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.get(`settings/school`)
+				commit('ASSIGN_DATA_SETTING_SCHOOL', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {

@@ -155,7 +155,7 @@
 					</label>
 					<div class="col-lg-9 col-xl-6">
 						<input type="text" class="form-control form-control-lg form-control-solid" v-model="student.name" :class="{ 'is-invalid' : errors.name }">
-						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
+						<div class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</div>
 					</div>
 				</div>
 				<div class="form-group row">

@@ -1,5 +1,5 @@
 <template>
-	<div class="card card-custom bg-light-success gutter-b">
+	<div class="card card-custom bg-light-success gutter-b" v-if="authenticated.role == '1' || authenticated.role == '0'">
 		<!--begin::Header-->
 		<div class="card-header pt-3 border-0">
 			<!-- <h3 class="card-title font-weight-bolder text-success">Siswa & Guru sedang di lobi kelas</h3> -->
@@ -49,7 +49,8 @@ export default {
 	},
 	data() {
 		return {
-			channel:''
+			channel:'',
+			key: null
 		}
 	},
 	computed: {
@@ -63,7 +64,13 @@ export default {
 	},
 	async created() {
 		try {
-			this.channel = 'classroom_'+this.$route.params.id
+			if(this.authenticated.role == '2') {
+				this.key = this.authenticated.classroom.id
+			} else {
+				this.key = this.$route.params.id
+			}
+
+			this.channel = 'classroom_'+this.key
 			await this.setUserToChannel(this.channel)
 			await this.getUserOnChannel(this.channel)
 			if(typeof this.authenticated.name != 'undefined') {

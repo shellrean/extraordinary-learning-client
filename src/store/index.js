@@ -11,6 +11,7 @@ import channel from './channel.store'
 import abcent from './abcent.store'
 import task from './task.store'
 import setting from './setting.store'
+import question from './question.store'
 
 Vue.use(Vuex)
 
@@ -82,6 +83,7 @@ export default new Vuex.Store({
         channel,
         abcent,
         task,
-        setting
+        setting,
+        question
     }
 })

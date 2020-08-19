@@ -81,6 +81,12 @@ export default {
 	},
 	created() {
 		if(this.authenticated.role == '2') {
+			if(typeof this.authenticated.classroom == 'undefined') {
+				if(this.$route.name != 'master.classroom.join') {
+					this.$router.push({ name: 'master.classroom.join' })
+				}
+				return
+			}
 			this.key = this.authenticated.classroom.id
 		} else {
 			this.key = this.$route.params.id

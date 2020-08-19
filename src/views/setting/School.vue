@@ -83,7 +83,7 @@ export default {
 		...mapState('setting', ['setting'])
 	},
 	methods: {
-		...mapActions('setting', ['getDataSetting', 'storeDataSetting', 'storeDataSettingLogo']),
+		...mapActions('setting', ['getDataSetting', 'storeDataSetting', 'storeDataSettingLogo', 'getDataSettingSchool']),
 		async upload() {
 			try {
 				let formData = new FormData()
@@ -101,6 +101,7 @@ export default {
 			try {
 				await this.storeDataSetting()
 				this.$bvToast.toast('Data informasi sekolah berhasil disimpan', successToas())
+				this.getDataSettingSchool()
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}

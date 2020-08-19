@@ -11,7 +11,7 @@
 							<div class="col-xxl-6">
 								<ClassTimeline />
 							</div>
-							<div class="col-xxl-6" v-if="authenticated.role == '1' || authenticated.role == '0'">
+							<div>
 								<ClassStudentLoby />
 							</div>
 						</div>

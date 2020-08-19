@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="card card-custom bg-light-warning gutter-b" >
+		<div class="card card-custom bg-light-warning gutter-b" v-if="authenticated.role == '0' || authenticated.role =='1'">
 			<!--begin::Header-->
 			<div class="card-header pt-3 border-0">
 				<h3 class="card-title align-items-start flex-column">
@@ -37,7 +37,7 @@
 			<!--end::Body-->
 		</div>
 
-		<div class="card card-custom bg-light-success gutter-b">
+		<div class="card card-custom bg-light-success gutter-b"  v-if="authenticated.role == '0' || authenticated.role =='1'">
 			<!--begin::Header-->
 			<div class="card-header border-0 pt-3">
 				<h3 class="card-title align-items-start flex-column">
@@ -174,8 +174,8 @@ export default {
 		try {
 			this.channel = 'classlive_'+this.$route.params.id
 			await this.setUserToChannel(this.channel)
-			await this.getUserOnChannel(this.channel)
 			if(typeof this.authenticated.name != 'undefined') {
+				await this.getUserOnChannel(this.channel)
 				this.socket.emit('getin', {
 					user: this.authenticated,
 					channel: this.channel,
@@ -187,7 +187,8 @@ export default {
 		}
 	},
 	watch: {
-		authenticated() {
+		async authenticated() {
+			await this.getUserOnChannel(this.channel)
 			this.socket.emit('getin', {
 				user: this.authenticated,
 				channel: this.channel,

@@ -14,8 +14,9 @@
 		</button>
 
 		<!--begin::Logo-->
-		<a href="index.html">
-			<img alt="Logo" src="/img/logo.ico" class="logo-sticky max-h-35px" />
+		<a href="index.html"  v-if="typeof school.settings != 'undefined'">
+			<img :src="`${baseURL}/storage/${school.settings.logo}`"  class="logo-sticky max-h-35px" v-if="typeof school.settings.logo != 'undefined'">
+			<img alt="Logo" src="/img/logo.ico" class="logo-sticky max-h-35px" v-else />
 		</a>
 		<!--end::Logo-->
 
@@ -26,11 +27,16 @@
 </template>
 <script>
 import SearchBar from '@/components/header/SearchBar'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'LeftMenu',
 	components: {
 		SearchBar
+	},
+	computed: {
+		...mapGetters(['baseURL']),
+		...mapState('setting', ['school'])
 	}
 }
 </script>
