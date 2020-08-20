@@ -103,6 +103,27 @@ const actions = {
 			}
 		})
 	},
+	importDataQuestionBank({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.post(`question_banks/${payload.id}`, payload.data, {
+					headers: {
+			            'content-type': 'multipart/form-data'
+			        }
+				})
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	getDataQuestionBank({ commit, state }, payload) {
 		return new Promise(async (resolve, reject) => {
 			try {
