@@ -9,7 +9,7 @@
 						<span class="text-danger" v-if="errors.body">{{ errors.body[0] }}</span>
 					</div>
 				</div>
-			</div>
+			</div> 
 		</div>
 		<div class="col-md-4">
 			<div class="card card-custom">

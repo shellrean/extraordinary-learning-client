@@ -26,18 +26,20 @@
 						<b-table :fields="fields"
 						  :items="question_banks.data">
 							<template v-slot:cell(details)="row">
-								<b-button size="sm" variant="light-primary" @click="row.toggleDetails">
+								<b-button size="sm" variant="white" @click="row.toggleDetails">
 									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'"></i>
+										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-danger"></i>
 									</small>
 								</b-button>
 							</template>
 							<template v-slot:cell(code)="row">
 								<span style="width: 250px;">
-									<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
-										{{ row.item.code }}
+									<div class="d-flex flex-column flex-grow-1 font-weight-bold">
+										<router-link :to="{ name: 'exam.bank.questions', params: { id: row.item.id } }" class="text-dark mb-1 font-size-lg text-hover-primary">
+											{{ row.item.code }}
+										</router-link>
+										<span class="text-muted font-weight-bold">{{ row.item.subject.name }}</span>
 									</div>
-									<span class="text-muted font-weight-bold">{{ row.item.subject.name }}</span>
 								</span>
 							</template>
 							<template v-slot:row-details="row">
@@ -78,7 +80,7 @@
 									    <i class="flaticon-more"></i>
 									</template>
 									<b-dropdown-item @click="getData(row.item.id)">Edit</b-dropdown-item>
-									<b-dropdown-item @click="">Hapus</b-dropdown-item>
+									<b-dropdown-item @click="deleteData(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
                         	</template>
 						</b-table>
@@ -109,7 +111,7 @@
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah banksoal">
+		<b-modal id="modal-create" title="Tambah banksoal" @hide="$store.commit('question/CLEAR_QUESTION_BANK')" no-close-on-backdrop>
 			<div class="form-group">
 				<label>Mata pelajaran</label>
 				<v-select label="name" :reduce="item => item.id" :options="subjects" v-model="question_bank.subject_id">
@@ -242,7 +244,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank']),
+		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank', 'deleteDataQuestionBank', 'updateDataQuestionBank']),
 		...mapActions('classroom', ['getDataTeacherSubject']),
 		changeData() {
 			this.getDataQuestionBanks({ perPage: this.perPage })
@@ -251,6 +253,15 @@ export default {
 			})
 		},
 		submit() {
+			if(typeof this.question_bank.id != 'undefined') {
+				this.updateDataQuestionBank()
+				.then((res) => {
+					this.$bvToast.toast('Banksoal diupdate', successToas())
+					this.changeData()
+					this.$bvModal.hide('modal-create')
+				})
+				return;
+			}
 			this.createDataQuestionBank()
 			.then((res) => {
 				this.$bvToast.toast('Banksoal ditambahkan', successToas())
@@ -270,6 +281,26 @@ export default {
 			.catch((error) => {
 				this.$bvToast.toast(error.message, errorToas())
 			})
+		},
+		deleteData(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Bnksoal akan dihapus beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+            	if(result.value) {
+            		try {
+            			await this.deleteDataQuestionBank(id)
+            			this.changeData()
+            		} catch (error) {
+            			this.$bvToast.toast(error.message, errorToas())
+            		}
+            	}
+            })
 		}
 	},
 	created() {

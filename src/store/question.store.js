@@ -9,10 +9,20 @@ const state = () => ({
 		esay_count: 0,
 		percentage: {
 			mc: 100,
-			esay: 0
+			esay: 0,
+			correct: null
 		}
 	},
 	question_banks: [],
+	question: {
+		type: 1,
+		options: []
+	},
+	setting: {
+		opsi_max: 5,
+	},
+	questions: [],
+	questions_page: 1,
 	question_banks_page: 1
 })
 
@@ -23,8 +33,25 @@ const mutations = {
 	ASSIGN_QUESTION_BANK(state, payload) {
 		state.question_bank = payload
 	},
+	ASSIGN_QUESTION(state, payload) {
+		state.question = payload
+	},
+	ASSIGN_QUESTIONS(state, payload) {
+		state.questions = payload
+	},
 	SET_QUESTION_BANKS_PAGE(state, payload) {
 		state.question_banks_page = payload
+	},
+	SET_QUESTIONS_PAGE(state, payload) {
+		state.questions_page = payload
+	},
+	CLEAR_QUESTION(state) {
+		state.question = {
+			type: 1,
+			options: [],
+			opsi_max: 5,
+			correct: null
+		}
 	},
 	CLEAR_QUESTION_BANK(state) {
 		state.question_bank = {
@@ -91,12 +118,113 @@ const actions = {
 			}
 		})
 	},
+	updateDataQuestionBank({ commit, state }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.put(`question_banks/${state.question_bank.id}`, state.question_bank)
+
+				commit('CLEAR_QUESTION_BANK')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	deleteDataQuestionBank({ commit }, payload) {
 		return new Promise(async (resolve, reject) => {
 			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.delete(`question_banks/${payload}`)
 
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
 			} catch (error) {
-				
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataQuestions({ commit, state }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				let perPage = payload.perPage
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.get(`question_banks/${payload.id}/question?page=${state.questions_page}&perPage=${perPage}`)
+
+				commit('ASSIGN_QUESTIONS', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	createDataQuestion({ commit, state }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.post(`question_banks/question`, state.question)
+
+				commit('CLEAR_QUESTION')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataQuestion({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.get(`question_banks/question/${payload}`)
+
+				commit('ASSIGN_QUESTION', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	updateDataQuestion({ commit, state }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.put(`question_banks/question/${state.question.id}`, payload)
+
+				commit('CLEAR_QUESTION')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response && error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	deleteDataQuestion({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.delete(`question_banks/question/${payload}`)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
 			}
 		})
 	}
