@@ -48,6 +48,9 @@ export default {
 			file: null
 		}
 	},
+	computed: {
+		...mapGetters(['isLoading'])
+	},
 	methods: {
 		...mapActions('question', ['importDataQuestionBank']),
 		async submit() {

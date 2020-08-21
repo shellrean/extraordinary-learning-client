@@ -43,35 +43,39 @@
 								</span>
 							</template>
 							<template v-slot:row-details="row">
-								<div class="table-responsive-md">
-									<table class="table table-bordered">
-										<tr>
-											<td width="150px">Jumlah PG</td>
-											<td>
-												<div class="d-flex justify-content-between">
-													<span>
-														{{ row.item.mc_count }} / {{ row.item.mc_option_count }} Opsi
-													</span>
-													<span class="badge badge-success">
-														{{ row.item.percentage.mc }} %
-													</span>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>Jumlah esay</td>
-											<td>
-												<div class="d-flex justify-content-between">
-													<span>
-														{{ row.item.esay_count }}		
-													</span>
-													<span class="badge badge-success">
-														{{ row.item.percentage.esay }} %
-													</span>
-												</div>
-											</td>
-										</tr>
-									</table>
+								<div class="card">
+									<div class="card-body">
+										<div class="table-responsive-md">
+											<table class="table table-bordered">
+												<tr>
+													<td width="150px">Jumlah PG</td>
+													<td>
+														<div class="d-flex justify-content-between">
+															<span>
+																{{ row.item.mc_count }}
+															</span>
+															<span class="badge badge-success">
+																{{ row.item.percentage.mc }} %
+															</span>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>Jumlah esay</td>
+													<td>
+														<div class="d-flex justify-content-between">
+															<span>
+																{{ row.item.esay_count }}		
+															</span>
+															<span class="badge badge-success">
+																{{ row.item.percentage.esay }} %
+															</span>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
 								</div>
 							</template>
 							<template v-slot:cell(actions)="row">
@@ -124,42 +128,18 @@
 				<div class="invalid-feedback" v-if="errors.code">{{ errors.code[0] }}</div>
 			</div>
 			<div class="form-group">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Jumlah soal pilihan ganda</label>
-							<div class="input-group">
-								<div class="input-group-prepend" v-show="question_bank.mc_count > 0">
-									<button class="btn btn-light-primary" type="button" @click="question_bank.mc_count -= 1">
-										<strong>-</strong>
-									</button>
-								</div>
-								<input type="number" class="form-control form-control-lg form-control-solid" :class="{ 'is-invalid' : errors.mc_count }" v-model.number="question_bank.mc_count">
-								<div class="input-group-append">
-									<button class="btn btn-light-success" type="button" @click="question_bank.mc_count += 1">
-										<strong>+</strong>
-									</button>
-								</div>
-							</div>
-						</div>
+				<label>Jumlah soal pilihan ganda</label>
+				<div class="input-group">
+					<div class="input-group-prepend" v-show="question_bank.mc_count > 0">
+						<button class="btn btn-light-primary" type="button" @click="question_bank.mc_count -= 1">
+							<strong>-</strong>
+						</button>
 					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Jumlah soal pilihan ganda</label>
-							<div class="input-group">
-								<div class="input-group-prepend" v-show="question_bank.mc_option_count > 0">
-									<button class="btn btn-light-primary" type="button" @click="question_bank.mc_option_count -= 1">
-										<strong>-</strong>
-									</button>
-								</div>
-								<input type="number" class="form-control form-control-lg form-control-solid" :class="{ 'is-invalid' : errors.mc_option_count }" v-model.number="question_bank.mc_option_count">
-								<div class="input-group-append">
-									<button class="btn btn-light-success" type="button" @click="question_bank.mc_option_count += 1">
-										<strong>+</strong>
-									</button>
-								</div>
-							</div>
-						</div>
+					<input type="number" class="form-control form-control-lg form-control-solid" :class="{ 'is-invalid' : errors.mc_count }" v-model.number="question_bank.mc_count">
+					<div class="input-group-append">
+						<button class="btn btn-light-success" type="button" @click="question_bank.mc_count += 1">
+							<strong>+</strong>
+						</button>
 					</div>
 				</div>
 			</div>

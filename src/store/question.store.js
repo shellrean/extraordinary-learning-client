@@ -107,7 +107,7 @@ const actions = {
 		return new Promise(async (resolve, reject) => {
 			try {
 				commit('SET_LOADING', true, { root: true })
-				let network = await $axios.post(`question_banks/${payload.id}`, payload.data, {
+				let network = await $axios.post(`question_banks/${payload.id}/import`, payload.data, {
 					headers: {
 			            'content-type': 'multipart/form-data'
 			        }

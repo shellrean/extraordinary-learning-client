@@ -73,7 +73,7 @@
 								</div>
 							</template>
 							<template v-slot:cell(status)="row">
-								<b-form-checkbox v-model="row.item.isactive" @change="setStatus(row.item.id, row.item.isactve)" value="1" switch>
+								<b-form-checkbox v-model="row.item.isactive" @change="setStatus(row.item.id, row.item.isactive)" value="1" switch>
 									{{row.item.isactive == 1 ? 'Aktif' : 'Tidak aktif' }}
 								</b-form-checkbox>
 							</template>
