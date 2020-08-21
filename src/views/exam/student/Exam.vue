@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<loading :active.sync="loadPage" 
-        :is-full-page="true"></loading>
+        :is-full-page="true" :loader="'bars'" :color="'#F64E60'"></loading>
 
         <div class="container">
         	
@@ -60,7 +60,7 @@ export default {
                 }
             }, 1000 )
         },
-        finish () {
+        async finish () {
         	try {
                 await this.finishingExam()
 

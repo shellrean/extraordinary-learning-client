@@ -62,6 +62,7 @@ const ExamBankQuestionEdit = () => import('@/views/exam/question/Edit')
 const ExamBankQuestionImport = () => import('@/views/exam/question/Import')
 const ExamSchedule = () => import('@/views/exam/Schedule')
 
+const ExamLayout = () => import('@/views/layout/Exam')
 const ExamDash = () => import('@/views/exam/student/Dashboard')
 const ExamWait = () => import('@/views/exam/student/Waiting')
 const ExamDoing = () => import('@/views/exam/student/Exam')
@@ -328,28 +329,35 @@ Vue.use(VueRouter)
             path: 'schedule',
             name: 'exam.schedule',
             component: ExamSchedule
-          },
-          {
-            path: 'dash',
-            name: 'exam.student',
-            component: ExamDash
-          },
-          {
-            path: 'waitingroom',
-            name: 'exam.prepare',
-            component: ExamWait
-          },
-          {
-            path: 'extraordinary',
-            name: 'exam.while',
-            component: ExamDoing
-          },
-          {
-            path: 'finish',
-            name: 'exam.finish',
-            component: ExamFinish
           }
         ]
+      }
+    ]
+  },
+  {
+    path: '/exam',
+    component: ExamLayout,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: 'dash',
+        name: 'exam.student',
+        component: ExamDash
+      },
+      {
+        path: 'waitingroom',
+        name: 'exam.prepare',
+        component: ExamWait
+      },
+      {
+        path: 'extraordinary',
+        name: 'exam.while',
+        component: ExamDoing
+      },
+      {
+        path: 'finish',
+        name: 'exam.finish',
+        component: ExamFinish
       }
     ]
   }

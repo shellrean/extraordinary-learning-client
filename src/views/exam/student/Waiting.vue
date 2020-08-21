@@ -76,7 +76,6 @@ export default {
 	},
 	created() {
 		const date = new Date()
-		const date = new Date()
         const ye = date.getFullYear()
         const mo = date.getMonth()
         const da = date.getDate()

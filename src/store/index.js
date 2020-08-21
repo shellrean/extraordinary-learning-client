@@ -13,6 +13,7 @@ import task from './task.store'
 import setting from './setting.store'
 import question from './question.store'
 import exam_schedule from './exam_schedule.store'
+import exam from './exam.store'
 
 Vue.use(Vuex)
 
@@ -86,6 +87,7 @@ export default new Vuex.Store({
         task,
         setting,
         question,
-        exam_schedule
+        exam_schedule,
+        exam
     }
 })

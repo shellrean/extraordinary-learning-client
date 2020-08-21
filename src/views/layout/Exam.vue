@@ -1,5 +1,15 @@
 <template>
-	
+	<div>
+		<div class="d-flex flex-column flex-root" v-if="typeof authenticated.id != 'undefined'">
+			<div class="d-flex flex-row flex-column-fluid page" id="kt_body_content">
+				<div id="kt_wrapper" class="d-flex flex-column flex-row-fluid wrapper">
+					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+			    		<router-view />
+			    	</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
