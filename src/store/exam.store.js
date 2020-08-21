@@ -27,11 +27,11 @@ const mutations = {
 		}
 	},
 	SLICE_DATA_RESP(state, payload) {
-		state.answers.data[payload.index].answer = payload.answer
-		state.answers.data[payload.index].esay = payload.esay
+		state.answers.data[payload.index].answer = payload.data.answer
+		state.answers.data[payload.index].esay = payload.data.esay
 	},
 	SLICE_DATA_DOUBT(state, payload) {
-		state.answers.data[payload.index].doubt = payload.doubt
+		state.answers.data[payload.index].doubt = payload.data.doubt
 	}
 }
 
@@ -115,7 +115,7 @@ const actions = {
 				commit('SET_LOAD_PAGE', true, { root: true })
 				let network = await $axios.get('exam')
 
-				commit('ASSIGN_ANSWERS', network.data.data)
+				commit('ASSIGN_ANSWERS', network.data)
 				commit('SET_LOAD_PAGE', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
@@ -130,7 +130,7 @@ const actions = {
 				commit('SET_LOADING', true, { root: true })
 				let network = await $axios.post('exam', payload)
 
-				commit('SLICE_DATA_RESP', network.data.data)
+				commit('SLICE_DATA_RESP', network.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
@@ -145,10 +145,11 @@ const actions = {
 				commit('SET_LOADING', true, { root: true })
 				let network = await $axios.post('exam/doubt', payload)
 
-				commit('SLICE_DATA_DOUBT', network.data.data)
+				commit('SLICE_DATA_DOUBT', network.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
+				console.log(error)
 				commit('SET_LOADING', false, { root: true })
 				reject(error.response.data)
 			}
@@ -157,13 +158,13 @@ const actions = {
 	finishingExam({ commit }, payload) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				commit('SET_LOADING', true, { root: true })
+				commit('SET_LOAD_PAGE', true, { root: true })
 				let network = await $axios.get('exam/finish')
 
-				commit('SET_LOADING', false, { root: true })
+				commit('SET_LOAD_PAGE', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
-				commit('SET_LOADING', false, { root: true })
+				commit('SET_LOAD_PAGE', false, { root: true })
 				reject(error.response.data)
 			}
 		})

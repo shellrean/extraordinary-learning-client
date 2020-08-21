@@ -3,9 +3,10 @@
 	    id="kt_header_mobile"
 	    class="header-mobile align-items-center"
 	>
-		<a href="/">
-	      <img alt="Logo" src="/img/logo.ico" class="logo-sticky max-h-35px" />
-	    </a>
+		<a href="#"  v-if="typeof school.settings != 'undefined'">
+			<img :src="`${baseURL}/storage/${school.settings.logo}`"  class="logo-sticky max-h-35px" v-if="typeof school.settings.logo != 'undefined'">
+			<img alt="Logo" src="/img/logo.ico" class="logo-sticky max-h-35px" v-else />
+		</a>
 
 	    <div class="d-flex align-items-center">
 	    	<button
@@ -31,6 +32,7 @@
 </template>
 <script>
 import KTLayoutHeaderTopbar from "@/assets/js/layout/base/header-topbar.js";
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'HeaderMobile',
@@ -38,5 +40,9 @@ export default {
 	    // Init Header Topbar For Mobile Mode
 	    KTLayoutHeaderTopbar.init(this.$refs["kt_header_mobile_topbar_toggle"]);
 	},
+	computed: {
+		...mapGetters(['baseURL']),
+		...mapState('setting', ['school'])
+	}
 }
 </script>

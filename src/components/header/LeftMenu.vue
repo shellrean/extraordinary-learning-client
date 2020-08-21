@@ -14,25 +14,25 @@
 		</button>
 
 		<!--begin::Logo-->
-		<a href="index.html"  v-if="typeof school.settings != 'undefined'">
+		<a href="#"  v-if="typeof school.settings != 'undefined'">
 			<img :src="`${baseURL}/storage/${school.settings.logo}`"  class="logo-sticky max-h-35px" v-if="typeof school.settings.logo != 'undefined'">
 			<img alt="Logo" src="/img/logo.ico" class="logo-sticky max-h-35px" v-else />
 		</a>
 		<!--end::Logo-->
 
 		<!--begin::Desktop Search-->
-		<SearchBar />
+		<!-- <SearchBar /> -->
 		<!--end::Desktop Search-->
  	</div>
 </template>
 <script>
-import SearchBar from '@/components/header/SearchBar'
+// import SearchBar from '@/components/header/SearchBar'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'LeftMenu',
 	components: {
-		SearchBar
+		// SearchBar
 	},
 	computed: {
 		...mapGetters(['baseURL']),

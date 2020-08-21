@@ -1,8 +1,10 @@
 <template>
 	<div>
+		<KTHeaderMobile></KTHeaderMobile>
 		<div class="d-flex flex-column flex-root" v-if="typeof authenticated.id != 'undefined'">
 			<div class="d-flex flex-row flex-column-fluid page" id="kt_body_content">
 				<div id="kt_wrapper" class="d-flex flex-column flex-row-fluid wrapper">
+					<KTHeader></KTHeader>
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 			    		<router-view />
 			    	</div>
@@ -14,11 +16,17 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
+import KTHeader from '@/components/header/HeaderExam'
+import KTHeaderMobile from '@/components/header/HeaderMobileExan'
 
 export default {
 	name: 'Exam',
+	components: {
+		KTHeader,
+		KTHeaderMobile
+	},
 	computed: {
-		...mapGetters(['isLoadng']),
+		...mapGetters(['isLoading']),
 		...mapState('user', ['authenticated']),
 		...mapState('exam', ['uncomplete'])
 	},
@@ -47,3 +55,6 @@ export default {
 	}
 }
 </script>
+<style lang="scss">
+	@import "@/assets/sass/exam";
+</style>

@@ -1,8 +1,21 @@
 <template>
 	<div class="container">
 		<div class="row justify-content-center">
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="card card-custom">
+					<div class="card-header flex-wrap border-0 pt-6 pb-0">
+						<h3 class="card-title align-items-start flex-column">
+							<span class="card-label font-weight-bolder text-dark">Jadwal ujian</span>
+							<span class="text-muted mt-1 font-weight-bold font-size-sm">Daftar ujian yang dapat diikuti</span>
+						</h3>
+						<div class="card-toolbar">
+							<div class="form-group">
+								<router-link :to="{ name: 'home' }" class="btn btn-light-primary mr-2">
+									<i class="flaticon2-layers"></i>Dashboard
+								</router-link>
+							</div>
+						</div>
+					</div>
 					<div class="card-body">
 						<form @submit.prevent="submit">
 							<div v-if="schedules && schedules.length > 0">
@@ -14,7 +27,7 @@
 								</div>
 								<div class="form-group">
 									<b-button variant="primary" type="submit" block :disabled="isLoading">
-										{{ isLoaing ? 'Processing...' : 'Submit' }}
+										{{ isLoading ? 'Processing...' : 'Submit' }}
 									</b-button>
 								</div>
 							</div>
@@ -51,14 +64,15 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters(['isLoading']),
 		...mapState('exam', ['schedules']),
 		...mapState('user', ['authenticated']),
 	},
 	methods: {
-		...mapActions('exam_schedule', ['storeDataExamAnswer']),
+		...mapActions('exam', ['createDataExam', 'getDataExamActive']),
 		async submit() {
 			try {
-				await this.storeDataExamAnswer(this.data)
+				await this.createDataExam(this.data)
 				await this.getDataExamActive()
 				this.$router.replace({ name: 'exam.prepare' })
 			} catch (error) {

@@ -93,6 +93,7 @@ export default {
 				await this.storeDataSettingLogo(formData)
 				this.file = null
 				this.$bvToast.toast('Logo berhasil diupload', successToas())
+				this.getDataSettingSchool()
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}

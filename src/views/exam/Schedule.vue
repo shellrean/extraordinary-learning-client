@@ -130,7 +130,7 @@
 			</div>
 			<div class="form-group">
 				<label>Nama</label>
-				<input type="text" class="form-control form-control-lg form-control-solid" v-model="schedule.name" :class="{ 'is-invalid' : errors.name }">
+				<input type="text" class="form-control form-control-lg form-control-solid" v-model="schedule.name" :class="{ 'is-invalid' : errors.name }" placeholder="Nama ujian">
 
 			</div>
 			<div class="form-group">
@@ -145,7 +145,7 @@
 			</div>
 			<div class="form-group">
 				<label>Durasi</label>
-				<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="schedule.duration" :class="{ 'is-invalid' : errors.duration }">
+				<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="schedule.duration" :class="{ 'is-invalid' : errors.duration }" placeholder="Menit">
 			</div>
 			<hr>
 			<div class="row">

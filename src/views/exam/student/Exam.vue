@@ -4,8 +4,117 @@
         :is-full-page="true" :loader="'bars'" :color="'#F64E60'"></loading>
 
         <div class="container">
-        	
+        	<div class="card card-custom">
+                <div class="card-header flex-wrap border-0 pt-6 pb-0">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label font-weight-bolder text-dark">Nomor {{ questionIndex + 1 }}</span>
+                        <span class="text-muted mt-1 font-weight-bold font-size-sm">Kerjakan soal dengan jujur</span>
+                    </h3>
+                    <div class="card-toolbar">
+                        <div class="form-group">
+                             <div class="btn-group">
+                              <button type="button" class="btn btn-outline-primary btn-soal btn-pill"><i class="flaticon2-hourglass-1"></i> {{ prettyTime }}</button>
+                              <b-button variant="primary" v-b-modal.nomorSoal :disabled="!listening" class="btn-pill"><i class="flaticon-apps"></i> Daftar Soal</b-button>
+                            </div>
+                        </div>
+                    </div>
+                    <b-form-input v-model="range" type="range" min="12" max="30"></b-form-input>
+                </div>
+                <div class="card-body" v-if="typeof filleds[questionIndex] != 'undefined'">
+                    <table class="table table-borderless table-sm">
+                        <tr>
+                            <td colspan="2" :style="'font-size:'+range+'px !important'" 
+                                v-html="filleds[questionIndex].question.question"></td>
+                        </tr>
+                        <tr v-for="(option,index) in filleds[questionIndex].question.options" :key="index">
+                            <td width="50px" :style="'font-size:'+range+'px !important'">
+                                <b-form-radio size="lg" v-model="selected" name="jwb" :value="option.id"  @change="selectOption(index)">
+                                    <span class="text-uppercase">{{ index | charIndex }}</span>.
+                                </b-form-radio>
+                            </td>
+                            <td :style="'font-size:'+range+'px !important'" v-html="option.body"></td>
+                        </tr>
+                        <tr v-if="filleds[questionIndex].question.type == 2">
+                            <td height="auto">
+                                <ckeditor v-model="filleds[questionIndex].esay" :config="editorConfig"
+                                 @input="onInput" >
+                                </ckeditor>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="d-flex justify-content-between ">
+                        <b-button variant="primary" class="sebelum" size="md" pill
+                        @click="prev()" v-if="questionIndex != 0" :disabled="isLoading">
+                            <span class="flaticon2-back"></span>
+                            Sebelumnya
+                        </b-button>
+                         <button id="soal-ragu" class="btn btn-warning btn-pill" :disabled="isLoading">
+                            <b-form-checkbox size="lg" :value="1" v-model="filleds[questionIndex].doubt" :disabled="isLoading" @change="sendDoubt()">Ragu ragu</b-form-checkbox>
+                        </button>
+                         <b-button variant="primary" class="sesudah" size="md" :disabled="isLoading" @click="next()" v-if="questionIndex+1 != filleds.length" pill>
+                            Selanjutnya <span class="flaticon2-next"></span>
+                        </b-button>
+                        <b-button variant="success" class="sesudah" size="md" @click="$bvModal.show('modal-selesai')" v-if="questionIndex+1 == filleds.length && checkDoubt() == false" :disabled="isLoading" pill>
+                            SELESAI <i class="flaticon2-check-mark"></i>
+                        </b-button>
+                        <b-button variant="danger" class="sesudah" size="md" :disabled="isLoading" v-b-modal.modal-1 v-if="questionIndex+1 == filleds.length && checkDoubt() == true" pill>
+                            SELESAI <i class="flaticon2-check-mark"></i>
+                        </b-button>
+                    </div>
+                </div>
+            </div>
         </div>
+         <b-modal id="modal-selesai" centered class="shadow">
+            <template v-slot:modal-header="{ close }">
+              <h5>Konfirmasi</h5>
+            </template>
+
+            <template v-slot:default="{ hide }">
+              <b-form-checkbox size="lg" v-model="isKonfirm">Saya sudah selesai mengerjakan</b-form-checkbox>
+            </template>
+
+            <template v-slot:modal-footer="{ cancel }">
+                <div class="button-wrapper">
+                  <b-button size="sm" variant="success" @click="finish()" :disabled="!isKonfirm">
+                    Selesai
+                  </b-button>
+                  <b-button size="sm" variant="secondary" @click="cancel()">
+                    Batal
+                  </b-button>
+                </div>
+            </template>
+         </b-modal>
+          <b-modal id="modal-1" centered class="shadow">
+            <template v-slot:modal-header="{ close }">
+              <h5>Ragu ragu</h5>
+            </template>
+            <p>Masih ada jawaban ragu ragu</p>
+            <template v-slot:modal-footer="{ cancel }">
+                  <b-button size="sm" variant="secondary" @click="cancel()">
+                    Tutup
+                  </b-button>
+            </template>
+         </b-modal>
+         <b-modal id="nomorSoal" title="Nomor Soal" size="lg" class="shadow">
+            <template v-slot:modal-footer="{ cancel }">
+              <b-button variant="secondary" @click="cancel()">
+                Tutup
+              </b-button>
+            </template>
+            <template v-slot:default="{ hide }">
+                <ul class="nomor-soal" id="nomor-soal">
+                    <li v-for="(fiel,index) in filleds" :key="index">
+                        <a href="#" :class="{
+                        'isi' : (fiel.answer != 0 || fiel.esay != ''),
+                        'ragu' : (fiel.doubt == 1),
+                        'active' : (index == questionIndex)}" @click.prevent="toLand(index)" :disabled="isLoading">
+                            {{ index+1 }} 
+                            <span></span>
+                        </a>
+                    </li>
+                </ul>
+            </template>
+        </b-modal>
 	</div>
 </template>
 <script>
@@ -14,11 +123,12 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import _ from 'lodash'
 import { successToas, errorToas } from '@/core/entities/notif'
+import { BButton, BFormInput, BFormRadio, BFormCheckbox } from 'bootstrap-vue'
 
 export default {
 	name: 'StudentExam',
 	components: {
-		Loading
+		Loading, BButton, BFormInput, BFormRadio, BFormCheckbox
 	},
 	data() {
 		return {
@@ -48,6 +158,19 @@ export default {
 	computed: {
 		...mapGetters(['isLoading', 'loadPage']),
 		...mapState('exam', ['active', 'answers']),
+        prettyTime() {
+            let sec_num = parseInt(this.time, 10)
+            let hours   = Math.floor(sec_num / 3600)
+            let minutes = Math.floor((sec_num - (hours * 3600)) / 60)
+            let seconds = sec_num - (hours * 3600) - (minutes * 60)
+            return hours+':'+minutes+':'+seconds 
+        },
+        filleds() {
+            return this.answers.data
+        },
+        detail() {
+            return this.answers.detail
+        },
 	},
 	methods: {
 		...mapActions('exam' ,['getDataExamAnswers', 'storeDataExamAnswer', 'storeDataExamDoubt', 'finishingExam']),
@@ -70,19 +193,6 @@ export default {
                 this.$bvToast.toast(error.message, errorToas())
             }
         },
-		filleds() {
-			return this.answers.data
-		},
-		detail() {
-			return this.answers.detail
-		},
-		prettyTime() {
-			let sec_num = parseInt(this.time, 10)
-            let hours   = Math.floor(sec_num / 3600)
-            let minutes = Math.floor((sec_num - (hours * 3600)) / 60)
-            let seconds = sec_num - (hours * 3600) - (minutes * 60)
-            return hours+':'+minutes+':'+seconds 
-		},
 		selectOption(index) {
             const fill = this.filleds[this.questionIndex]
 
@@ -122,11 +232,11 @@ export default {
         toLand(index) {
             this.questionIndex = index
         },
-        doubt(val) {
+        sendDoubt(val) {
         	const fill = this.filleds[this.questionIndex]
             let ragu = fill.doubt == false || fill.doubt == '0' ? 1 : 0;
 
-            this.updateRaguJawaban({ 
+            this.storeDataExamDoubt({ 
                 doubt: ragu,
                 answer_id : this.filleds[this.questionIndex].id,
                 index : this.questionIndex

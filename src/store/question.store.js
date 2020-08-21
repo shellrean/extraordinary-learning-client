@@ -34,7 +34,14 @@ const mutations = {
 		state.question_bank = payload
 	},
 	ASSIGN_QUESTION(state, payload) {
-		state.question = payload
+		state.question = {
+			id: payload.id,
+			question_bank_id: payload.question_bank_id,
+			question: payload.question,
+			type: payload.type,
+			options: (payload.options.length != 'undefined' ? payload.options.map(item => item.body) : []),
+			correct: (payload.options.length != 'undefined' ? payload.options.map(item => item.correct).indexOf(1) : null)
+		}
 	},
 	ASSIGN_QUESTIONS(state, payload) {
 		state.questions = payload
@@ -221,7 +228,7 @@ const actions = {
 		return new Promise(async (resolve, reject) => {
 			try {
 				commit('SET_LOADING', true, { root: true })
-				let network = await $axios.put(`question_banks/question/${state.question.id}`, payload)
+				let network = await $axios.put(`question_banks/question/${state.question.id}`, state.question)
 
 				commit('CLEAR_QUESTION')
 				commit('SET_LOADING', false, { root: true })
