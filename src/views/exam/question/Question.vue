@@ -25,7 +25,7 @@
 									</b-button>
 								</template>
 								<b-dropdown-item :to="{ name: 'exam.bank.question.add', params: { id: $route.params.id} }">Form input</b-dropdown-item>
-								<b-dropdown-item @click="">Import file (.docx)</b-dropdown-item>
+								<b-dropdown-item :to="{ name: 'exam.bank.question.import', params: { id: $route.params.id }}">Import file (.docx)</b-dropdown-item>
 							</b-dropdown>
 						</div>
 					</div>

@@ -51,12 +51,11 @@ export default {
 	name: 'FormClassroomLive',
 	data() {
 		return {
-			showEditor: true,
+			showEditor: false,
 			editorConfig: {
 				embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
 		        extraPlugins: 'embed',
 		        allowedContent: true,
-		        filebrowserUploadUrl: process.env.VUE_APP_API_SERVER+'/api/v1/file/upload?',
 		        fileTools_requestHeaders: {
 		          'Accept': 'application/json',
 		          'Authorization' : 'Bearer '+store.state.token
@@ -78,6 +77,8 @@ export default {
 	async created() {
 		try {
 			await this.getDataSubjects({ perPage: 100})
+			this.editorConfig.filebrowserUploadUrl = `${this.baseURL}/api/v1/file?`
+			this.showEditor = true
 		} catch (error) {
 
 		}

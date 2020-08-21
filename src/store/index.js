@@ -12,6 +12,7 @@ import abcent from './abcent.store'
 import task from './task.store'
 import setting from './setting.store'
 import question from './question.store'
+import exam_schedule from './exam_schedule.store'
 
 Vue.use(Vuex)
 
@@ -84,6 +85,7 @@ export default new Vuex.Store({
         abcent,
         task,
         setting,
-        question
+        question,
+        exam_schedule
     }
 })

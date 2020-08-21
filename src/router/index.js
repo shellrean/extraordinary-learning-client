@@ -59,6 +59,8 @@ const ExamBank = () => import('@/views/exam/Bank')
 const ExamBankQuestion = () => import('@/views/exam/question/Question')
 const ExamBankQuestionAdd = () => import('@/views/exam/question/Add')
 const ExamBankQuestionEdit = () => import('@/views/exam/question/Edit')
+const ExamBankQuestionImport = () => import('@/views/exam/question/Import')
+const ExamSchedule = () => import('@/views/exam/Schedule')
 
 Vue.use(VueRouter)
 
@@ -311,6 +313,16 @@ Vue.use(VueRouter)
             path: 'bank/:id/question/:id_question/edit',
             name: 'exam.bank.question.edit',
             component: ExamBankQuestionEdit
+          },
+          {
+            path: 'bank/:id/import',
+            name: 'exam.bank.question.import',
+            component: ExamBankQuestionImport
+          },
+          {
+            path: 'schedule',
+            name: 'exam.schedule',
+            component: ExamSchedule
           }
         ]
       }
