@@ -62,6 +62,8 @@ const ExamBankQuestionEdit = () => import('@/views/exam/question/Edit')
 const ExamBankQuestionImport = () => import('@/views/exam/question/Import')
 const ExamSchedule = () => import('@/views/exam/Schedule')
 
+const ExamDash = () => import('@/views/exam/student/Dashboard')
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -323,6 +325,11 @@ Vue.use(VueRouter)
             path: 'schedule',
             name: 'exam.schedule',
             component: ExamSchedule
+          },
+          {
+            path: 'dash',
+            name: 'exam.student',
+            component: ExamDash
           }
         ]
       }
