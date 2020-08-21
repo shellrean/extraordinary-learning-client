@@ -1,0 +1,39 @@
+<template>
+	
+</template>
+<script>
+import { mapGetters, mapActions, mapState } from 'vuex'
+import { successToas, errorToas } from '@/core/entities/notif'
+
+export default {
+	name: 'Exam',
+	computed: {
+		...mapGetters(['isLoadng']),
+		...mapState('user', ['authenticated']),
+		...mapState('exam', ['uncomplete'])
+	},
+	methods: {
+		...mapActions('exam', ['getDataExamSchedule','getDataExamActive', 'getDataExamUncomplete'])
+	},
+	async created() {
+		try {
+			if(this.$route.name != 'exam.while') {
+				await this.getDataExamSchedule()
+				await this.getDataExamActive()
+				await this.getDataExamUncomplete()
+			}
+		} catch (error) {
+			this.$bvToast.toast(error.message, errorToas())
+		}
+	},
+	watch: {
+		uncomplete(val) {
+			if(this.$route.name != 'exam.while' && typeof val.exam_schedule_id != 'undefined') {
+				this.$router.replace({
+					name: 'exam.while'
+				})
+			}
+		}
+	}
+}
+</script>

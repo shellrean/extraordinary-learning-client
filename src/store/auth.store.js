@@ -14,7 +14,7 @@ const actions = {
 					localStorage.setItem('token', network.data.token)
 					commit('SET_TOKEN', network.data.token, { root: true })
 				} else {
-					commit('SET_ERRORS', { invalid: 'Email/Password salah' }, { root: true })
+					commit('SET_ERRORS', { invalid: 'Akun tidak ditemukan' }, { root: true })
 				}
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)

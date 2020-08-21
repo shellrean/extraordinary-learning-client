@@ -63,6 +63,9 @@ const ExamBankQuestionImport = () => import('@/views/exam/question/Import')
 const ExamSchedule = () => import('@/views/exam/Schedule')
 
 const ExamDash = () => import('@/views/exam/student/Dashboard')
+const ExamWait = () => import('@/views/exam/student/Waiting')
+const ExamDoing = () => import('@/views/exam/student/Exam')
+const ExamFinish = () => import('@/views/exam/student/Finish')
 
 Vue.use(VueRouter)
 
@@ -330,6 +333,21 @@ Vue.use(VueRouter)
             path: 'dash',
             name: 'exam.student',
             component: ExamDash
+          },
+          {
+            path: 'waitingroom',
+            name: 'exam.prepare',
+            component: ExamWait
+          },
+          {
+            path: 'extraordinary',
+            name: 'exam.while',
+            component: ExamDoing
+          },
+          {
+            path: 'finish',
+            name: 'exam.finish',
+            component: ExamFinish
           }
         ]
       }
