@@ -50,6 +50,7 @@ const SettingSchool = () => import('@/views/setting/School')
 
 const EventIndex = () => import('@/views/event/Index')
 const EventData = () => import('@/views/event/Event')
+const EventShow = () => import('@/views/event/View')
 
 const InfoIndex = () => import('@/views/info/Index')
 const InfoData = () => import('@/views/info/Info')
@@ -194,6 +195,11 @@ Vue.use(VueRouter)
             path: '',
             name: 'event.index',
             component: EventData
+          },
+          {
+            path: ':id',
+            name: 'event.view',
+            component: EventShow
           }
         ]
       },

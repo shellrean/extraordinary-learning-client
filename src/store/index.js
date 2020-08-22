@@ -14,6 +14,8 @@ import setting from './setting.store'
 import question from './question.store'
 import exam_schedule from './exam_schedule.store'
 import exam from './exam.store'
+import info from './info.store'
+import event from './event.store'
 
 Vue.use(Vuex)
 
@@ -88,6 +90,8 @@ export default new Vuex.Store({
         setting,
         question,
         exam_schedule,
-        exam
+        exam,
+        info,
+        event
     }
 })
