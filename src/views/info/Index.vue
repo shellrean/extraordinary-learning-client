@@ -1,3 +1,3 @@
 <template>
-	<rotuer-view />
+	<router-view />
 </template>

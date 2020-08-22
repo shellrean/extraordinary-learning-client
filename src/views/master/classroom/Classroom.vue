@@ -59,20 +59,25 @@
                         	<template v-slot:cell(classroom)="row">
                         		<span style="width: 250px;">
                         			<div class="d-flex align-items-center">
-                        				<div class="symbol symbol-40 symbol-light-warning symbol-sm flex-shrink-0">					
+                        				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">					
                         					<span class="symbol-label font-size-h4 font-weight-bold">{{ row.item.grade }}</span>								
                         				</div>								
                         				<div class="ml-4">									
                         					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.name"></div>									
-                        					<a href="#" class="text-muted font-weight-bold text-hover-primary" v-text="row.item.group"></a>	
+                        					<a href="#" class="text-muted font-weight-bold" v-text="row.item.group"></a>	
                         				</div>							
                         			</div>
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
                         		<b-button size="sm" :to="{ name: 'master.classroom.dashboard', params: { id: row.item.id }}" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-buildings"></i></b-button>
-                        		<b-button @click="getClassroom(row.item.id)" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
-                        		<b-button @click="deleteClassroom(row.item.id)" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
+                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+									<template v-slot:button-content>
+									    <i class="flaticon-more"></i>
+									</template>
+									<b-dropdown-item  @click="getClassroom(row.item.id)" >Edit</b-dropdown-item>
+									<b-dropdown-item @click="deleteClassroom(row.item.id)">Hapus</b-dropdown-item>
+								</b-dropdown>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
@@ -222,13 +227,13 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination, BFormFile } from 'bootstrap-vue'
+import { BButton, BTable, BPagination, BFormFile, BDropdown, BDropdownItem } from 'bootstrap-vue'
 import _ from 'lodash'
 
 export default {
 	name: 'ClassroomData',
 	components: {
-		BButton, BTable, BPagination, BFormFile
+		BButton, BTable, BPagination, BFormFile, BDropdown, BDropdownItem
 	},
 	data() {
 		return {

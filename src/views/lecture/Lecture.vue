@@ -67,7 +67,7 @@
 									    <i class="flaticon-more"></i>
 									</template>
 									<b-dropdown-item :to="{ name: 'lecture.edit', params: { id: row.item.id}}" >Edit</b-dropdown-item>
-									<b-dropdown-item @click="deleteLecture()">Hapus</b-dropdown-item>
+									<b-dropdown-item @click="deleteLecture(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
                         	</template>
                     	</b-table>

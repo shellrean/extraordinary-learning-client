@@ -25,7 +25,7 @@
                         			<span class="font-weight-bolder" v-text="infos.from+row.index"></span>
                         		</span>
                         	</template>
-                        	<template v-slot:cell(classroom)="row">
+                        	<template v-slot:cell(info)="row">
                         		<span style="width: 250px;">
                         			<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.title"></div>									
                         			<a href="#" class="text-muted font-weight-bold" v-text="row.item.created_at"></a>
@@ -48,7 +48,6 @@
 					        :total-rows="infos.total"
 					        :per-page="infos.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">
@@ -78,8 +77,8 @@
 				<textarea class="form-control form-control-lg form-control-solid" v-model="info.body" :class="{ 'is-invalid' : errors.body }"></textarea>
 			</div>
 			<hr>
-			<b-form-checkbox v-model="row.item.status" value="1" switch>
-				{{row.item.status == 1 ? 'Aktif' : 'Tidak aktif' }}
+			<b-form-checkbox v-model="info.status" value="1" switch>
+				{{info.status == 1 ? 'Aktif' : 'Tidak aktif' }}
 			</b-form-checkbox>
 			<template v-slot:modal-footer="{ cancel }">
 		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
@@ -94,13 +93,13 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { BButton, BPagination, BDropdown, BDRopdownItem } from 'bootstrap-vue'
+import { BButton, BPagination, BDropdown, BDropdownItem, BFormCheckbox } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'InfoData',
 	components: {
-		BButton, BPagination, BDRopdownItem, BDropdown
+		BButton, BPagination, BDropdownItem, BDropdown, BFormCheckbox
 	},
 	data() {
 		return {

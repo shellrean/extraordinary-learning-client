@@ -1,4 +1,4 @@
-import $axios from '@/core/services/api.store'
+import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	infos: [],
@@ -61,7 +61,7 @@ const actions = {
 			}
 		})
 	},
-	getDataInfo({ commit } payload) {
+	getDataInfo({ commit }, payload) {
 		return new Promise(async (resolve, reject) => {
 			try {
 				commit('SET_LOADING', true, { root: true })

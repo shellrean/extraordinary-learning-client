@@ -56,9 +56,22 @@
                         	<template v-slot:cell(no)="row">
                         		<span style="width: 40px;"><span class="font-weight-bolder" v-text="subjects.from+row.index"></span></span>
                         	</template>
+                        	<template v-slot:cell(name)="row">
+                        		<div class="d-flex flex-column">
+                        			<div  class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0">
+                        				{{ row.item.name }}
+                        			</div>
+                        			<span class="text-muted font-weight-bold">{{ row.item.description }}</span>
+                        		</div>
+                        	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-button @click="getSubject(row.item.id)" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2" :disabled="isLoading"><i class="flaticon-edit"></i></b-button>
-                        		<b-button @click="deleteSubject(row.item.id)" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2" :disabled="isLoading"><i class="flaticon-delete"></i></b-button>
+                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+									<template v-slot:button-content>
+									    <i class="flaticon-more"></i>
+									</template>
+									<b-dropdown-item  @click="getSubject(row.item.id)" >Edit</b-dropdown-item>
+									<b-dropdown-item @click="deleteSubject(row.item.id)">Hapus</b-dropdown-item>
+								</b-dropdown>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
@@ -82,14 +95,13 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
-								<span class="text-muted">Menampilkan {{ subjects.data.length }} dari {{ subjects.total }} records</span>
 							</div>
 					    </div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah matpel" size="lg">
+		<b-modal id="modal-create" title="Tambah matpel" size="lg"  @hide="$store.commit('subject/CLEAR_FORM_SUBJECT')" no-close-on-backdrop>
 			<form class="form pt-9">
 				<div class="form-group row">
 					<label class="col-xl-3 col-lg-9 text-right col-form-label">
@@ -120,7 +132,7 @@
 		    </template>
 		</b-modal>
 
-		<b-modal id="modal-update" title="Edit matpel" size="lg">
+		<b-modal id="modal-update" title="Edit matpel" size="lg"  @hide="$store.commit('subject/CLEAR_FORM_SUBJECT')" no-close-on-backdrop>
 			<form class="form pt-9">
 				<div class="form-group row">
 					<label class="col-xl-3 col-lg-9 text-right col-form-label">
@@ -172,13 +184,13 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination, BFormFile } from 'bootstrap-vue'
+import { BButton, BTable, BPagination, BFormFile, BDropdown, BDropdownItem } from 'bootstrap-vue'
 import _ from 'lodash'
 
 export default {
 	name: 'SubjectData',
 	components: {
-		BButton, BTable, BPagination, BFormFile
+		BButton, BTable, BPagination, BFormFile, BDropdown, BDropdownItem
 	},
 	data() {
 		return {

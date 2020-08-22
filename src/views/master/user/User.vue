@@ -61,13 +61,13 @@
                         	<template v-slot:cell(user)="row">
                         		<span style="width: 250px;">
                         			<div class="d-flex align-items-center">
-                        				<div class="symbol symbol-40 symbol-light-warning symbol-sm flex-shrink-0">									
+                        				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">									
                         					<img class="" src="/media/users/100_13.jpg" alt="photo" v-if="row.item.details != null && typeof row.item.details.avatar != 'undefined' && row.item.settings.avatar != ''">
                         					<span class="symbol-label font-size-h4 font-weight-bold" v-else>{{ row.item.name.charAt(0) }}</span>								
                         				</div>								
                         				<div class="ml-4">									
                         					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.name"></div>									
-                        					<a href="#" class="text-muted font-weight-bold text-hover-primary" v-text="row.item.email"></a>								
+                        					<a href="#" class="text-muted font-weight-bold" v-text="row.item.email"></a>								
                         				</div>							
                         			</div>
                         		</span>
@@ -76,8 +76,13 @@
                         		<span class="label label-lg font-weight-bold  label-light-info label-inline">{{ row.item.isactive == 0 ? 'In- active' : 'Active' }}</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-button @click="getUserData(row.item.id)" :disabled="isLoading" size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-edit"></i></b-button>
-                        		<b-button @click="deleteTeacher(row.item.id)" :disabled="isLoading"  size="sm" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-delete"></i></b-button>
+                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+									<template v-slot:button-content>
+									    <i class="flaticon-more"></i>
+									</template>
+									<b-dropdown-item  @click="getUserData(row.item.id)" >Edit</b-dropdown-item>
+									<b-dropdown-item @click="deleteTeacher(row.item.id)">Hapus</b-dropdown-item>
+								</b-dropdown>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
@@ -101,7 +106,6 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
-								<span class="text-muted">Menampilkan {{ teachers.data.length }} dari {{ teachers.total }} records</span>
 							</div>
 					    </div>
 					</div>
@@ -211,13 +215,13 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BTable, BPagination, BFormFile, BFormCheckbox } from 'bootstrap-vue'
+import { BButton, BTable, BPagination, BFormFile, BFormCheckbox, BDropdown, BDropdownItem } from 'bootstrap-vue'
 import _ from 'lodash'
 
 export default {
 	name: 'UserDataMaster',
 	components: {
-		BButton, BTable, BPagination, BFormFile, BFormCheckbox
+		BButton, BTable, BPagination, BFormFile, BFormCheckbox, BDropdown, BDropdownItem
 	},
 	data() {
 		return {
@@ -233,8 +237,8 @@ export default {
 	        perPage: 10,
 			fields: [
 				{ key: 'no', label: '#' },
-				{ key: 'id', label: 'ID Pengajar' },
 				{ key: 'user', label: 'User', shortable: true },
+				{ key: 'id', label: 'ID Pengajar' },
 				{ key: 'status', label: 'Status' },
 				{ key: 'actions', label: 'Aksi' }
 			],

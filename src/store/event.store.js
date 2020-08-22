@@ -1,4 +1,4 @@
-import $axios from '@/core/services/api.store'
+import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	events: [],
@@ -24,7 +24,7 @@ const mutations = {
 	SET_PUBLIC_PAGE(state, payload) {
 		state.public_page = payload
 	},
-	CLEAR_EVENT(state payload) {
+	CLEAR_EVENT(state, payload) {
 		state.event = {}
 	}
 }

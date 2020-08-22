@@ -25,10 +25,12 @@
                         			<span class="font-weight-bolder" v-text="events.from+row.index"></span>
                         		</span>
                         	</template>
-                        	<template v-slot:cell(classroom)="row">
+                        	<template v-slot:cell(event)="row">
                         		<span style="width: 250px;">
-                        			<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.title"></div>									
-                        			<a href="#" class="text-muted font-weight-bold" v-text="row.item.location"></a>
+                        			<div class="d-flex flex-column">	
+	                        			<router-link :to="{ name: 'event.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.title"></router-link>									
+	                        			<span class="text-muted font-weight-bold" v-text="row.item.location"></span>
+	                        		</div>
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
@@ -68,7 +70,7 @@
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-event" title="Kegiatan"  @hide="$store.commit('event/CLEAR_EVENT')" no-close-on-backdrop>
+		<b-modal id="modal-event" title="Kegiatan"  @hide="$store.commit('event/CLEAR_EVENT')" no-close-on-backdrop size="lg">
 			<div class="form-group">
 				<label>Judul</label>
 				<input type="text" class="form-control form-control-lg form-control-solid" v-model="event.title" :class="{ 'is-invalid' : errors.title }">
@@ -79,20 +81,16 @@
 			</div>
 			<div class="form-group">
 				<label>Kontent</label>
-				<ckeditor v-model="event.body" v-if="showEditor" :config="editorConfig"></ckeditor>
+				<ckeditor v-model="event.body" v-if="showEditor" :config="editorConfig" id="content"></ckeditor>
 			</div>
 			<div class="form-group">
 				<label>Tanggal</label>
-				<VueCtkDateTimePicker v-model="event.date" only-date format='YYYY-MM-DD' formatted='DD-MM-YYYY' label="Tanggal pelaksanaan"/>
+				<VueCtkDateTimePicker v-model="event.date" only-date format='YYYY-MM-DD' formatted='DD-MM-YYYY' label="Tanggal pelaksanaan" id="date do"/>
 			</div>
 			<div class="form-group">
 				<label>Waktu</label>
-				<VueCtkDateTimePicker v-model="event.time" only-time format='HH:mm' formatted='HH:mm' label="Waktu pelaksanaan"/>
+				<VueCtkDateTimePicker v-model="event.time" only-time format='HH:mm' formatted='HH:mm' label="Waktu pelaksanaan" id="time do"/>
 			</div>
-			<hr>
-			<b-form-checkbox v-model="row.item.status" value="1" switch>
-				{{row.item.status == 1 ? 'Aktif' : 'Tidak aktif' }}
-			</b-form-checkbox>
 			<template v-slot:modal-footer="{ cancel }">
 		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
 		        {{ isLoading ? 'Processing...' : 'Simpan' }}
@@ -107,14 +105,15 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BPagination, BDropdown, BDRopdownItem } from 'bootstrap-vue'
+import { BButton, BPagination, BDropdown, BDropdownItem } from 'bootstrap-vue'
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+import store from '@/store'
 
 export default {
 	name: 'EventData',
 	components: {
-		BButton, BPagination, BDRopdownItem, BDropdown,
+		BButton, BPagination, BDropdownItem, BDropdown,
 		VueCtkDateTimePicker
 	},
 	data() {
@@ -154,7 +153,7 @@ export default {
 		...mapActions('event', ['getDataEvents', 'createDataEvent', 'updateDataEvent', 'getDataEvent', 'deleteDataEvent']),
 		async changeData() {
 			try {
-				await this.getDataEvents()
+				await this.getDataEvents({ perPage: this.perPage })
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
@@ -166,7 +165,9 @@ export default {
 				} else {
 					await this.createDataEvent()
 				}
+				this.$bvModal.hide('modal-event')
 				this.changeData()
+				this.$bvToast.toast('Kegiatan berhasil disimpan', successToas())
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
@@ -174,6 +175,7 @@ export default {
 		async getData(id) {
 			try {
 				await this.getDataEvent(id)
+				this.$bvModal.show('modal-event')
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
