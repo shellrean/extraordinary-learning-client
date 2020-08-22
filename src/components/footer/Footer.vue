@@ -11,7 +11,7 @@
 			<!--end::Copyright-->
 			<!--begin::Nav-->
 			<div class="nav nav-dark order-1 order-md-2">
-				<a href="#" target="_blank" class="nav-link pr-3 pl-0">Shellrean & ICT Team</a>
+				<a href="#" class="nav-link pr-3 pl-0">Shellrean & ICT Team</a>
 			</div>
 			<!--end::Nav-->
 		</div>

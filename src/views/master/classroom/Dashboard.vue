@@ -11,7 +11,7 @@
 							<div class="col-xxl-6">
 								<ClassTimeline />
 							</div>
-							<div>
+							<div class="col-xxl-6">
 								<ClassStudentLoby />
 							</div>
 						</div>

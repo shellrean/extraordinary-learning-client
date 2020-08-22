@@ -23,7 +23,7 @@
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
 											<select class="form-control form-control-solid" v-model="classroom_id">
-												<option value="1">12 TKJ</option>
+												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms">{{ classroom.classroom.name }} - {{ classroom.subject.name }}</option>
 											</select>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
@@ -130,10 +130,12 @@ export default {
 	}),
 	computed: {
 		...mapGetters(['isLoading','baseURL']),
-		...mapState('task', ['classroom_submit_tasks'])
+		...mapState('task', ['classroom_submit_tasks']),
+		...mapState('classroom', ['myclassrooms'])
 	},
 	methods: {
 		...mapActions('task', ['getDataUncheckedTask', 'deleteDataStudentTask', 'createNewTaskResult']),
+		...mapActions('classroom', ['getDataClassromMine']),
 		deleteFromList(id) {
 			let index = this.classroom_submit_tasks.map(item => item.id).indexOf(id)
 			this.classroom_submit_tasks.splice(index, 1)
@@ -187,6 +189,12 @@ export default {
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		}
+	},
+	created() {
+		this.getDataClassromMine()
+		.catch((error) => {
+			this.$bvToast.toast(error.message, errorToas())
+		})
 	}
 }
 </script>

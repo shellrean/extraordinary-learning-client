@@ -36,7 +36,7 @@
 							<template v-slot:cell(name)="row">
 								<span style="width: 250px;">
 									<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-										<span class="text-dark mb-1 font-size-lg text-hover-primary">
+										<span class="text-dark mb-1 font-size-lg">
 											{{ row.item.name }}
 										</span>
 										<span class="text-muted font-weight-bold">{{ row.item.question_bank.code }}</span>

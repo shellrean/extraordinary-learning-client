@@ -51,6 +51,10 @@
 							</div>
 						</div>
 					</div>
+					<div class="d-flex align-items-center" v-if="isLoading">
+						<div class="mr-2 text-muted">Loading...</div>
+						<div class="spinner spinner-primary mr-10"></div>
+					</div>
 				</div>
 			</div>
 		</div>

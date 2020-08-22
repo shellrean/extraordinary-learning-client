@@ -1,5 +1,5 @@
 import $axios from '@/core/services/api.service'
-
+import $axiosexcel from '@/core/services/api_excel.service'
 const state = () => ({
 	abcents: []
 })
@@ -39,7 +39,28 @@ const actions = {
 				reject(error.response.data)
 			}
 		})
-	}
+	},
+	downloadExcel({ state, commit}, payload) {
+		commit('SET_LOADING', true, { root: true })
+		return new Promise((resolve, reject) => {
+			$axiosexcel.get(`abcents/subject/${payload.subject_id}/classroom/${payload.classroom_id}/export`)
+			.then((response) => {
+				const type = response.headers['content-type']
+			    const blob = new Blob([response.data], { type: type, encoding: 'UTF-8' })
+			    const link = document.createElement('a')
+			    link.href = window.URL.createObjectURL(blob)
+			    link.download = 'Report absensi hari ini.xlsx'
+			    link.click()
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(response.data)
+			})
+			.catch((error) => {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			})
+		})
+	},
 }
 
 export default {

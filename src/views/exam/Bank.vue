@@ -213,7 +213,7 @@ export default {
 		...mapGetters(['isLoading']),
 		...mapState(['errors']),
 		...mapState('question', ['question_banks','question_bank']),
-		...mapState('classroom', ['subjects']),
+		...mapState('classroom', ['myclassrooms']),
 		page: {
 			get() {
 				return this.$store.state.question.question_banks_page
@@ -221,11 +221,19 @@ export default {
 			set(val) {
 				this.$store.commit('question/SET_QUESTION_BANKS_PAGE', val)
 			}
+		},
+		subjects() {
+			return this.myclassrooms.map((item) => {
+				return {
+					id: item.subject.id,
+					name: item.subject.name
+				}
+			})
 		}
 	},
 	methods: {
 		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank', 'deleteDataQuestionBank', 'updateDataQuestionBank']),
-		...mapActions('classroom', ['getDataTeacherSubject']),
+		...mapActions('classroom', ['getDataClassromMine']),
 		changeData() {
 			this.getDataQuestionBanks({ perPage: this.perPage })
 			.catch((error) => {
@@ -285,7 +293,7 @@ export default {
 	},
 	created() {
 		this.changeData()
-		this.getDataTeacherSubject()
+		this.getDataClassromMine()
 	},
 	watch: {
 		

@@ -17,7 +17,7 @@
 					<div class="form-group" v-if="typeof subjects.data != 'undefined'">
 						<label>Pelajaran</label>
 						<select class="form-control form-control-lg form-control-solid" v-model="lecture.subject_id" :class="{ 'is-invalid' : errors.subject_id }">
-							<option v-for="subject in subjects.data" :value="subject.id">{{ subject.name }}</option>
+							<option v-for="classroom in myclassrooms" :value="classroom.subject.id">{{ classroom.subject.name }}</option>
 						</select>
 						<div class="invalid-feedback" v-if="errors.subject_id">{{ errors.subject_id[0] }}</div>
 					</div>
@@ -62,12 +62,19 @@ export default {
 		...mapState('subject',['subjects']),
 		...mapState('lecture', {
 			lecture: state => state.lecture
-		})
+		}),
+		...mapState('classroom', ['myclassrooms'])
 	},
 	methods: {
-		...mapActions('subject',['getDataSubjects'])
+		...mapActions('subject',['getDataSubjects']),
+		...mapActions('classroom', ['getDataClassromMine']),
 	},
 	async created() {
+		this.getDataClassromMine()
+		.catch((error) => {
+			this.$bvToast.toast(error.message, errorToas())
+		})
+
 		try {
 			await this.getDataSubjects({ perPage: 100})
 			this.editorConfig.filebrowserUploadUrl = `${this.baseURL}/api/v1/file?`

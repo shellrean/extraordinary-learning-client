@@ -8,6 +8,7 @@
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 			    		<router-view />
 			    	</div>
+			    	<KTFooter></KTFooter>
 				</div>
 			</div>
 		</div>
@@ -18,12 +19,14 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
 import KTHeader from '@/components/header/HeaderExam'
 import KTHeaderMobile from '@/components/header/HeaderMobileExan'
+import KTFooter from '@/components/footer/Footer'
 
 export default {
 	name: 'Exam',
 	components: {
 		KTHeader,
-		KTHeaderMobile
+		KTHeaderMobile,
+		KTFooter
 	},
 	computed: {
 		...mapGetters(['isLoading']),
