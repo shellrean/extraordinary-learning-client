@@ -61,6 +61,7 @@ export default {
 	},
 	async created() {
 		try {
+			this.center.open();
 			this.channel = process.env.VUE_APP_KEY
 			if(typeof this.authenticated.name != 'undefined') {
 				this.center.emit('getin', {
@@ -83,6 +84,7 @@ export default {
 	},
 	destroyed() {
         this.center.emit('exit', { channel: this.channel })
+        this.center.close()
     },
 }
 </script>
