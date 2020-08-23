@@ -26,9 +26,9 @@
 						<div class="col-md-5">
 							<div class="card card-custom card-stretch gutter-b">
 								<div class="card-body d-flex p-0">
-									<div class="flex-grow-1 bg-danger p-8 card-rounded flex-grow-1 bgi-no-repeat" style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 70%; background-image: url(/media/svg/banner/svg-coffe.svg)">
-										<h4 class="text-inverse-danger mt-2 font-weight-bolder">{{ authenticated.classroom.name }} - {{ authenticated.classroom.group}} ({{ authenticated.classroom.grade}})</h4>
-										<p class="text-inverse-danger my-6">Kode: {{ authenticated.classroom.invitation_code }} 
+									<div class="flex-grow-1 bg-primary p-8 card-rounded flex-grow-1 bgi-no-repeat" style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 70%; background-image: url(/media/svg/banner/svg-coffe.svg)">
+										<h4 class="text-inverse-primary mt-2 font-weight-bolder">{{ authenticated.classroom.name }} - {{ authenticated.classroom.group}} ({{ authenticated.classroom.grade}})</h4>
+										<p class="text-inverse-primary my-6">Kode: {{ authenticated.classroom.invitation_code }} 
 										<br>Bagikan kode kelas hanya kepada murid anda</p>
 									</div>
 								</div>
@@ -59,7 +59,7 @@
 						</div>
 						<div class="col-md-12" v-if="groupedClass.length == 0">
 							<div class="text-center">
-								<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+								<img src="/media/svg/banner/svg-nodata4.svg" style="max-width: 130px">
 								<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas</p>
 							</div>
 						</div>

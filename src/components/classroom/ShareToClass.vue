@@ -18,7 +18,7 @@
 					</span>
 					Bagikan materi
 				</b-button>
-				<b-button v-b-modal.modal-task variant="white"  class="btn btn-sm btn-text-dark-50 btn-hover-icon-danger btn-hover-text-danger bg-hover-light-danger font-weight-bolder rounded font-size-sm p-2">
+				<b-button v-b-modal.modal-task variant="white"  class="btn btn-sm btn-text-dark-50 btn-hover-icon-primary btn-hover-text-primary bg-hover-light-primary font-weight-bolder rounded font-size-sm p-2">
 					<span class="svg-icon svg-icon-md svg-icon-dark-25 pr-1">
 						<i class="flaticon-list"></i>
 					</span>

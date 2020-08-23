@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<loading :active.sync="loadPage" 
-	    :is-full-page="true" :loader="'bars'" :color="'#F64E60'"></loading>
+	    :is-full-page="true" :loader="'bars'" :color="'#3699FF'"></loading>
 		<div class="d-flex flex-column flex-root" v-if="typeof authenticated.id != 'undefined'">
 			<!-- begin:: Header Mobile -->
 		    <KTHeaderMobile></KTHeaderMobile>

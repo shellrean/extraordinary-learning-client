@@ -33,7 +33,7 @@
 		<div class="card card-custom gutter-b mt-5" v-if="classroom_tasks.data.length == 0 ">
 			<div class="card-body">
 				<div class="text-center">
-					<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+					<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
 				</div>
 			</div>
 		</div>

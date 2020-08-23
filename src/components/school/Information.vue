@@ -36,7 +36,6 @@
 			    :total-rows="public_infos.total"
 			    :per-page="public_infos.per_page"
 			    :disabled="isLoading"
-			    last-number
 			  ></b-pagination>
 			</div>
 		</div>
@@ -44,7 +43,7 @@
 			<div class="card card-custom gutter-b mt-5">
 				<div class="card-body">
 					<div class="text-center">
-						<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+						<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
 					</div>
 				</div>
 			</div>

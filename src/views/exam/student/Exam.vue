@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<loading :active.sync="loadPage" 
-        :is-full-page="true" :loader="'bars'" :color="'#F64E60'"></loading>
+        :is-full-page="true" :loader="'bars'" :color="'#187DE4'"></loading>
 
         <div class="container">
         	<div class="card card-custom">

@@ -28,7 +28,7 @@
 							<template v-slot:cell(details)="row">
 								<b-button size="sm" variant="white" @click="row.toggleDetails">
 									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-danger"></i>
+										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-primary"></i>
 									</small>
 								</b-button>
 							</template>

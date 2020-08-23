@@ -29,7 +29,7 @@
 						  	<template v-slot:cell(details)="row">
 								<b-button size="sm" variant="white" @click="row.toggleDetails">
 									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-danger"></i>
+										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-primary"></i>
 									</small>
 								</b-button>
 							</template>
@@ -94,7 +94,6 @@
 					        :total-rows="schedules.total"
 					        :per-page="schedules.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">

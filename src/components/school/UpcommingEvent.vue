@@ -31,7 +31,7 @@
 		</div>
 		<div class="card-body" v-else>
 			<div class="text-center">
-				<img src="/media/svg/banner/svg-notfound.svg" style="max-width: 130px">
+				<img src="/media/svg/banner/svg-nodata3.svg" style="max-width: 130px">
 			</div>
 		</div>
 		<!--end::Body-->
