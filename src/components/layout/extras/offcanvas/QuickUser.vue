@@ -81,6 +81,7 @@ export default {
   			await this.loggedOut()
   			localStorage.removeItem('token')
             this.$store.state.token = localStorage.getItem('token')
+            this.$store.commit('user/CLEAR_AUTH')
             this.$router.push('/login')
   		}
   	}

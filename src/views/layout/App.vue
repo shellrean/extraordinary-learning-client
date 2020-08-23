@@ -37,6 +37,7 @@ import KTHeaderMobile from '@/components/header/HeaderMobile'
 import { mapGetters, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'Master',
@@ -47,9 +48,41 @@ export default {
 		KTHeaderMobile,
 		Loading
 	},
+	data() {
+		return {
+			channel: ''
+		}
+	},
 	computed: {
+		...mapState(['token']),
 		...mapGetters(['loadPage']),
-		...mapState('user', ['authenticated'])
-	}
+		...mapState('user', ['authenticated']),
+		...mapState('channel',['center', 'socket', 'setUserToChannel'])
+	},
+	async created() {
+		try {
+			this.channel = process.env.VUE_APP_KEY
+			if(typeof this.authenticated.name != 'undefined') {
+				this.center.emit('getin', {
+					user: this.authenticated,
+					channel: this.channel
+				});
+			}
+
+		} catch (error) {
+			this.$bvToast.toast(error.message, errorToas())
+		}
+	},
+	watch: {
+		authenticated() {
+			this.center.emit('getin', {
+				user: this.authenticated,
+				channel: this.channel
+			});
+		}
+	},
+	destroyed() {
+        this.center.emit('exit', { channel: this.channel })
+    },
 }
 </script>

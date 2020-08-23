@@ -46,6 +46,9 @@ const mutations = {
 	},
 	CLEAR_STUDENT(state, payload) {
 		state.student = {}
+	},
+	CLEAR_AUTH(state, payload) {
+		state.authenticated = {}
 	}
 }
 
