@@ -67,6 +67,7 @@
 									<template v-slot:button-content>
 									    <i class="flaticon-more"></i>
 									</template>
+									<b-dropdown-item @click="sharee(row.item.id)">Bagikan</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'task.check', params: { id: row.item.id }}">Koreksi</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'task.result', params: { id: row.item.id }}">Hasil</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'task.edit', params: { id: row.item.id }}">Edit</b-dropdown-item>
@@ -101,18 +102,42 @@
 				</div>
 			</div>
 		</div>
+		<b-modal id="modal-sharee" title="Bagikan tugas ke kelas">
+			<div class="form-group">
+				<label>Kelas</label>
+				<v-select label="name" multiple :reduce="item => item.id" :options="classrooms" v-model="data.classroom_id">
+
+				</v-select>
+			</div>
+			<div class="form-group">
+				<label>Body</label>
+				<textarea class="form-control" v-model="data.body" placeholder="Ungkapkan sedikit alasan mengapa anda membagikan tugas ini">
+						
+				</textarea>
+			</div>
+			<template v-slot:modal-footer="{ cancel }">
+		      <b-button size="sm" variant="primary" @click="submitSharee" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Bagikan' }}
+		      </b-button>
+		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+		        Cancel
+		      </b-button>
+		    </template>
+		</b-modal>
 	</div>
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
 import { BButton, BTable, BPagination, BDropdown, BDropdownItem} from 'bootstrap-vue'
+import VSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 import _ from 'lodash'
 
 export default {
 	name: 'LectureDataMaster',
 	components: {
-		BButton, BTable, BPagination, BDropdown, BDropdownItem
+		BButton, BTable, BPagination, BDropdown, BDropdownItem, VSelect
 	},
 	data() {
 		return {
@@ -122,11 +147,25 @@ export default {
 				{ key: 'title', label: 'Title', thStyle: { display: 'none'} },
 				{ key: 'actions', label: 'Aksi', thStyle: { display: 'none'} }
 			],
+			sharee_task: null,
+			data: {
+				classroom_id: [],
+				body: ''
+			}
 		}
 	},
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState('task', ['tasks']),
+		...mapState('classroom',['myclassrooms']),
+		classrooms() {
+			return this.myclassrooms.map(item => {
+				return {
+					id : item.classroom.id,
+					name :item.classroom.name
+				}
+			})
+		},
 		page: {
             get() {
                 return this.$store.state.task.page
@@ -137,7 +176,15 @@ export default {
         },
 	},
 	methods: {
-		...mapActions('task', ['getDataTasks', 'deleteDataTask']),
+		...mapActions('task', ['getDataTasks', 'deleteDataTask', 'shareeTask']),
+		...mapActions('classroom', ['getDataClassromMine']),
+		clearForm() {
+			this.sharee_task = null
+			this.data = {
+				classroom_id: [],
+				body: ''
+			}
+		},
 		async changeData() {
 			try {
 				await this.getDataTasks({ perPage: this.perPage, search: this.search })
@@ -164,10 +211,31 @@ export default {
                 	}
                 }
             })
+		},
+		sharee(id) {
+			this.sharee_task = id
+			this.$bvModal.show('modal-sharee')
+		},
+		async submitSharee() {
+			try {
+				await this.shareeTask({
+					id: this.sharee_task,
+					data: this.data
+				})
+				this.$bvModal.hide('modal-sharee')
+				this.$bvToast.toast(`Tugas dibagikan ke ${this.data.classroom_id.length} Kelas`, successToas())
+				this.clearForm()
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
 		}
 	},
 	created() {
 		this.changeData()
+		this.getDataClassromMine()
+		.catch((error) => {
+			this.$bvToast.toast(error.message, errorToas())
+		})
 	},
 	watch: {
 		perPage() {

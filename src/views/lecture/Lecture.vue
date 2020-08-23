@@ -66,6 +66,7 @@
 									<template v-slot:button-content>
 									    <i class="flaticon-more"></i>
 									</template>
+									<b-dropdown-item @click="shareeLecutre(row.item.id)">Bagikan</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'lecture.edit', params: { id: row.item.id}}" >Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteLecture(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
@@ -98,18 +99,42 @@
 				</div>
 			</div>
 		</div>
+		<b-modal id="modal-sharee" title="Bagikan materi ke kelas">
+			<div class="form-group">
+				<label>Kelas</label>
+				<v-select label="name" multiple :reduce="item => item.id" :options="classrooms" v-model="data.classroom_id">
+
+				</v-select>
+			</div>
+			<div class="form-group">
+				<label>Body</label>
+				<textarea class="form-control" v-model="data.body" placeholder="Ungkapkan sedikit alasan mengapa anda membagikan materi ini">
+						
+				</textarea>
+			</div>
+			<template v-slot:modal-footer="{ cancel }">
+		      <b-button size="sm" variant="primary" @click="submitSharee" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Bagikan' }}
+		      </b-button>
+		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+		        Cancel
+		      </b-button>
+		    </template>
+		</b-modal>
 	</div>
 </template>
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
 import { BButton, BTable, BPagination ,BDropdownItem, BDropdown } from 'bootstrap-vue'
+import VSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 import _ from 'lodash'
 
 export default {
 	name: 'LectureDataMaster',
 	components: {
-		BButton, BTable, BPagination, BDropdownItem, BDropdown
+		BButton, BTable, BPagination, BDropdownItem, BDropdown, VSelect
 	},
 	data() {
 		return {
@@ -119,6 +144,11 @@ export default {
 				{ key: 'title', label: 'Materi',thStyle: { display: 'none'} },
 				{ key: 'actions', label: 'Aksi', thStyle: { display: 'none'} }
 			],
+			share_lecture: null,
+			data: {
+				classroom_id: [],
+				body: ''
+			}
 		}
 	},
 	computed: {
@@ -126,6 +156,15 @@ export default {
 		...mapState('lecture', {
 			lectures: state => state.lectures
 		}),
+		...mapState('classroom',['myclassrooms']),
+		classrooms() {
+			return this.myclassrooms.map(item => {
+				return {
+					id : item.classroom.id,
+					name :item.classroom.name
+				}
+			})
+		},
 		page: {
             get() {
                 return this.$store.state.lecture.page
@@ -136,7 +175,8 @@ export default {
         },
 	},
 	methods: {
-		...mapActions('lecture', ['getDataLectures', 'deleteDataLecture']),
+		...mapActions('lecture', ['getDataLectures', 'deleteDataLecture', 'shareeLectureToClassroom']),
+		...mapActions('classroom', ['getDataClassromMine']),
 		async changeData() {
 			try {
 				await this.getDataLectures({ perPage: this.perPage, search: this.search })
@@ -163,10 +203,30 @@ export default {
 					}
                 }
             })
+		},
+		shareeLecutre(id) {
+			this.share_lecture = id
+			this.$bvModal.show('modal-sharee')
+		},
+		async submitSharee() {
+			try {
+				await this.shareeLectureToClassroom({
+					id: this.share_lecture,
+					data: this.data
+				})
+				this.$bvModal.hide('modal-sharee')
+				this.$bvToast.toast('Materi dibagikan ke '+this.data.classroom_id.length+' Kelas', successToas())
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
 		}
 	},
 	created() {
 		this.changeData()
+		this.getDataClassromMine()
+		.catch((error) => {
+			this.$bvToast.toast(error.message, errorToas())
+		})
 	},
 	watch: {
 		perPage() {

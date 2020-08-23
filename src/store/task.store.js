@@ -209,6 +209,20 @@ const actions = {
 			}
 		})
 	},
+	deleteTaskSharee({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', false, { root: true })
+				let network = await $axios.delete(`tasks/sharee/${payload}`)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	deleteDataStudentTask({ commit }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {

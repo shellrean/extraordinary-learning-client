@@ -182,6 +182,19 @@ const actions = {
 			}
 		})
 	},
+	deleteShareLecture({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				let network = await $axios.delete(`lectures/sharee/${payload}`)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	shareeLectureToClassroom({ commit }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {

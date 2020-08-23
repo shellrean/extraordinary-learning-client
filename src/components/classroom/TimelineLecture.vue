@@ -18,11 +18,11 @@
 							</div>
 						</div>
 					</div>
-					<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+					<b-dropdown size="lg"  v-if="authenticated.role == '1'" variant="link" toggle-class="text-decoration-none" no-caret>
 						<template v-slot:button-content>
 							<i class="flaticon-more-v2"></i>
 						</template>
-						<b-dropdown-item @click="">Hapus</b-dropdown-item>
+						<b-dropdown-item @click="deleteData(lecture.id)">Hapus</b-dropdown-item>
 					</b-dropdown>
 				</div>
 				<div class="pt-3">
@@ -77,7 +77,33 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('lecture',['getDataLectureClassroom']),
+		...mapActions('lecture',['getDataLectureClassroom', 'deleteShareLecture']),
+		changeData() {
+			this.getDataLectureClassroom(this.key)
+			.then((error) => {
+				this.$bvToast.toast(error.message, errorToas())
+			})
+		},
+		deleteData(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Materi akan dihapus dari kelas ini",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+            	if (result.value) {
+                	try {
+                		await this.deleteShareLecture(id)
+                		this.changeData()
+                	} catch (error) {
+                		this.$bvToast.toast(error.message, errorToas())
+                	}
+                }
+            })
+		}
 	},
 	created() {
 		if(this.authenticated.role == '2') {
@@ -92,10 +118,7 @@ export default {
 			this.key = this.$route.params.id
 		}
 
-		this.getDataLectureClassroom(this.key)
-		.then((error) => {
-			this.$bvToast.toast(error.message, errorToas())
-		})
+		this.changeData()
 	},
 	watch: {
 		page() {

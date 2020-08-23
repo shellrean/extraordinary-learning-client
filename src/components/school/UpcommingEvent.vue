@@ -22,7 +22,7 @@
 					</span>
 				</div>
 				<div class="d-flex flex-column font-weight-bold">
-					<a href="#" class="text-dark text-hover-primary mb-1 font-size-lg">{{ event.title }}</a>
+					<router-link :to="{ name: 'event.view', params: { id: event.id }}" class="text-dark text-hover-primary mb-1 font-size-lg">{{ event.title }}</router-link>
 					<span class="text-muted">{{ event.date }} / {{ event.time }}</span>
 				</div>
 				<!--end::Text-->

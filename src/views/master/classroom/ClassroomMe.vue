@@ -22,6 +22,19 @@
 					</div>
 				</div>
 				<div class="card-body">	
+					<div class="row" v-if="typeof authenticated.name != 'undefined' && authenticated.classroom != ''">
+						<div class="col-md-5">
+							<div class="card card-custom card-stretch gutter-b">
+								<div class="card-body d-flex p-0">
+									<div class="flex-grow-1 bg-danger p-8 card-rounded flex-grow-1 bgi-no-repeat" style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 70%; background-image: url(/media/svg/banner/svg-coffe.svg)">
+										<h4 class="text-inverse-danger mt-2 font-weight-bolder">{{ authenticated.classroom.name }} - {{ authenticated.classroom.group}} ({{ authenticated.classroom.grade}})</h4>
+										<p class="text-inverse-danger my-6">Kode: {{ authenticated.classroom.invitation_code }} 
+										<br>Bagikan kode kelas hanya kepada murid anda</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="row mt-2">
 						<div class="col-md-4" v-for="grade in groupedClass">
 							<div class="d-flex align-items-center mb-10" v-for="classroom in grade">
@@ -58,23 +71,19 @@
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah kelas" size="lg">
-			<form class="form pt-9">
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">Kelas</label>
-					<div class="col-lg-9 col-xl-6">
-						<select class="form-control form-control-lg form-control-solid" v-model="data.classroom_id">
-							<option :value="classroom.id" v-for="classroom in classrooms.data">{{ classroom.name }}</option>
-						</select>
-					</div>
+		<b-modal id="modal-create" title="Tambah kelas">
+			<form class="form">
+				<div class="form-group">
+					<label>Kelas</label>
+					<select class="form-control form-control-lg form-control-solid" v-model="data.classroom_id">
+						<option :value="classroom.id" v-for="classroom in classrooms.data">{{ classroom.name }}</option>
+					</select>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">Matpel</label>
-					<div class="col-lg-9 col-xl-6">
-						<select class="form-control form-control-lg form-control-solid" v-model="data.subject_id">
-							<option :value="subject.id" v-for="subject in subjects.data">{{ subject.name }}</option>
-						</select>
-					</div>
+				<div class="form-group">
+					<label>Matpel</label>
+					<select class="form-control form-control-lg form-control-solid" v-model="data.subject_id">
+						<option :value="subject.id" v-for="subject in subjects.data">{{ subject.name }}</option>
+					</select>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
@@ -111,6 +120,7 @@ export default {
 		...mapState(['errors']),
 		...mapState('classroom',['myclassrooms', 'classrooms']),
 		...mapState('subject', ['subjects']),
+		...mapState('user', ['authenticated']),
 		groupedClass() {
 			let group = this.myclassrooms.reduce((r, a) => {
 				r[a.classroom.grade] = [...r[a.classroom.grade] || [], a];
