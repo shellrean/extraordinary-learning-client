@@ -6,7 +6,7 @@
 					<div class="symbol symbol-45 symbol-light mr-5">
 						<span class="symbol-label">
 							<span class="svg-icon svg-icon-lg svg-icon-primary">
-								<i class="flaticon-presentation-1 text-danger"></i>
+								<i class="flaticon-presentation-1 text-primary"></i>
 							</span>
 						</span>
 					</div>
@@ -18,15 +18,9 @@
 							</div>
 						</div>
 					</div>
-					<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-						<template v-slot:button-content>
-							<i class="flaticon-more-v2"></i>
-						</template>
-						<b-dropdown-item @click="">Hapus</b-dropdown-item>
-					</b-dropdown>
 				</div>
 				<div class="pt-3">
-					<router-link :to="{ name: 'master.classroom.live', params: { id: liveclass.id }}" class="btn btn-success btn-block">Masuk</router-link>
+					<router-link :to="{ name: 'master.classroom.live', params: { id: liveclass.id }}" class="btn btn-primary">Masuk</router-link>
 				</div>
 			</div>
 		</div>

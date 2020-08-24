@@ -12,10 +12,10 @@
 								</h3>
 								<div class="card-toolbar" v-if="authenticated.role == '0' || authenticated.role == '1'">
 									<div class="form-group">
-										<button class="btn btn-light-success mr-2" v-b-modal.modal-abcent>
+										<button class="btn btn-light-primary mr-2" v-b-modal.modal-abcent>
 											Lihat absen
 										</button>
-										<button class="btn btn-warning" @click="closeClass">
+										<button class="btn btn-danger" @click="closeClass">
 											Tutup Kelas
 										</button>
 									</div>
@@ -45,7 +45,10 @@
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-abcent" title="Absen hari ini" size="lg">
+		<b-modal id="modal-abcent" title="Absen hari ini" size="xl" hide-footer>
+			<VuePerfectScrollbar
+				style="max-height: 70vh; position: relative;"
+			>
 			<b-table 
                 show-empty
                 :fields="fields"
@@ -59,7 +62,11 @@
                 <template v-slot:cell(isattend)="row">
                     <span class="badge badge-info">{{ row.item.isabcent ? 'Hadir' : 'Tidak hadir' }}</span>
                 </template>
+                <template v-slot:cell(type)="row">
+                	{{ row.item.details != null && typeof row.item.details.type != 'undefined' ? row.item.details.type : '-' }}
+                </template>
             </b-table>
+			</VuePerfectScrollbar>
 		</b-modal>
 	</div>
 </template>
@@ -69,6 +76,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import StudentAttend from '@/components/classroom/StudentAttend'
 import StudentComment from '@/components/classroom/StudentComment'
 import { successToas, errorToas } from '@/core/entities/notif'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
 	name: 'ClassroomLive',
@@ -79,13 +87,15 @@ export default {
 				{ key: 'no', label: '#' },
 				{ key: 'user.name', label: 'Nama' },
 				{ key: 'isattend', label: 'Status' },
-				{ key: 'desc', label: 'Keterangan' }
+				{ key: 'type', label: 'Keterangan'},
+				{ key: 'desc', label: 'Detail' }
 			]
 		}
 	},
 	components: {
 		StudentAttend,
 		StudentComment,
+		VuePerfectScrollbar,
 		// LiveFrame
 	},
 	computed: {
@@ -133,9 +143,6 @@ export default {
 	},
 	async created() {
 		try {
-			if(this.authenticated.role == '1' || this.authenticated.role == '0') {
-				await this.getDataStudents(this.$route.params.id)
-			}
 			await this.getDataliveClassroom(this.$route.params.id)
 			if(this.classlive.settings.type == 'youtube') {
 				this.videoId = this.$youtube.getIdFromUrl(this.classlive.settings.link)
@@ -147,6 +154,9 @@ export default {
 	watch: {
 		async classlive() {
 			try {
+				if(this.authenticated.role == '1') {
+					await this.getDataStudents(this.classlive.classroom_id)
+				}
 				await this.getAbcentToday({
 					subject_id: this.classlive.subject_id,
 					classroom_id: this.classlive.classroom_id

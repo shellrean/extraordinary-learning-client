@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="card card-custom bg-light-warning gutter-b" v-if="authenticated.role == '0' || authenticated.role =='1'">
+		<div class="card card-custom bg-light-warning gutter-b" v-if="authenticated.role =='1'">
 			<!--begin::Header-->
 			<div class="card-header pt-3 border-0">
 				<h3 class="card-title align-items-start flex-column">
@@ -21,12 +21,12 @@
 						<div class="symbol-label text-warning">
 							{{ student.student.name.charAt(0) }}
 						</div>
-						<i class="symbol-badge bg-primary"></i>
+						<i class="symbol-badge bg-danger"></i>
 					</div>
 					<!--end::Symbol-->
 					<!--begin::Text-->
 					<div class="d-flex flex-column font-weight-bold">
-						<span @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</span>
+						<buttton type="button" @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</buttton>
 						<span class="text-muted">{{ student.student.email }}</span>
 					</div>
 					<!--end::Text-->
