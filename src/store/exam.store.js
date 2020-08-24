@@ -28,7 +28,6 @@ const mutations = {
 	},
 	SLICE_DATA_RESP(state, payload) {
 		state.answers.data[payload.index].answer = payload.data.answer
-		state.answers.data[payload.index].esay = payload.data.esay
 	},
 	SLICE_DATA_DOUBT(state, payload) {
 		state.answers.data[payload.index].doubt = payload.data.doubt

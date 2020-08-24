@@ -42,7 +42,7 @@
                         		<div style="width: 40px">	
 								<b-button size="sm" variant="white" @click="row.toggleDetails">
 									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-danger"></i>
+										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-primary"></i>
 									</small>
 								</b-button>
                         		</div>
@@ -90,7 +90,6 @@
 					        :total-rows="questions.total"
 					        :per-page="questions.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">

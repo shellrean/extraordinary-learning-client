@@ -18,9 +18,8 @@
                             </div>
                         </div>
                     </div>
-                    <b-form-input v-model="range" type="range" min="12" max="30"></b-form-input>
                 </div>
-                <div class="card-body" v-if="typeof filleds[questionIndex] != 'undefined'">
+                <div class="card-body pt-0" v-if="typeof filleds[questionIndex] != 'undefined'">
                     <table class="table table-borderless table-sm">
                         <tr>
                             <td colspan="2" :style="'font-size:'+range+'px !important'" 
@@ -37,7 +36,7 @@
                         <tr v-if="filleds[questionIndex].question.type == 2">
                             <td height="auto">
                                 <ckeditor v-model="filleds[questionIndex].esay" :config="editorConfig"
-                                 @input="onInput" >
+                                 @input="changeAnwerEsay" >
                                 </ckeditor>
                             </td>
                         </tr>
@@ -55,10 +54,10 @@
                             Selanjutnya <span class="flaticon2-next"></span>
                         </b-button>
                         <b-button variant="success" class="sesudah" size="md" @click="$bvModal.show('modal-selesai')" v-if="questionIndex+1 == filleds.length && checkDoubt() == false" :disabled="isLoading" pill>
-                            SELESAI <i class="flaticon2-check-mark"></i>
+                            SELESAI
                         </b-button>
                         <b-button variant="danger" class="sesudah" size="md" :disabled="isLoading" v-b-modal.modal-1 v-if="questionIndex+1 == filleds.length && checkDoubt() == true" pill>
-                            SELESAI <i class="flaticon2-check-mark"></i>
+                            SELESAI 
                         </b-button>
                     </div>
                 </div>
@@ -147,6 +146,7 @@ export default {
             range: 16,
             editorConfig: {
                 allowedContent: true,
+                removeButtons: 'PasteText,PasteFromWord,Paste,Image,Flash,HorizontalRule,Smiley,PageBreak,Iframe,Source,Styles,About'
             }
 		}
 	},
@@ -211,13 +211,13 @@ export default {
             this.storeDataExamAnswer({ 
                 answer_id : this.filleds[this.questionIndex].id,
                 index : this.questionIndex,
-                essy: fill.esay
+                esay: fill.esay
             })
             .catch((error) => {
                 this.$bvToast.toast(error.message, errorToas())
             })
         },
-        onInput: _.debounce(function (value) {
+        changeAnwerEsay: _.debounce(function (value) {
           this.inputAnswerEsay(value)
         }, 500),
         prev() {
