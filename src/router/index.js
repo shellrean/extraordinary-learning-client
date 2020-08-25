@@ -62,6 +62,8 @@ const ExamBankQuestionAdd = () => import('@/views/exam/question/Add')
 const ExamBankQuestionEdit = () => import('@/views/exam/question/Edit')
 const ExamBankQuestionImport = () => import('@/views/exam/question/Import')
 const ExamSchedule = () => import('@/views/exam/Schedule')
+const ExamEsayCheck = () => import('@/views/exam/result/Check')
+const ExamPoint = () => import('@/views/exam/result/Point')
 
 const ExamLayout = () => import('@/views/layout/Exam')
 const ExamDash = () => import('@/views/exam/student/Dashboard')
@@ -335,6 +337,16 @@ Vue.use(VueRouter)
             path: 'schedule',
             name: 'exam.schedule',
             component: ExamSchedule
+          },
+          {
+            path: 'schedule/:id/check',
+            name: 'exam.schedule.check',
+            component: ExamEsayCheck
+          },
+          {
+            path: 'schedule/:id/point',
+            name: 'exam.schedule.point',
+            component: ExamPoint
           }
         ]
       }

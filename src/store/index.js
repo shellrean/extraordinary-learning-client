@@ -16,6 +16,7 @@ import exam_schedule from './exam_schedule.store'
 import exam from './exam.store'
 import info from './info.store'
 import event from './event.store'
+import result from './result.store'
 
 Vue.use(Vuex)
 
@@ -92,6 +93,7 @@ export default new Vuex.Store({
         exam_schedule,
         exam,
         info,
-        event
+        event,
+        result
     }
 })
