@@ -77,18 +77,21 @@ export default {
 		this.socket.on('monit', (users) => {
 			this.users = users
 		})
-		this.socket.on(`is_online`, (user) => {
-			let index = this.users.map(item => item.id).indexOf(user.id)
-			if(index == -1) {
-				this.users.push(user)
-			}
-		}),
-		this.socket.on(`is_offline`, (user) => {
-			let removeIndex = this.users.map(item => item.id).indexOf(user.id)
-			if(removeIndex != -1) {
-				this.users.splice(removeIndex,1)
-			}
-		})
+
+		if(this.authenticated.role != '2') {
+			this.socket.on(`is_online`, (user) => {
+				let index = this.users.map(item => item.id).indexOf(user.id)
+				if(index == -1) {
+					this.users.push(user)
+				}
+			}),
+			this.socket.on(`is_offline`, (user) => {
+				let removeIndex = this.users.map(item => item.id).indexOf(user.id)
+				if(removeIndex != -1) {
+					this.users.splice(removeIndex,1)
+				}
+			})
+		}
 	},
 	destroyed() {
         this.socket.emit('exit')

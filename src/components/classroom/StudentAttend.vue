@@ -196,7 +196,7 @@ export default {
 			channel: this.channel
 		});
 
-		if(this.authenticated.role != '0') {
+		if(this.authenticated.role != '2') {
 			this.socket.emit('monitor', { channel: this.channel })
 			this.socket.on('monit', (users) => {
 				this.users = users

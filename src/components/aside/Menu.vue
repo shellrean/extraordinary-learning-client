@@ -365,7 +365,7 @@
             </a>
           </li>
         </router-link>
-        <li class="menu-section" v-if="$role('0') || $role('1')">
+        <li class="menu-section" v-if="$role('1')">
             <h4 class="menu-text">Reporting</h4>
             <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
         </li>

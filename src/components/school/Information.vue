@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div v-else>
-			<div class="card card-custom gutter-b mt-5">
+			<div class="card card-custom gutter-b">
 				<div class="card-body">
 					<div class="text-center">
 						<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
