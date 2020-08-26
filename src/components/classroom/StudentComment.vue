@@ -3,7 +3,7 @@
 		<VuePerfectScrollbar
 			style="max-height: 60vh; position: relative;"
 		>
-		<div class="d-flex py-5" v-for="comment in comments.data">
+		<div class="d-flex py-5" v-for="comment in comments">
 			<div class="symbol symbol-40 symbol-light-primary mr-5 mt-1">
 				<span class="symbol-label">
 					{{ comment.user.name.charAt(0) }}
@@ -11,7 +11,7 @@
 			</div>
 			<div class="d-flex flex-column flex-row-fluid">
 				<div class="d-flex align-items-center flex-wrap">
-					<a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder pr-6">{{ comment.user.name }}</a>
+					<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder pr-6">{{ comment.user.name }}</span>
 				</div>
 				<span class="text-dark-75 font-size-sm font-weight-normal pt-1">{{ comment.content }}</span>
 			</div>
@@ -92,8 +92,8 @@ export default {
 		}
 	},
 	mounted() {
-		this.socket.on('comment_'+this.channel, (comment) => {
-			this.comments.data.push(comment)
+		this.socket.on('comment', (comment) => {
+			this.comments.push(comment)
 			this.scrollToEnd()
 		})
 	},

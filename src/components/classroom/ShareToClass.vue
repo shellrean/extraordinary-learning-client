@@ -30,8 +30,8 @@
 			<form>
 				<div class="form-group">
 					<label>Materi</label>
-					<select v-for="lecture in lectures.data" class="form-control" v-model="lecture_id" v-if="typeof lectures.data != 'undefined' && lectures.data.length > 0">
-						<option :value="lecture.id">{{ lecture.title }}</option>
+					<select class="form-control" v-model="lecture_id" v-if="typeof lectures.data != 'undefined' && lectures.data.length > 0">
+						<option :value="lecture.id"  v-for="lecture in lectures.data" >{{ lecture.title }}</option>
 					</select>
 					<span v-else><small>Tidak ada materi, silakan buat terlebih dahulu</small></span>
 				</div>
@@ -55,8 +55,8 @@
 			<form>
 				<div class="form-group">
 					<label>Tugas</label>
-					<select v-for="task in tasks.data" class="form-control" v-model="task_id">
-						<option :value="task.id">{{ task.title }}</option>
+					<select  class="form-control" v-model="task_id">
+						<option :value="task.id" v-for="task in tasks.data">{{ task.title }}</option>
 					</select>
 				</div>
 				<div class="form-group">

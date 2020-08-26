@@ -26,7 +26,7 @@
 					<!--end::Symbol-->
 					<!--begin::Text-->
 					<div class="d-flex flex-column font-weight-bold">
-						<buttton type="button" @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</buttton>
+						<a href="#" @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</a>
 						<span class="text-muted">{{ student.student.email }}</span>
 					</div>
 					<!--end::Text-->
@@ -121,14 +121,15 @@ export default {
 					desc: ''
 				}
 			},
-			id_set: ''
+			id_set: '',
+			users: []
 		}
 	},
 	computed: {
 		...mapState(['token']),
 		...mapGetters(['isLoading']),
 		...mapState('user',['authenticated']),
-		...mapState('channel',['users','socket']),
+		...mapState('channel',['socket']),
 		...mapState('classroom',['students']),
 		...mapState('abcent',['abcents']),
 		...mapState('classroom',['classlive']),
@@ -173,28 +174,15 @@ export default {
 	async created() {
 		try {
 			this.channel = 'classlive_'+this.$route.params.id
-			await this.setUserToChannel(this.channel)
-			if(typeof this.authenticated.name != 'undefined') {
-				await this.getUserOnChannel(this.channel)
-				this.socket.emit('getin', {
-					user: this.authenticated,
-					channel: this.channel,
-					token: this.token
-				});
-			}
+			this.getAbcentToday({
+				subject_id: this.classlive.subject_id,
+				classroom_id: this.classlive.classroom_id
+			})
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {
-		async authenticated() {
-			await this.getUserOnChannel(this.channel)
-			this.socket.emit('getin', {
-				user: this.authenticated,
-				channel: this.channel,
-				token: this.token
-			});
-		},
 		abcents() {
 			let abcents = this.abcents.map(item => item.user_id)
 			let sude = this.students.map(item => item.student_id)
@@ -202,27 +190,44 @@ export default {
 		}
 	},
 	mounted() {
-		this.socket.on('is_online_'+this.channel, (user) => {
-			let index = this.users.map(function(item) { return item.id; }).indexOf(user.id);
-			if(index == -1) {
-				this.users.push(user)
-			}
-			let studentIndex = this.no_attends.map(item => item.student_id).indexOf(user.id);
-			if(studentIndex != -1 && studentIndex != '') {
-				this.no_attends.splice(studentIndex, 1)
-			}
-		}),
-		this.socket.on('is_offline_'+this.channel, (user) => {
-			let removeIndex = this.users.map(function(item) { 
-				return item.id; 
-			}).indexOf(user.id);
-			if(removeIndex != -1) {
-				this.users.splice(removeIndex,1)
+		this.socket.open();
+		this.socket.emit('getin', {
+			user: this.authenticated,
+			channel: this.channel
+		});
+
+		if(this.authenticated.role != '0') {
+			this.socket.emit('monitor', { channel: this.channel })
+			this.socket.on('monit', (users) => {
+				this.users = users
+			})
+
+			this.socket.on('is_online', (user) => {
+				let index = this.users.map(item => item.id).indexOf(user.id);
+				if(index == -1) {
+					this.users.push(user)
+				}
+				let studentIndex = this.no_attends.map(item => item.student_id).indexOf(user.id);
+				if(studentIndex != -1) {
+					this.no_attends.splice(studentIndex, 1)
+				}
+			}),
+			this.socket.on('is_offline', (user) => {
+				let removeIndex = this.users.map(item => item.id).indexOf(user.id);
+				if(removeIndex != -1) {
+					this.users.splice(removeIndex,1)
+				}
+			})
+		}
+		this.socket.on('close_classroom', () => {
+			if(this.$router.name == 'master.classroom.live') {
+				this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id}})
 			}
 		})
 	},
 	destroyed() {
         this.socket.emit('exit', { channel: this.channel })
+        this.socket.close()
     },
 }
 </script>

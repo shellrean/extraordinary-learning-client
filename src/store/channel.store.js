@@ -3,7 +3,7 @@ import io from 'socket.io-client'
 
 const state = () => ({
 	users: [],
-	socket: io(process.env.VUE_APP_SOCKET),
+	socket: io(process.env.VUE_APP_SOCKET,{autoConnect: false, 'forceNew':true}),
 	center: io(process.env.VUE_APP_CENTER_SOCKET,{autoConnect: false})
 })
 

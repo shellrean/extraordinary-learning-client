@@ -50,14 +50,15 @@ export default {
 	data() {
 		return {
 			channel:'',
-			key: null
+			key: null,
+			users: []
 		}
 	},
 	computed: {
 		...mapState(['token']),
 		...mapGetters(['isLoading']),
 		...mapState('user',['authenticated']),
-		...mapState('channel',['users','socket'])
+		...mapState('channel',['socket'])
 	},
 	methods: {
 		...mapActions('channel', ['getUserOnChannel', 'setUserToChannel'])
@@ -69,48 +70,39 @@ export default {
 			} else {
 				this.key = this.$route.params.id
 			}
-
 			this.channel = 'classroom_'+this.key
-			await this.setUserToChannel(this.channel)
-			await this.getUserOnChannel(this.channel)
-			if(typeof this.authenticated.name != 'undefined') {
-				this.socket.emit('getin', {
-					user: this.authenticated,
-					channel: this.channel,
-					token: this.token
-				});
-			}
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
-	watch: {
-		authenticated() {
-			this.socket.emit('getin', {
-				user: this.authenticated,
-				channel: this.channel,
-				token: this.token
-			});
-		}
-	},
 	mounted() {
-		this.socket.on('is_online_'+this.channel, (user) => {
-			let index = this.users.map(function(item) { return item.id; }).indexOf(user.id);
-			if(index == -1) {
-				this.users.push(user)
-			}
-		}),
-		this.socket.on('is_offline_'+this.channel, (user) => {
-			let removeIndex = this.users.map(function(item) { 
-				return item.id; 
-			}).indexOf(user.id);
-			if(removeIndex != -1) {
-				this.users.splice(removeIndex,1)
-			}
-		})
+		this.socket.open();
+		this.socket.emit('getin', {
+			user: this.authenticated,
+			channel: this.channel
+		});
+		if(this.authenticated.role != '0') {
+			this.socket.emit('monitor', { channel: this.channel })
+			this.socket.on('monit', (users) => {
+				this.users = users
+			})
+			this.socket.on('is_online', (user) => {
+				let index = this.users.map(item => item.id).indexOf(user.id)
+				if(index == -1) {
+					this.users.push(user)
+				}
+			})
+			this.socket.on('is_offline', (user) => {
+				let index = this.users.map(item => item.id).indexOf(user.id)
+				if(index != -1) {
+					this.users.splice(index,1)
+				}
+			})
+		}
 	},
 	destroyed() {
         this.socket.emit('exit', { channel: this.channel })
+        this.socket.close()
     },
 }
 </script>

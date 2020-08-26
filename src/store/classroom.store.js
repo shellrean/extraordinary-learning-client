@@ -242,7 +242,7 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
-				let network = await $axios.post(`classrooms/live/${payload.lecture_id}/comment`, payload)
+				let network = await $axios.post(`classrooms/live/${payload.classroom_live_id}/comment`, payload)
 
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)

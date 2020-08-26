@@ -103,6 +103,7 @@ export default {
 		...mapState('user',['authenticated']),
 		...mapState('classroom',['classlive']),
 		...mapState('abcent',['abcents']),
+		...mapState('channel',['socket']),
 		filteredAbcent() {
 			return this.abcents.filter(item => item.user.role == '2')
 		},
@@ -133,6 +134,7 @@ export default {
                    try {
                    		await this.stopLiveClassroom(this.$route.params.id)
 
+                   		this.socket.emit('close_classroom')
                    		this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id }})
                    } catch (error) {
                    		this.$bvToast.toast(error.message, errorToas())

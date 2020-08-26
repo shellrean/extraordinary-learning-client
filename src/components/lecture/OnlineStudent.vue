@@ -48,61 +48,51 @@ export default {
 	},
 	data() {
 		return {
-			channel:''
+			channel:'',
+			users: []
 		}
 	},
 	computed: {
 		...mapState(['token']),
 		...mapGetters(['isLoading']),
 		...mapState('user',['authenticated']),
-		...mapState('channel',['users','socket'])
-	},
-	methods: {
-		...mapActions('channel', ['getUserOnChannel', 'setUserToChannel'])
+		...mapState('channel',['socket'])
 	},
 	async created() {
 		try {
 			this.channel = 'lecture_'+this.$route.params.id
-			await this.setUserToChannel(this.channel)
-			await this.getUserOnChannel(this.channel)
-			if(typeof this.authenticated.name != 'undefined') {
-				this.socket.emit('getin', {
-					user: this.authenticated,
-					channel: this.channel,
-					token: this.token
-				});
-			}
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
-	watch: {
-		authenticated() {
-			this.socket.emit('getin', {
-				user: this.authenticated,
-				channel: this.channel,
-				token: this.token
-			});
-		}
-	},
 	mounted() {
-		this.socket.on('is_online_'+this.channel, (user) => {
-			let index = this.users.map(function(item) { return item.id; }).indexOf(user.id);
+		this.socket.open();
+		
+		this.socket.emit('getin', {
+			user: this.authenticated,
+			channel: this.channel
+		});
+
+		this.socket.emit('monitor', { channel: this.channel })
+		this.socket.on('monit', (users) => {
+			this.users = users
+		})
+		this.socket.on(`is_online`, (user) => {
+			let index = this.users.map(item => item.id).indexOf(user.id)
 			if(index == -1) {
 				this.users.push(user)
 			}
 		}),
-		this.socket.on('is_offline_'+this.channel, (user) => {
-			let removeIndex = this.users.map(function(item) { 
-				return item.id; 
-			}).indexOf(user.id);
+		this.socket.on(`is_offline`, (user) => {
+			let removeIndex = this.users.map(item => item.id).indexOf(user.id)
 			if(removeIndex != -1) {
 				this.users.splice(removeIndex,1)
 			}
 		})
 	},
 	destroyed() {
-        this.socket.emit('exit', { channel: this.channel })
+        this.socket.emit('exit')
+        this.socket.close()
     },
 }
 </script>
