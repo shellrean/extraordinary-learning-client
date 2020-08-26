@@ -8,6 +8,15 @@
 						<ckeditor v-model="lecture.body" v-if="showEditor" :config="editorConfig"></ckeditor>
 						<span class="text-danger" v-if="errors.body">{{ errors.body[0] }}</span>
 					</div>
+					<div class="form-group" v-if="$route.name == 'lecture.add'">
+						<label>File pdf (tambahan)</label>
+						<div class="input-group">
+						  <div class="custom-file">
+						    <input type="file" class="custom-file-input" @change="onFileChange">
+						    <label class="custom-file-label" for="inputGroupFile04">{{ label == '' ? 'Pilih file pdf' : label }}</label>
+						  </div>
+						</div>
+					</div>
 				</div>
 			</div> 
 		</div>
@@ -54,6 +63,7 @@ export default {
 		        	'Authorization' : 'Bearer '+store.state.token
 		        }
 		    },
+		    label: ''
 		}
 	},
 	computed: {
@@ -63,11 +73,15 @@ export default {
 		...mapState('lecture', {
 			lecture: state => state.lecture
 		}),
-		...mapState('classroom', ['myclassrooms'])
+		...mapState('classroom', ['myclassrooms']),
 	},
 	methods: {
 		...mapActions('subject',['getDataSubjects']),
 		...mapActions('classroom', ['getDataClassromMine']),
+		onFileChange(e) {
+			this.lecture.file = e.target.files[0]
+			this.label = e.target.files[0].name
+		}
 	},
 	async created() {
 		this.getDataClassromMine()

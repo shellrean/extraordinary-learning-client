@@ -11,8 +11,11 @@
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ lecture.created_at }}</span>
 								</h3>
 							</div>
-							<div class="card-body" v-html="lecture.body">
-								
+							<div class="card-body">
+								<div v-html="lecture.body">
+									
+								</div>
+								<iframe id="fred" title="PDF in an i-Frame" :src="`${baseURL}/storage/${lecture.addition}`" height="700px" width="100%" frameborder="0" scrolling="no" v-if="lecture.addition != null"></iframe>
 							</div>
 						</div>
 						<div class="card card-custom">
@@ -42,7 +45,7 @@ export default {
 		DianOnlineStudent
 	},
 	computed: {
-		...mapGetters(['isLoading']),
+		...mapGetters(['isLoading','baseURL']),
 		...mapState('user',['authenticated']),
 		...mapState('lecture',['lecture']),
 	},

@@ -33,6 +33,7 @@ const mutations = {
 			body: payload.body,
 			subject_id: payload.subject_id,
 			isactive: payload.isactive,
+			addition: payload.addition,
 			created_at: payload.created_at
 		}
 	},
@@ -76,13 +77,22 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.post(`lectures`, state.lecture)
+				let formData = new FormData()
+				for(let key in state.lecture) {
+					formData.append(key, state.lecture[key])
+				}
+				let network = await $axios.post(`lectures`, formData, {
+					headers: {
+						'content-type': 'multipart/form-data'
+					}
+				})
 
 				commit('CLEAR_ERROR', true, { root: true })
 				commit('CLEAR_FORM_LECTURE', true)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
+				console.log(error)
 				if (error.response && error.response.status == 422) {
 					commit('SET_ERRORS', error.response.data.errors, { root: true })
 				}
