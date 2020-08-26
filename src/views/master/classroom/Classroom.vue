@@ -108,7 +108,7 @@
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah kelas" size="lg">
+		<b-modal id="modal-create" title="Kelas" size="lg" @hide="$store.commit('classroom/CLEAR_CLASSROOM')">
 			<form class="form pt-9">
 				<div class="form-group row">
 					<label class="col-xl-3 col-lg-9 text-right col-form-label">
@@ -147,58 +147,17 @@
 						</select>
 					</div>
 				</div>
-			</form>
-			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submitNewClassroom" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
-		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
-		        Cancel
-		      </b-button>
-		    </template>
-		</b-modal>
-		<b-modal id="modal-edit" title="Edit kelas" size="lg">
-			<form class="form pt-9">
 				<div class="form-group row">
 					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Nama
+						Telegram ID
 					</label>
 					<div class="col-lg-9 col-xl-6">
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="classroom.name" :class="{ 'is-invalid' : errors.name }">
-						<div class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Grade
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="classroom.grade" :class="{ 'is-invalid' : errors.grade }">
-						<div class="invalid-feedback" v-if="errors.grade">{{ errors.grade[0] }}</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Group
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="TEXT" class="form-control form-control-lg form-control-solid" v-model="classroom.group" :class="{ 'is-invalid' : errors.group }">
-						<div class="invalid-feedback" v-if="errors.group">{{ errors.group[0] }}</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Wali kelas
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<select class="form-control form-control-lg form-control-solid" v-model="classroom.teacher_id">
-							<option :value="teacher.id" v-for="teacher in teachers.data">{{ teacher.name }}</option>
-						</select>
+						<input type="text" class="form-control form-control-lg form-control-solid" v-model="classroom.settings.telegram_id">
 					</div>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submitNewClassroom" :disabled="isLoading">
+		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
 		        {{ isLoading ? 'Processing...' : 'Simpan' }}
 		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
@@ -262,7 +221,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('classroom', ['getDataClassrooms', 'getDataClassroom', 'createNewClassroom', 'deleteDataClassroom', 'importClassroom']),
+		...mapActions('classroom', ['getDataClassrooms', 'getDataClassroom', 'createNewClassroom', 'deleteDataClassroom', 'importClassroom', 'updateDataClassroom']),
 		...mapActions('user', ['getTeacherDataTable']),
 		async changeData() {
 			try {
@@ -271,20 +230,16 @@ export default {
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		},
-		async submitNewClassroom() {
+		async submit() {
 			try {
-				await this.createNewClassroom()
+				if(typeof this.classroom.id != 'undefined') {
+					await this.updateDataClassroom()
+				} else {
+					await this.createNewClassroom()
+				}
 				this.changeData()
 				this.$bvModal.hide('modal-create')
-			} catch (error) {
-				this.$bvToast.toast(error.message, errorToas())
-			}
-		},
-		async submitUpdateClassroom() {
-			try {
-				await this.updateDataClassroom()
-				
-				
+				this.$bvToast.toast('Kelas berhasil disimpan', successToas())
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
@@ -313,7 +268,7 @@ export default {
 			try {
 				await this.getDataClassroom(id)
 
-				this.$bvModal.show('modal-edit')
+				this.$bvModal.show('modal-create')
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}

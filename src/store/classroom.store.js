@@ -2,7 +2,11 @@ import $axios from '@/core/services/api.service'
 
 const state = () => ({
 	classrooms: [],
-	classroom: {},
+	classroom: {
+		settings: {
+
+		}
+	},
 	classlives: [],
 	classlive: {
 		settings: {
@@ -42,7 +46,11 @@ const mutations = {
 		state.subjects = payload
 	},
 	CLEAR_CLASSROOM(state, payload) {
-		state.classroom = {}
+		state.classroom = {
+			settings: {
+
+			}
+		}
 	},
 	SET_PAGE(state, payload) {
 		state.page = payload
@@ -101,6 +109,20 @@ const actions = {
 				let network = await $axios.post(`classrooms`, state.classroom)
 
 				commit('CLEAR_CLASSROOM')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	updateDataClassroom({ commit, state}, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.put(`classrooms/${state.classroom.id}`, state.classroom)
+
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
