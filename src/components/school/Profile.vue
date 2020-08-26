@@ -4,8 +4,7 @@
 			<div class="d-flex justify-content-between flex-column h-100" v-if="typeof school.settings != 'undefined'">
 				<div class="h-100">
 					<div class="d-flex flex-column flex-center">
-						<div class="bgi-no-repeat bgi-size-cover rounded min-h-180px w-100" style="background-image: url(/media/svg/banner/svg-files.svg)"></div>
-						<a href="#" class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">{{ school.settings.name }}</a>
+						<a href="#" class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pb-1">{{ school.settings.name }}</a>
 						<div class="font-weight-bold text-dark-50 font-size-sm pb-7">{{ school.settings.email }}</div>
 					</div>
 					<div class="pt-1">
