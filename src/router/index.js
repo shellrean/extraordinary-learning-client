@@ -80,6 +80,11 @@ Vue.use(VueRouter)
     component: Login
   },
   {
+    path: '/test',
+    name: 'test',
+    component: () => import('@/views/Test')
+  },
+  {
     path: '/',
     component: Layout,
     meta: { requiresAuth: true },

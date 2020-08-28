@@ -35,10 +35,8 @@
 					<div class="col-md-6">
 						<div class="card-body" v-if="typeof classlive.settings != 'undefined'">
 							<youtube v-if="classlive.settings.type == 'youtube'" :video-id="videoId" ref="youtube" @playing="playing"></youtube>
-							<iframe id="mainIframe" v-if="classlive.settings.type == 'zoom' && typeof authenticated.name != 'undefined'" :src="`https://zoom.us/wc/${classlive.settings.id_meet}/join?prefer=1&pwd=${classlive.settings.password}&&un=${authenticated.name}`" allow="microphone;camera"  sandbox="allow-forms allow-scripts allow-same-origin"  style="height: 100vh;width: 100%;"  frameborder="0"></iframe>
-   									
-								<!-- <LiveFrame /> -->
-							
+							<!-- <LiveFrame v-if="classlive.settings.type == 'zoom' && typeof authenticated.name != 'undefined'" /> -->
+							<!-- <iframe src="https://zoom.us/wc/2682642912/join?prefer=1" sandbox="allow-forms allow-scripts allow-same-origin" allow="microphone; camera;" width="100%" height="600px"></iframe> -->
 						</div>
 						<StudentAttend/>
 					</div>
@@ -71,7 +69,7 @@
 	</div>
 </template>
 <script>
-// import LiveFrame from '@/components/classroom/LiveFrame'
+// const  LiveFrame = () => import('@/components/classroom/LiveFrame')
 import { mapGetters, mapState, mapActions } from 'vuex'
 import StudentAttend from '@/components/classroom/StudentAttend'
 import StudentComment from '@/components/classroom/StudentComment'

@@ -58,6 +58,7 @@ export default {
 				await this.createDataQuestion()
 				this.initOption()
 				this.$bvToast.toast('Soal berhasil disimpan', successToas())
+				this.$store.state.question.question.question_bank_id = this.$route.params.id
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
