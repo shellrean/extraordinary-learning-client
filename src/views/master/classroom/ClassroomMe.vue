@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="card-body">	
-					<div class="row" v-if="typeof authenticated.name != 'undefined' && authenticated.classroom != ''">
+					<div class="row" v-if="typeof authenticated.name != 'undefined' && typeof authenticated.classroom != 'undefined'">
 						<div class="col-md-5">
 							<div class="card card-custom card-stretch gutter-b">
 								<div class="card-body d-flex p-0">
