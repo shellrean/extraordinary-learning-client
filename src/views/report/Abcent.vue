@@ -8,15 +8,23 @@
 						<span class="text-muted mt-1 font-weight-bold font-size-sm">Laporan absensi hari ini</span>
 					</h3>
 					<div class="card-toolbar" v-if="classroom_id != ''">
-						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-							<b-button variant="light-primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm mr-2" @click="download">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/PenAndRuller.svg"
-						          />
-						        </span>
-								Export
+						<div>
+							<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
+								<template v-slot:button-content>
+									<b-button variant="light-primary" class="font-weight-bolder font-size-sm">
+										<span class="svg-icon svg-icon">
+								          <inline-svg
+								            class="svg-icon"
+								            src="/media/svg/icons/Design/Flatten.svg"
+								          />
+								        </span>
+										Export/Cetak
+									</b-button>
+								</template>
+								<b-dropdown-item @click="print">Cetak/Pdf</b-dropdown-item>
+								<b-dropdown-item @click="download">Download excel</b-dropdown-item>
+							</b-dropdown>
+							<b-button v-b-modal.modal-1 variant="primary">Filter tanggal
 							</b-button>
 						</div>
 					</div>
@@ -40,7 +48,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="table-responsive-md">
+					<div class="table-responsive-md"  id="printMe">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
@@ -71,23 +79,35 @@
 				</div>
 			</div>
 		</div>
+		<b-modal id="modal-1" title="Filter tanggal" hide-footer>
+			<div class="form-group">
+				<label>Tanggal</label>
+				<input type="date" class="form-control form-control-lg form-control-solid" v-model="date"  name="">
+			</div>
+			<div class="form-group">
+				<b-button @click="filterDate" variant="primary" :disabled="isLoading">
+					{{ isLoading ? 'Processing...' : 'Filter' }}
+				</b-button>
+			</div>
+		</b-modal>
 	</div>
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { BButton } from 'bootstrap-vue'
+import { BButton, BDropdown, BDropdownItem } from 'bootstrap-vue'
 import { errorToas, successToas } from '@/core/entities/notif'
 
 export default {
 	name: 'AbcentReport',
 	components: {
-		BButton
+		BButton, BDropdown, BDropdownItem
 	},
 	data() {
 		return {
 			classroom_id: '',
 			search: '',
-			data: null
+			data: null,
+			date: ''
 		}
 	},
 	computed: {
@@ -107,7 +127,27 @@ export default {
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
-		}
+		},
+		async filterDate() {
+			try {
+				if(this.classroom_id != '') {
+					let data = this.myclassrooms.map(item => item.id).indexOf(this.classroom_id)
+					if(data != -1) {
+						this.data = this.myclassrooms[data]
+						this.getAbcentToday({ 
+							subject_id: this.data.subject_id, 
+							classroom_id: this.data.classroom_id,
+							date: this.date
+						})
+					}
+				}
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		print () {
+      		this.$htmlToPaper('printMe');
+    	},
 	},
 	created() {
 		this.getDataClassromMine()
@@ -128,3 +168,10 @@ export default {
 	}
 }
 </script>
+<style>
+@media print {
+    @page {
+        size: landscape;
+    }
+}
+</style>

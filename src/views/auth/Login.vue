@@ -32,7 +32,7 @@
 							<div class="login-signin">
 								<div class="text-center mb-10 mb-lg-20">
 									<h2 class="font-weight-bold">Sign In</h2>
-									<p class="text-muted font-weight-bold">Enter your username and password</p>
+									<p class="text-muted font-weight-bold">Masukan email dan password anda</p>
 								</div>
 								<div class="alert alert-custom alert-light-primary fade show mb-5" role="alert" v-if="errors.invalid">
 									<div class="alert-icon">

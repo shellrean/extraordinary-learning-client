@@ -29,7 +29,8 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.get(`abcents/subject/${payload.subject_id}/classroom/${payload.classroom_id}/today`)
+				let date = typeof payload.date != 'undefined' ? payload.date : ''
+				let network = await $axios.get(`abcents/subject/${payload.subject_id}/classroom/${payload.classroom_id}?date=${date}`)
 
 				commit('ASSIGN_DATA_ABCENTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })

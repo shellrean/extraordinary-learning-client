@@ -98,8 +98,6 @@
 	</div>
 </template>
 <script>
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { errorToas, successToas } from '@/core/entities/notif'
 import { BButton, BDropdown, BDropdownItem} from 'bootstrap-vue'
@@ -108,7 +106,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
 	name: 'TaskCheck',
 	components: {
-		BButton, BDropdown, BDropdownItem, VueSlickCarousel, VuePerfectScrollbar
+		BButton, BDropdown, BDropdownItem, VuePerfectScrollbar
 	},
 	data: () => ({
 		classroom_id: '',
@@ -116,15 +114,6 @@ export default {
 			{ key: 'name', thStyle: { display: 'none' }},
 			{ key: 'actions', thStyle: { display: 'none'} }
 		],
-		setting: {
-		  "lazyLoad": "ondemand",
-		  "dots": true,
-		  "fade": true,
-		  "infinite": true,
-		  "speed": 500,
-		  "slidesToShow": 1,
-		  "slidesToScroll": 1
-		},
 		use_data: {},
 		point: 0
 	}),

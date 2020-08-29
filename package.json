@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@mycure/vue-jitsi-meet": "^0.0.7",
-    "@zoomus/websdk": "^1.7.10",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.16.0",
@@ -25,7 +24,6 @@
     "vue-perfect-scrollbar": "^0.2.1",
     "vue-router": "^3.2.0",
     "vue-select": "^3.10.8",
-    "vue-slick-carousel": "^1.0.6",
     "vue-sweetalert2": "^3.0.6",
     "vue-uuid": "^2.0.2",
     "vue-youtube": "^1.4.0",

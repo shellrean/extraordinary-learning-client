@@ -18,6 +18,7 @@
 						<select class="form-control" v-model="classlive.settings.type">
 							<option value="youtube">Youtube</option>
 							<option value="jitsi">Jitsi Meet</option>
+							<option value="any">Materi saja</option>
 						</select>
 					</div>
 					<div class="form-group" v-if="classlive.settings.type == 'jitsi'">
