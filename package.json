@@ -7,6 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@mycure/vue-jitsi-meet": "^0.0.7",
     "@zoomus/websdk": "^1.7.10",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.2",
@@ -26,11 +27,13 @@
     "vue-select": "^3.10.8",
     "vue-slick-carousel": "^1.0.6",
     "vue-sweetalert2": "^3.0.6",
+    "vue-uuid": "^2.0.2",
     "vue-youtube": "^1.4.0",
     "vue-youtube-embed": "^2.2.2",
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuejs-datetimepicker": "^1.1.13",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "webrtc-adapter": "^7.7.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

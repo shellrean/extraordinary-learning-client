@@ -17,8 +17,12 @@
 						<label>Type</label>
 						<select class="form-control" v-model="classlive.settings.type">
 							<option value="youtube">Youtube</option>
-							<option value="zoom">Zoom Meet</option>
+							<option value="jitsi">Jitsi Meet</option>
 						</select>
+					</div>
+					<div class="form-group" v-if="classlive.settings.type == 'jitsi'">
+						<label>Jitsi ID</label>
+						<input type="text" readonly="" class="form-control" v-model="id_random">
 					</div>
 					<div class="form-group" v-if="classlive.settings.type == 'youtube'">
 						<label>Link youtube</label>
@@ -46,6 +50,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import store from '@/store'
+import { uuid } from 'vue-uuid'; 
 
 export default {
 	name: 'FormClassroomLive',
@@ -64,7 +69,8 @@ export default {
 		    data: {
 		    	body: '',
 		    	subject_id: ''
-		    }
+		    },
+		    id_random: uuid.v1(),
 		}
 	},
 	computed: {
@@ -76,6 +82,7 @@ export default {
 	},
 	async created() {
 		try {
+			this.$store.state.classroom.classlive.settings.id_meet = this.id_random
 			await this.getDataSubjects({ perPage: 100})
 			this.editorConfig.filebrowserUploadUrl = `${this.baseURL}/api/v1/file?`
 			this.showEditor = true

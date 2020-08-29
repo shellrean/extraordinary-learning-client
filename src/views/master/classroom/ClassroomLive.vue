@@ -1,5 +1,16 @@
 <template>
 	<div>
+		<div class="container" v-if="typeof classlive.settings != 'undefined' && classlive.settings.type == 'jitsi'">	
+			<div class="card  bg-dark"  v-if="typeof classlive.settings != 'undefined'">
+				<div class="card-body text-center">
+					<vue-jitsi-meet
+						ref="jitsiRef"
+					   	domain="meet.jit.si"
+						:options="jitsiOptions"
+					></vue-jitsi-meet>
+				</div>
+			</div>
+		</div>
 		<div class="d-flex flex-column-fluid">
 			<div class="container">
 				<div class="row">
@@ -24,7 +35,6 @@
 							<div class="card-body" v-html="classlive.body">
 								
 							</div>
-
 						</div>
 						<div class="card card-custom">
 							<div class="card-body">
@@ -33,10 +43,8 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="card-body" v-if="typeof classlive.settings != 'undefined'">
-							<youtube v-if="classlive.settings.type == 'youtube'" :video-id="videoId" ref="youtube" @playing="playing"></youtube>
-							<!-- <LiveFrame v-if="classlive.settings.type == 'zoom' && typeof authenticated.name != 'undefined'" /> -->
-							<!-- <iframe src="https://zoom.us/wc/2682642912/join?prefer=1" sandbox="allow-forms allow-scripts allow-same-origin" allow="microphone; camera;" width="100%" height="600px"></iframe> -->
+						<div class="card-body" v-if="typeof classlive.settings != 'undefined' && classlive.settings.type == 'youtube'">
+							<youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
 						</div>
 						<StudentAttend/>
 					</div>
@@ -69,12 +77,12 @@
 	</div>
 </template>
 <script>
-// const  LiveFrame = () => import('@/components/classroom/LiveFrame')
 import { mapGetters, mapState, mapActions } from 'vuex'
 import StudentAttend from '@/components/classroom/StudentAttend'
 import StudentComment from '@/components/classroom/StudentComment'
 import { successToas, errorToas } from '@/core/entities/notif'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import { JitsiMeet } from '@mycure/vue-jitsi-meet';
 
 export default {
 	name: 'ClassroomLive',
@@ -87,14 +95,16 @@ export default {
 				{ key: 'isattend', label: 'Status' },
 				{ key: 'type', label: 'Keterangan'},
 				{ key: 'desc', label: 'Detail' }
-			]
+			],
+			width: '',
+			height: ''
 		}
 	},
 	components: {
 		StudentAttend,
 		StudentComment,
 		VuePerfectScrollbar,
-		// LiveFrame
+		VueJitsiMeet: JitsiMeet
 	},
 	computed: {
 		...mapGetters(['isLoading']),
@@ -106,8 +116,32 @@ export default {
 			return this.abcents.filter(item => item.user.role == '2')
 		},
 		player() {
-      		// return this.$refs.youtube.player
-    	}
+
+    	},
+    	jitsiOptions () {
+    		return {
+      			width: this.width,
+    			height: window.innerHeight-300,
+        		roomName: this.classlive.settings.id_meet,
+        		noSSL: false,
+        		userInfo: {
+          		email: this.authenticated.email,
+          		displayName: this.authenticated.name,
+        	},
+        	configOverwrite: {
+          		enableNoisyMicDetection: false,
+       	 		prejoinPageEnabled: false,
+       	 		fileRecordingsEnabled: false,
+				liveStreamingEnabled: false,
+        	},
+        	interfaceConfigOverwrite: {
+          		SHOW_JITSI_WATERMARK: false,
+          		SHOW_WATERMARK_FOR_GUESTS: false,
+          		SHOW_CHROME_EXTENSION_BANNER: false
+        	},
+        	onload: this.onIFrameLoad
+      	};
+    },
 	},
 	methods: {
 		...mapActions('classroom',['storeLiveClassroom', 'getDataliveClassroom', 'getDataStudents', 'stopLiveClassroom']),
@@ -139,10 +173,22 @@ export default {
                    }
                 }
             })
-    	}
+    	},
+    	onIFrameLoad () {
+      		// do stuff
+    	},
 	},
 	async created() {
 		try {
+			if(window.innerWidth >= 1200) {
+				this.width = 1130
+			} else if(window.innerWidth >= 992) {
+				this.width = 950
+			} else if(window.innerWidth >= 768) {
+				this.width = 730
+			} else {
+				this.width = window.innerWidth-10
+			}
 			await this.getDataliveClassroom(this.$route.params.id)
 			if(this.classlive.settings.type == 'youtube') {
 				this.videoId = this.$youtube.getIdFromUrl(this.classlive.settings.link)
@@ -180,8 +226,3 @@ export default {
 	}
 }
 </script>
-<style>
-.container-zoom {
-
-}
-</style>
