@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<div class="container" v-if="typeof classlive.settings != 'undefined' && classlive.settings.type == 'jitsi'">	
-			<div class="card  bg-dark"  v-if="typeof classlive.settings != 'undefined'">
-				<div class="card-body text-center">
+		<div :class="bg ? 'container-fluid' : ''" v-if="typeof classlive.settings != 'undefined' && classlive.settings.type == 'jitsi'">	
+			<div class="card " :class="bg ? 'bg-dark' : ''" v-if="typeof classlive.settings != 'undefined'">
+				<div class="text-center" :class="bg ? 'card-body' : ''">
 					<vue-jitsi-meet
 						ref="jitsiRef"
 					   	domain="meet.jit.si"
@@ -97,7 +97,8 @@ export default {
 				{ key: 'desc', label: 'Detail' }
 			],
 			width: '',
-			height: ''
+			height: '',
+			bg: true
 		}
 	},
 	components: {
@@ -183,11 +184,12 @@ export default {
 			if(window.innerWidth >= 1200) {
 				this.width = 1130
 			} else if(window.innerWidth >= 992) {
-				this.width = 950
+				this.width = 900
 			} else if(window.innerWidth >= 768) {
-				this.width = 730
+				this.width = 690
 			} else {
-				this.width = window.innerWidth-10
+				this.width = window.innerWidth-20
+				this.bg = false
 			}
 			await this.getDataliveClassroom(this.$route.params.id)
 			if(this.classlive.settings.type == 'youtube') {
