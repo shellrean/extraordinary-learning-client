@@ -9,7 +9,7 @@
 					</h3>
 					<div class="card-toolbar">
 						<div class="form-group">
-							<router-link :to="{ name: 'task.index' }" class="btn btn-primary mr-2">
+							<router-link :to="{ name: 'task.index' }" class="btn btn-ligh-primary mr-2">
 								<i class="flaticon2-left-arrow-1"></i>Kembali
 							</router-link>
 						</div>
@@ -82,11 +82,17 @@
 			      style="max-height: 60vh; position: relative;"
 			    >
 			    	<div  v-if="typeof use_data.content != 'undefined'">
-						<img :src="`${baseURL}/storage/attachment/${file}`" class="img-thumbnail" v-for="file in use_data.content.file">
+						<div v-for="file in use_data.content.file">
+							<img :src="`${baseURL}/storage/attachment/${file}`" class="img-thumbnail"  v-if="file.match(/jpg.*/) || file.match(/png.*/)">
+							<a :href="`${baseURL}/storage/attachment/${file}`" download v-else>{{ file }}</a>
+						</div>
+			    	</div>
+			    	<div v-if="typeof use_data.content != 'undefined' && use_data.content.type == 'text'" v-html="use_data.content.body">
+			    		
 			    	</div>
 				</VuePerfectScrollbar>
 				<div class="form-group mb-3">
-				  <input type="number" max-number="100" class="form-control form-control-lg form-control-solid" placeholder="Nilai: 0 - 100" v-model="point">
+				  <input type="number" min="0" max="100" class="form-control form-control-lg form-control-solid" placeholder="Nilai: 0 - 100" v-model.number="point">
 				</div>
 				<template v-slot:modal-footer="{ cancel }">
 			      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">

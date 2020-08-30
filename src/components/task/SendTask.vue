@@ -13,7 +13,7 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<b-form-file multiple @change="onFileChange">
+				<b-form-file multiple @change="onFileChange" v-if="task.type == '0' || task.type == '1'">
 				   <template slot="file-name" slot-scope="{ names }">
 				     <b-badge variant="success">{{ names[0] }}</b-badge>
 				     <b-badge v-if="names.length > 1" variant="success" class="ml-1">
@@ -21,8 +21,7 @@
 				     </b-badge>
 				   </template>
 				</b-form-file>
-				<div class="form-group">
-				</div>
+				<ckeditor v-model="content" v-if="task.type == '2' && showEditor" :config="editorConfig"></ckeditor>
 			</div>
 		</div>
 		<div v-else>
@@ -34,6 +33,7 @@
 import { BFormFile, BBadge } from 'bootstrap-vue'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
+import store from '@/store'
 
 export default {
 	name: 'SendTask',
@@ -43,25 +43,50 @@ export default {
 	},
 	data() {
 		return {
-			files: []
+			files: [],
+			content: '',
+			showEditor: false,
+			editorConfig: {
+				embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
+		        extraPlugins: 'embed',
+		        allowedContent: true,
+		        fileTools_requestHeaders: {
+		        	'Accept': 'application/json',
+		        	'Authorization' : 'Bearer '+store.state.token
+		        }
+		    },
 		}
 	},
 	computed: {
-		...mapGetters(['isLoading']),
+		...mapGetters(['isLoading', 'baseURL']),
 		...mapState('task',['task']),
 	},
 	methods: {
 		...mapActions('task',['sendTask']),
 		async submit() {
 			try {
-				let formData = new FormData()
-				for( var i = 0; i < this.files.length; i++ ){
-				  let file = this.files[i];
+				let formData
+				let type
+				if(this.task.type == '0' || this.task.type == '1') {
+					formData= new FormData()
+					for( var i = 0; i < this.files.length; i++ ){
+					  let file = this.files[i];
 
-				  formData.append('file[]', file);
+					  formData.append('file[]', file);
+					}
+					type = 'file'
+				} else {
+					formData = {
+						content: {
+							type: 'text',
+							body: this.content
+						}
+					}
+					type = 'form'
 				}
 				let data = {
 					'id'	: this.$route.params.id,
+					'type' : type,
 					'data' : formData
 				};
 				await this.sendTask(data)
@@ -69,12 +94,20 @@ export default {
 				this.files = []
 				this.$router.push({ name: 'task.student' })
 			} catch (error) {
+				if(error.message == 'Time to submit task has over') {
+					this.$bvToast.toast('Waktu pengumpulan sudah berakhir', errorToas())
+					return;
+				}
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		},
 		onFileChange(e) {
             this.files = e.target.files
 		},
+	},
+	created() {
+		this.editorConfig.filebrowserUploadUrl = `${this.baseURL}/api/v1/file?`
+		this.showEditor = true
 	}
 }
 </script>

@@ -260,11 +260,16 @@ const actions = {
 			let id = payload.id
 			let data = payload.data
 			try {
-				let network = await $axios.post(`tasks/${id}/collect`, data, {
-					headers: {
-			            'content-type': 'multipart/form-data'
-			        }
-				})
+				let network
+				if(payload.type == 'file') {
+					network = await $axios.post(`tasks/${id}/collect`, data, {
+						headers: {
+				            'content-type': 'multipart/form-data'
+				        }
+					})
+				} else {
+					network = await $axios.post(`tasks/${id}/collect`, data)
+				}
 
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)

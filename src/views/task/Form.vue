@@ -22,7 +22,9 @@
 					<div class="form-group">
 						<label>Jenis tugas</label>
 						<select class="form-control form-control-lg form-control-solid" v-model="task.type"  :class="{ 'is-invalid' : errors.type }">
-							<option value="0">File upload</option>
+							<option value="0">Gambar upload</option>
+							<option value="1">File upload</option>
+							<option value="2">Esay</option>
 						</select>
 						<div class="invalid-feedback" v-if="errors.type">{{ errors.type[0] }}</div>
 					</div>

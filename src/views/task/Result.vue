@@ -9,9 +9,10 @@
 					</h3>
 					<div class="card-toolbar">
 						<div class="form-group">
-							<router-link :to="{ name: 'task.index' }" class="btn btn-primary mr-2">
+							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary mr-2">
 								<i class="flaticon2-left-arrow-1"></i>Kembali
 							</router-link>
+							<button class="btn btn-primary"  @click="print">Pdf/Cetak</button>
 						</div>
 					</div>
 				</div>
@@ -35,7 +36,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="table-responsive-md">
+					<div class="table-responsive-md" id="printMe">
 						<b-table 
                         id="table-transition-example" 
                         show-empty
@@ -110,7 +111,10 @@ export default {
 			.catch((error) => {
 				this.$bvToast.toast(error.message, errorToas())
 			})
-		}
+		},
+		print () {
+      		this.$htmlToPaper('printMe');
+    	},
 	},
 	created() {
 		this.getDataClassromMine()
