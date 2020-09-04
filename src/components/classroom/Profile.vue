@@ -4,7 +4,8 @@
 			<div class="d-flex justify-content-between flex-column h-100">
 				<div class="h-100">
 					<div class="d-flex flex-column flex-center">
-						<a href="#" class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pb-1">{{ classroom.name }}</a>
+						<div class="bgi-no-repeat bgi-size-cover rounded min-h-180px w-100" style="background-image: url(/img/img-72.jpg)"></div>
+						<a href="#" class="card-title font-weight-bolder text-dark-75 pt-7 text-hover-primary font-size-h4 m-0 pb-1">{{ classroom.name }}</a>
 						<div class="font-weight-bold text-dark-50 font-size-sm pb-7">{{ classroom.grade }}, {{ classroom.group }}</div>
 					</div>
 					<VuePerfectScrollbar
