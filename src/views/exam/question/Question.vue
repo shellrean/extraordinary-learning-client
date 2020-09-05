@@ -1,91 +1,79 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
-				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Soal</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage soal</span>
-					</h3>
+			<div class="card mb-10 shadow">
+				<div class="card-header p-4 d-flex justify-content-between">
+					<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light mr-5">
+							<span class="symbol-label">
+								<i class="flaticon2-rectangular text-info"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+								Soal
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary">
+									</span>
+									<span class="text-muted font-weight-bold">Manage soal</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline">
 							<router-link :to="{ name: 'exam.bank' }" class="btn btn-light-primary mr-2">
 								<i class="flaticon2-left-arrow-1"></i>Kembali
 							</router-link>
-							<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
-								<template v-slot:button-content>
-									<b-button variant="primary" class="font-weight-bolder font-size-sm">
-										<span class="svg-icon svg-icon">
-								          <inline-svg
-								            class="svg-icon"
-								            src="/media/svg/icons/Design/Flatten.svg"
-								          />
-								        </span>
-										Tambah soal
-									</b-button>
-								</template>
-								<b-dropdown-item :to="{ name: 'exam.bank.question.add', params: { id: $route.params.id} }">Form input</b-dropdown-item>
-								<b-dropdown-item :to="{ name: 'exam.bank.question.import', params: { id: $route.params.id }}">Import file (.docx)</b-dropdown-item>
-							</b-dropdown>
+							<b-button variant="primary" @click="addQuestion">
+								<i class="flaticon2-add-square"></i>
+								Tambah soal
+							</b-button>
 						</div>
 					</div>
 				</div>
-				<div class="card-body">
-					<div class="table-responsive-md" v-if="typeof questions.data != 'undefined'">
-						<b-table 
-                        show-empty
-                        small
-                        :fields="fields"
-                        :items="questions.data"
-                        >
-                        	<template v-slot:cell(details)="row">
-                        		<div style="width: 40px">	
-								<b-button size="sm" variant="white" @click="row.toggleDetails">
-									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-primary"></i>
-									</small>
-								</b-button>
-                        		</div>
-							</template>
-                        	<template v-slot:cell(no)="row">
-                        		<div class="text-dark-75 font-size-lg mb-0">
-                        			{{ row.item.type == '1' ? 'Pilihan ganda' : 'Esay' }}
-                        		</div>
-                        	</template>
-                        	<template v-slot:row-details="row">
-                        		<div class="card">
-                        			<div class="card-body">
-										<div class="table-responsive-md">
-											<div v-html="row.item.question">
-												
-											</div>
-											<table class="table" v-if="row.item.options != ''">
-												<tr v-for="(option, index) in row.item.options" :key="index">
-													<td width="20px">
-														<i class="flaticon2-correct text-success" v-if="option.correct == '1'"></i>
-													</td>
-													<td>
-														<div v-html="option.body"></div>
-													</td>
-												</tr>
-											</table>
-										</div>
-                        			</div>
-                        		</div>
-							</template>
-							<template v-slot:cell(actions)="row">
-                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-									<template v-slot:button-content>
-									    <i class="flaticon-more"></i>
-									</template>
-									<b-dropdown-item :to="{ name: 'exam.bank.question.edit', params: {id: $route.params.id, id_question: row.item.id} }">Edit</b-dropdown-item>
-									<b-dropdown-item @click="deleteData(row.item.id)">Hapus</b-dropdown-item>
-								</b-dropdown>
-                        	</template>
-                    	</b-table>
-                    	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
+			</div>
+			<div class="row">
+				<div class="col-md-8" v-if="typeof questions.data != 'undefined'">
+					<div class="card" v-for="row in questions.data">
+						<div class="card-header p-4 pb-0">
+							
+					 		<div class="d-flex align-items-center">
+					 			<b-button size="sm" variant="white" v-b-toggle="'question_'+row.id"><i class="flaticon2-talk"></i></b-button>
+					 			<div class="d-flex flex-column flex-grow-1">
+					 				<div>
+										<span class="badge badge-primary">{{ row.type == '1' ? 'Pilihan ganda' : 'Esay' }}</span>
+					 				</div>
+								</div>
+								<div>
+									<b-button variant="white" size="sm"><small><i class="flaticon2-contract"></i> Edit</small></b-button>
+									<b-button variant="white" size="sm"><small><i class="flaticon2-trash"></i></small></b-button>
+								</div>
+					 		</div>
+						</div>
+						<b-collapse :id="'question_'+row.id">
+					 	<div class="card-body p-4">
+							<div v-html="row.question">
+							  	
+							</div>
+							<table class="table table-sm table-borderless" v-if="row.options != ''">
+								<tr v-for="(option, index) in row.options" :key="index">
+									<td width="20px">
+										<i class="flaticon2-hexagonal text-success" v-if="option.correct == '1'"></i>
+										<i class="flaticon2-hexagonal text-danger" v-if="option.correct == '0'"></i>
+									</td>
+									<td>
+										<div v-html="option.body"></div>
+									</td>
+								</tr>
+							</table>
+						</div>
+						</b-collapse>
+					</div>
+					<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="questions.total"
 					        :per-page="questions.per_page"
@@ -105,21 +93,72 @@
 								</select>
 							</div>
 					    </div>
-					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card gutter-b" v-if="typeof question_bank.code != 'undefined'">
+						<div class="card-header p-4 border-0 pb-0">
+							<div class="d-flex align-items-center mb-2">
+								<div class="symbol symbol-40 symbol-light mr-5">
+									<span class="symbol-label">
+										<i class="flaticon2-soft-icons-1 text-info"></i>
+									</span>
+								</div>
+								<div class="d-flex flex-column flex-grow-1">
+									<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+										{{ question_bank.code }}
+									</span>
+									<div class="d-flex">
+										<div class="d-flex align-items-center pr-5">
+											<span class="svg-icon svg-icon-md svg-icon-primary">
+											</span>
+											<span class="text-muted font-weight-bold">{{ question_bank.subject.name }}</span>
+										</div>
+									</div>
+								</div>
+								<div>	
+									<b-button variant="light-success" size="sm"><i class="flaticon2-pen"></i></b-button>
+								</div>
+							</div>	
+						</div>
+						<div class="card-body p-4 pt-0">
+							<span class="badge bg-light-primary mr-1" v-if="question_bank.mc_count > 0"><i class="flaticon2-list-2"></i> {{ question_bank.mc_count }} [{{ question_bank.percentage.mc }}%]</span>
+							<span class="badge bg-light-success" v-if="question_bank.esay_count > 0"><i class="flaticon2-list-3"></i> {{ question_bank.esay_count }} [{{question_bank.percentage.esay}}%]</span>
+						</div>
+					</div>	
 				</div>
 			</div>
 		</div>
+		<b-modal id="modal-create" title="Soal" size="xl" @hide="$store.commit('question/CLEAR_QUESTION')" no-close-on-backdrop>
+			<VuePerfectScrollbar
+				style="max-height: 60vh;"
+			>
+			<div class="container">
+				
+			<FormQuestion />
+			</div>
+			</VuePerfectScrollbar>
+			<template v-slot:modal-footer="{ ok, cancel, hide }">
+		      	<b-button variant="secondary" @click="cancel()">
+		        	Cancel
+		      	</b-button>
+				<b-button variant="success" @click="submit">
+		        	Simpan
+		      	</b-button>
+			</template>
+		</b-modal>
 	</div>
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { BButton, BDropdown, BDropdownItem, BPagination } from 'bootstrap-vue'
+import { BButton, BDropdown, BDropdownItem, BPagination, BCollapse, VBToggle   } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
+import FormQuestion from './FormQuestion'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
 	name: 'ExamBankQuestion',
 	components: {
-		BButton, BDropdown, BDropdownItem,BPagination
+		BButton, BDropdown, BDropdownItem,BPagination, BCollapse , VBToggle, FormQuestion, VuePerfectScrollbar
 	},
 	data: () => ({
 		perPage: 10,
@@ -131,7 +170,7 @@ export default {
 	}),
 	computed: {
 		...mapGetters(['isLoading']),
-		...mapState('question', ['questions']),
+		...mapState('question', ['questions', 'question', 'setting', 'question_bank']),
 		page: {
 			get() {
 				return this.$store.state.question.questions_page
@@ -142,12 +181,18 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('question', ['getDataQuestions', 'deleteDataQuestion']),
+		...mapActions('question', ['getDataQuestionBank','getDataQuestions', 'deleteDataQuestion', 'createDataQuestion']),
 		changeData() {
 			this.getDataQuestions({ id: this.$route.params.id, perPage: this.perPage })
 			.catch((error) => {
 				this.$bvToast.toast(error.message, errorToas())
 			})
+		},
+		initOption() {
+			for(let i = 0; i < this.setting.opsi_max; i++) {
+				let option = ''
+				this.$store.state.question.question.options.push(option)
+			}
 		},
 		deleteData(id) {
 			this.$swal({
@@ -169,10 +214,42 @@ export default {
                 	}
                 }
             })
+		},
+		addQuestion() {
+			this.$store.state.question.question.options = []
+			for(let i = 0; i < this.setting.opsi_max; i++) {
+				let option = ''
+				this.$store.state.question.question.options.push(option)
+			}
+			this.$store.state.question.question.question_bank_id = this.$route.params.id
+			this.$bvModal.show('modal-create')
+		},
+		async submit() {
+			try {
+				if (this.question.correct === null && this.question.type == 1) {
+			        this.$swal({
+			          title: 'Kunci jawaban kosong',
+			          text: "Pilih jawaban yang benar",
+			          icon: 'error',
+			        })
+			        return
+			    }
+				await this.createDataQuestion()
+				this.initOption()
+				this.$bvToast.toast('Soal berhasil disimpan', successToas())
+				this.$store.state.question.question.question_bank_id = this.$route.params.id
+				this.changeData()
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
 		}
 	},
 	created() {
 		this.changeData()
+		this.getDataQuestionBank(this.$route.params.id)
+		.catch((error) => {
+			this.$bvToast.toast(error.message, errorToas())
+		})
 	},
 	watch: {
 		page() {

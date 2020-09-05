@@ -16,14 +16,16 @@ const state = () => ({
 	question_banks: [],
 	question: {
 		type: 1,
-		options: []
+		options: [],
+		correct: null
 	},
 	setting: {
 		opsi_max: 5,
 	},
 	questions: [],
 	questions_page: 1,
-	question_banks_page: 1
+	question_banks_page: 1,
+	options: []
 })
 
 const mutations = {
@@ -42,6 +44,12 @@ const mutations = {
 			options: (payload.options.length != 'undefined' ? payload.options.map(item => item.body) : []),
 			correct: (payload.options.length != 'undefined' ? payload.options.map(item => item.correct).indexOf(1) : null)
 		}
+	},
+	REMOVE_QUESTION_OPTION(state, payload) {
+		const newdata = [...state.question.options]
+		newdata.splice(payload,1)
+		state.question.options = []
+		state.question.options.push(...newdata)
 	},
 	ASSIGN_QUESTIONS(state, payload) {
 		state.questions = payload
