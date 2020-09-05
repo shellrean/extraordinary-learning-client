@@ -50,7 +50,6 @@
 					        :total-rows="events.total"
 					        :per-page="events.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">

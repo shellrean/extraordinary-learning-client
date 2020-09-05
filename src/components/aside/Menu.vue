@@ -31,7 +31,7 @@
         v-if="$role('0')"
         >
             <a href="#" class="menu-link menu-toggle">
-                <i class="menu-icon flaticon-imac"></i>
+                <i class="menu-icon flaticon2-layers-1"></i>
                 <span class="menu-text">Data master</span>
             </a>
             <div class="menu-submenu">
@@ -139,7 +139,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon-information"></i>
+            <i class="menu-icon flaticon2-speaker"></i>
             <span class="menu-text">Informasi</span>
           </a>
         </li>

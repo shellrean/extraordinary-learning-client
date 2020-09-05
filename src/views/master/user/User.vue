@@ -92,7 +92,6 @@
 					        :total-rows="teachers.total"
 					        :per-page="teachers.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">
