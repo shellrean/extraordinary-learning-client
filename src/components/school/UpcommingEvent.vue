@@ -18,9 +18,11 @@
 		<!--begin::Body-->
 		<div class="card-body pt-2" v-if="public_events.length > 0">
 			<!--begin::Item-->
-			<div class="d-flex align-items-center mb-10" v-for="event in public_events"> 
+			<div class="d-flex align-items-center justify-content-between mb-10" v-for="event in public_events"> 
 				<!--end::Symbol-->
 				<!--begin::Text-->
+				<div class="d-flex align-items-center">
+					
 				<div class="symbol symbol-45 symbol-light-info mr-5">
 					<span class="symbol-label">
 						<span class="svg-icon svg-icon-lg svg-icon-info">
@@ -32,7 +34,8 @@
 					<router-link :to="{ name: 'event.view', params: { id: event.id }}" class="text-dark text-hover-info mb-1 font-size-lg">{{ event.title }}</router-link>
 					<span class="text-muted">{{ event.location }}</span>
 				</div>
-				<div class="d-flex flex-column font-weight-bold">
+				</div>
+				<div class="d-flex flex-column font-weight-bold text-right">
 					<span class="text-dark mb-1 font-size-lg">{{ event.date }}</span>
 					<span class="text-muted">{{ event.time }}</span>
 				</div>
