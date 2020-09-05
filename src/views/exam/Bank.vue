@@ -1,12 +1,27 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
-				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Banksoal</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Daftar bnaksoal</span>
-					</h3>
+			<div class="card mb-10 shadow">
+				<div class="card-header p-4 d-flex justify-content-between">
+					<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light mr-5">
+							<span class="symbol-label">
+								<i class="flaticon2-delivery-package text-info"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+								Banksoal
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary pr-1">
+									</span>
+									<span class="text-muted font-weight-bold">Daftar banksoal</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline">
 							<b-button variant="primary" v-b-modal.modal-create>
@@ -21,81 +36,37 @@
 						</div>
 					</div>
 				</div>
-				<div class="card-body">
-					<div class="table-responsive-md" v-if="typeof question_banks.data != 'undefined'">
-						<b-table :fields="fields"
-						  :items="question_banks.data">
-							<template v-slot:cell(details)="row">
-								<b-button size="sm" variant="white" @click="row.toggleDetails">
-									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-primary"></i>
-									</small>
-								</b-button>
-							</template>
-							<template v-slot:cell(code)="row">
-								<span style="width: 250px;">
-									<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-										<router-link :to="{ name: 'exam.bank.questions', params: { id: row.item.id } }" class="text-dark mb-1 font-size-lg text-hover-primary">
-											{{ row.item.code }}
-										</router-link>
-										<span class="text-muted font-weight-bold">{{ row.item.subject.name }}</span>
-									</div>
-								</span>
-							</template>
-							<template v-slot:row-details="row">
-								<div class="card">
-									<div class="card-body">
-										<div class="table-responsive-md">
-											<table class="table table-bordered">
-												<tr>
-													<td width="150px">Jumlah PG</td>
-													<td>
-														<div class="d-flex justify-content-between">
-															<span>
-																{{ row.item.mc_count }}
-															</span>
-															<span class="badge badge-success">
-																{{ row.item.percentage.mc }} %
-															</span>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>Jumlah esay</td>
-													<td>
-														<div class="d-flex justify-content-between">
-															<span>
-																{{ row.item.esay_count }}		
-															</span>
-															<span class="badge badge-success">
-																{{ row.item.percentage.esay }} %
-															</span>
-														</div>
-													</td>
-												</tr>
-											</table>
-										</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8" v-if="typeof question_banks.data != 'undefined'">
+					<div class="card" v-for="row in question_banks.data">
+					  <div class="card-body p-4">
+						  	<div class="d-flex align-items-center">
+						  		<div class="symbol symbol-75 symbol-danger mr-5">
+							        <span class="symbol-label font-size-h4">
+							        	<i class="flaticon-doc text-white"></i>
+							        </span>
+							    </div>
+							    <div class="d-flex flex-column flex-grow-1">
+									<a href="#" class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+										{{ row.code }}
+									</a>
+									<span class="text-muted font-weight-bold">{{ row.subject.name }}</span>
+									<div>
+									<span class="badge badge-primary">Pilihan ganda {{ row.mc_count }} [{{ row.percentage.mc }}%]</span>
+									<span class="badge badge-success">Esay {{ row.esay_count }} [{{row.percentage.esay}}%]</span>
 									</div>
 								</div>
-							</template>
-							<template v-slot:cell(actions)="row">
-                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-									<template v-slot:button-content>
-									    <i class="flaticon-more"></i>
-									</template>
-									<b-dropdown-item @click="getData(row.item.id)">Edit</b-dropdown-item>
-									<b-dropdown-item @click="deleteData(row.item.id)">Hapus</b-dropdown-item>
-								</b-dropdown>
-                        	</template>
-						</b-table>
-						<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
+							</div>
+							<router-link :to="{ name: 'exam.bank.questions', params: { id: row.id } }" class="stretched-link"></router-link>
+						</div>
+					</div>
+					<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="question_banks.total"
 					        :per-page="question_banks.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">
@@ -111,7 +82,9 @@
 								</select>
 							</div>
 					    </div>
-					</div>
+				</div>
+				<div class="col-md-4">
+					
 				</div>
 			</div>
 		</div>
