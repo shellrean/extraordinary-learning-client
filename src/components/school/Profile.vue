@@ -14,7 +14,7 @@
 					<template v-if="authenticated.role == '0'">
 						
 					<div class="d-flex align-items-center mt-2">
-                    	<div class="symbol symbol-40 symbol-light symbol-sm flex-shrink-0">					
+                    	<div class="symbol symbol-40 symbol-light symbol-sm flex-shrink-0 mr-5">					
                     		<span class="symbol-label font-size-h4 font-weight-bold">
                     			<i class="flaticon2-list-1"></i>
                     		</span>
@@ -26,7 +26,7 @@
 						<span class="font-weight-bolder label label-xl label-light-success label-inline px-3 py-5 min-w-45px">{{ classrooms.total }}</span>						
                     </div>
 					<div class="d-flex align-items-center mt-2">
-                    	<div class="symbol symbol-40 symbol-light symbol-sm flex-shrink-0">					
+                    	<div class="symbol symbol-40 symbol-light symbol-sm flex-shrink-0 mr-5">					
                     		<span class="symbol-label font-size-h4 font-weight-bold">
                     			<i class="flaticon-users-1"></i>
                     		</span>
@@ -38,7 +38,7 @@
 						<span class="font-weight-bolder label label-xl label-light-danger label-inline px-3 py-5 min-w-45px">{{ students.total }}</span>						
                     </div>
                     <div class="d-flex align-items-center mt-2">
-                    	<div class="symbol symbol-40 symbol-light symbol-sm flex-shrink-0">					
+                    	<div class="symbol symbol-40 symbol-light symbol-sm flex-shrink-0 mr-5">					
                     		<span class="symbol-label font-size-h4 font-weight-bold">
                     			<i class="flaticon2-checking"></i>
                     		</span>

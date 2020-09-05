@@ -6,9 +6,6 @@
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light mr-5">
 							<span class="symbol-label">
-								<!-- <span class="svg-icon svg-icon-lg svg-icon-primary">
-									<i class="flaticon-exclamation text-primary"></i>
-								</span> -->
 								<img src="/img/007-boy-2.svg" class="h-75 align-self-end" alt="" />
 							</span>
 						</div>
