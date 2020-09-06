@@ -1,12 +1,12 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card mb-10 shadow">
-				<div class="card-header p-4 d-flex justify-content-between">
+			<div class="card mb-10">
+				<div class="card-header pt-2 pl-4 pr-4 pb-2 d-flex justify-content-between">
 					<div class="d-flex align-items-center">
-						<div class="symbol symbol-45 symbol-light mr-5">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
 							<span class="symbol-label">
-								<i class="flaticon2-rectangular text-info"></i>
+								<i class="flaticon2-rectangular text-primary"></i>
 							</span>
 						</div>
 						<div class="d-flex flex-column flex-grow-1">
@@ -106,15 +106,14 @@
 								</select>
 							</div>
 					    </div>
-					    <b-overlay :show="isLoading" no-wrap></b-overlay>
 				</div>
 				<div class="col-md-4">
 					<div class="card gutter-b" v-if="typeof question_bank.code != 'undefined'">
 						<div class="card-header p-4 border-0 pb-0">
 							<div class="d-flex align-items-center mb-2">
-								<div class="symbol symbol-40 symbol-light mr-5">
+								<div class="symbol symbol-40 symbol-light-primary mr-5">
 									<span class="symbol-label">
-										<i class="flaticon2-soft-icons-1 text-info"></i>
+										<i class="flaticon2-soft-icons-1 text-primary"></i>
 									</span>
 								</div>
 								<div class="d-flex flex-column flex-grow-1">
@@ -133,8 +132,7 @@
 						</div>
 						<div class="card-body p-4 pt-0">
 							<span class="badge bg-light-primary mr-1" v-b-tooltip.hover title="Jumlah soal pilihan ganda" v-if="question_bank.mc_count > 0"><i class="flaticon2-list-2"></i> {{ question_bank.mc_count }} [{{ question_bank.percentage.mc }}%]</span>
-							<span class="badge bg-light-success" v-if="question_bank.esay_count > 0" v-b-tooltip.hover title="Jumlah soal esay"><i class="flaticon2-list-3"></i> {{ question_bank.esay_count }} [{{question_bank.percentage.esay}}%]</span>
-							<br>
+							<span class="badge bg-light-success mr-1" v-if="question_bank.esay_count > 0" v-b-tooltip.hover title="Jumlah soal esay"><i class="flaticon2-list-3"></i> {{ question_bank.esay_count }} [{{question_bank.percentage.esay}}%]</span>
 							<span class="badge bg-light-info" v-if="typeof questions.data != 'undefined'" v-b-tooltip.hover title="Jumlah soal yang telah dibuat">
 								<i class="flaticon2-laptop"></i> {{ questions.total }}
 							</span>

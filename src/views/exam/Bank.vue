@@ -1,12 +1,12 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card mb-10 shadow">
+			<div class="card mb-10">
 				<div class="card-header p-4 d-flex justify-content-between">
 					<div class="d-flex align-items-center">
-						<div class="symbol symbol-45 symbol-light mr-5">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
 							<span class="symbol-label">
-								<i class="flaticon2-crisp-icons text-info"></i>
+								<i class="flaticon2-crisp-icons text-primary"></i>
 							</span>
 						</div>
 						<div class="d-flex flex-column flex-grow-1">
@@ -37,7 +37,21 @@
 					<table class="table table-borderless table-sm">
 						<tr v-for="row in question_banks.data">
 							<td>
-								
+								<div class="card ">
+									<div class="card-header p-0 d-flex justify-content-between">
+										<div class="d-flex align-items-center">
+											<b-button squared class="mr-1" variant="light-success" size="sm" @click="getData(row.id)" v-b-tooltip.hover title="Edit banksoal">
+												<i class="flaticon2-contract"></i> Edit
+											</b-button>
+											<b-button squared class="mr-1" variant="light-warning" size="sm" @click="getData(row.id)" v-b-tooltip.hover title="Gandakan banksoal">
+												<i class="flaticon2-copy"></i>
+											</b-button>
+											<b-button squared variant="light-danger" size="sm" @click="deleteData(row.id)" v-b-tooltip.hover title="Hapus banksoal">
+												<i class="flaticon2-trash"></i>
+											</b-button>
+										</div>
+									</div>
+								</div>
 								<div class="card" >
 								  <div class="card-body p-4">
 									  	<div class="d-flex align-items-center justify-content-between">
@@ -49,7 +63,7 @@
 											</div>
 											<div class="d-flex flex-column align-items-right">
 												<div>
-												<span class="badge bg-light-primary mr-1" v-b-tooltip.hover title="Tooltip directive content" v-if="row.mc_count > 0"><i class="flaticon2-list-2"></i> {{ row.mc_count }} [{{ row.percentage.mc }}%]</span>
+												<span class="badge bg-light-primary mr-1" v-if="row.mc_count > 0"><i class="flaticon2-list-2"></i> {{ row.mc_count }} [{{ row.percentage.mc }}%]</span>
 												<span class="badge bg-light-success" v-if="row.esay_count > 0"><i class="flaticon2-list-3"></i> {{ row.esay_count }} [{{row.percentage.esay}}%]</span>
 												</div>
 
@@ -59,42 +73,36 @@
 									</div>
 								</div>
 							</td>
-							<td>
-								<div class="d-flex align-items-center">
-									<b-button class="mr-1" variant="light" size="sm" @click="getData(row.id)"><i class="flaticon2-contract"></i> Edit</b-button>
-									<b-button variant="light" size="sm" @click="deleteData(row.id)"><i class="flaticon2-trash"></i></b-button>
-								</div>
-							</td>
 						</tr>
 					</table>
 					<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
-					      <b-pagination
+					    <b-pagination
 					        v-model="page"
 					        :total-rows="question_banks.total"
 					        :per-page="question_banks.per_page"
 					        :disabled="isLoading"
-					      ></b-pagination>
-					      <div class="d-flex align-items-center py-3">
-								<div class="d-flex align-items-center" v-if="isLoading">
-									<div class="mr-2 text-muted">Loading...</div>
-									<div class="spinner spinner-primary mr-10"></div>
-								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="30">30</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-								</select>
+					    ></b-pagination>
+					    <div class="d-flex align-items-center py-3">
+							<div class="d-flex align-items-center" v-if="isLoading">
+								<div class="mr-2 text-muted">Loading...</div>
+								<div class="spinner spinner-primary mr-10"></div>
 							</div>
-					    </div>
+							<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<option value="10">10</option>
+								<option value="20">20</option>
+								<option value="30">30</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-4">
 
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah banksoal" @hide="$store.commit('question/CLEAR_QUESTION_BANK')" no-close-on-backdrop>
+		<b-modal id="modal-create" title="Banksoal" @hide="$store.commit('question/CLEAR_QUESTION_BANK')" no-close-on-backdrop>
 			<div class="form-group">
 				<label>Mata pelajaran</label>
 				<v-select label="name" :reduce="item => item.id" :options="subjects" v-model="question_bank.subject_id">
@@ -156,12 +164,12 @@
 				Total harus 100 !!!
 			</div>
 			<template v-slot:modal-footer="{ cancel }">
-				<b-button variant="primary" @click="submit" :disabled="isLoading" v-if="!total_error">
-					{{ isLoading ? 'Processing...' : 'Simpan' }}
-				</b-button>
 				<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
                 	Tutup
              	</b-button>
+				<b-button variant="success" @click="submit" :disabled="isLoading" v-if="!total_error">
+					{{ isLoading ? 'Processing...' : 'Simpan' }}
+				</b-button>
 			</template>
 		</b-modal>
 	</div>

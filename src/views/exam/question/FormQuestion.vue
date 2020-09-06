@@ -108,5 +108,7 @@ export default {
 }
 </script>
 <style >
-	
+	div[contenteditable] {
+    outline: 1px solid #616161;
+}
 </style>
