@@ -34,26 +34,39 @@
 			</div>
 			<div class="row">
 				<div class="col-md-8" v-if="typeof question_banks.data != 'undefined'">
-					<div class="card" v-for="row in question_banks.data">
-					  <div class="card-body p-4">
-						  	<div class="d-flex align-items-center justify-content-between">
-							    <div class="d-flex flex-column flex-grow-1">
-									<a href="#" class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
-										{{ row.code }}
-									</a>
-									<span class="text-muted font-weight-bold">{{ row.subject.name }}</span>
-								</div>
-								<div class="d-flex flex-column align-items-right">
-									<div>
-									<span class="badge bg-light-primary mr-1" v-if="row.mc_count > 0"><i class="flaticon2-list-2"></i> {{ row.mc_count }} [{{ row.percentage.mc }}%]</span>
-									<span class="badge bg-light-success" v-if="row.esay_count > 0"><i class="flaticon2-list-3"></i> {{ row.esay_count }} [{{row.percentage.esay}}%]</span>
-									</div>
+					<table class="table table-borderless table-sm">
+						<tr v-for="row in question_banks.data">
+							<td>
+								
+								<div class="card" >
+								  <div class="card-body p-4">
+									  	<div class="d-flex align-items-center justify-content-between">
+										    <div class="d-flex flex-column flex-grow-1">
+												<a href="#" class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+													{{ row.code }}
+												</a>
+												<span class="text-muted font-weight-bold">{{ row.subject.name }}</span>
+											</div>
+											<div class="d-flex flex-column align-items-right">
+												<div>
+												<span class="badge bg-light-primary mr-1" v-b-tooltip.hover title="Tooltip directive content" v-if="row.mc_count > 0"><i class="flaticon2-list-2"></i> {{ row.mc_count }} [{{ row.percentage.mc }}%]</span>
+												<span class="badge bg-light-success" v-if="row.esay_count > 0"><i class="flaticon2-list-3"></i> {{ row.esay_count }} [{{row.percentage.esay}}%]</span>
+												</div>
 
+											</div>
+										</div>
+										<router-link :to="{ name: 'exam.bank.questions', params: { id: row.id } }" class="stretched-link"></router-link>
+									</div>
 								</div>
-							</div>
-							<router-link :to="{ name: 'exam.bank.questions', params: { id: row.id } }" class="stretched-link"></router-link>
-						</div>
-					</div>
+							</td>
+							<td>
+								<div class="d-flex align-items-center">
+									<b-button class="mr-1" variant="light" size="sm" @click="getData(row.id)"><i class="flaticon2-contract"></i> Edit</b-button>
+									<b-button variant="light" size="sm" @click="deleteData(row.id)"><i class="flaticon2-trash"></i></b-button>
+								</div>
+							</td>
+						</tr>
+					</table>
 					<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
 					        v-model="page"
@@ -77,7 +90,7 @@
 					    </div>
 				</div>
 				<div class="col-md-4">
-					
+
 				</div>
 			</div>
 		</div>
@@ -156,14 +169,14 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BDropdown, BDropdownItem, BPagination } from 'bootstrap-vue'
+import { BButton, BDropdown, BDropdownItem, BPagination, BBadge } from 'bootstrap-vue'
 import VSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 
 export default {
 	name: 'ExamBank',
 	components: {
-		BButton, BDropdown, BDropdownItem, BPagination,
+		BButton, BDropdown, BDropdownItem, BPagination,BBadge,
 		VSelect
 	},
 	data: () => ({

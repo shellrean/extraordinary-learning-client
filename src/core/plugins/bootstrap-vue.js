@@ -3,10 +3,12 @@ import {
 	ToastPlugin, 
 	ModalPlugin,
 	TablePlugin,
-	VBTogglePlugin 
+	VBTogglePlugin,
+	TooltipPlugin
 } from 'bootstrap-vue'
 
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
 Vue.use(TablePlugin)
 Vue.use(VBTogglePlugin)
+Vue.use(TooltipPlugin)

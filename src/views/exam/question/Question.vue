@@ -24,13 +24,26 @@
 					</div>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline">
-							<router-link :to="{ name: 'exam.bank' }" class="btn btn-light-primary mr-2">
+							<router-link :to="{ name: 'exam.bank' }" class="btn btn-light-primary mr-2" v-b-tooltip.hover title="Kembali ke daftar banksoal">
 								<i class="flaticon2-left-arrow-1"></i>Kembali
 							</router-link>
-							<b-button variant="primary" @click="addQuestion">
-								<i class="flaticon2-add-square"></i>
-								Tambah soal
-							</b-button>
+							<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
+								<template v-slot:button-content>
+									<b-button variant="primary">
+										<i class="flaticon2-add-square"></i>
+										Tambah soal
+									</b-button>
+								</template>
+								<b-dropdown-item  @click="addQuestion(1)">
+									Pilihan ganda
+								</b-dropdown-item>
+								<b-dropdown-item @click="addQuestion(2)">
+									Esay
+								</b-dropdown-item>
+								<b-dropdown-item>
+									Import dari file .docx
+								</b-dropdown-item>
+							</b-dropdown>
 						</div>
 					</div>
 				</div>
@@ -41,15 +54,15 @@
 						<div class="card-header p-4 pb-0">
 							
 					 		<div class="d-flex align-items-center">
-					 			<b-button size="sm" variant="white" v-b-toggle="'question_'+row.id"><i class="flaticon2-talk"></i></b-button>
+					 			<b-button size="sm" variant="white" v-b-toggle="'question_'+row.id" v-b-tooltip.hover title="Toggle detail soal"><i class="flaticon2-talk"></i></b-button>
 					 			<div class="d-flex flex-column flex-grow-1">
 					 				<div>
-										<span class="badge badge-primary">{{ row.type == '1' ? 'Pilihan ganda' : 'Esay' }}</span>
+										<span class="badge" :class="row.type == '1' ? 'badge-primary' : 'badge-success'">{{ row.type == '1' ? 'Pilihan ganda' : 'Esay' }}</span>
 					 				</div>
 								</div>
 								<div>
-									<b-button variant="white" size="sm"><small><i class="flaticon2-contract"></i> Edit</small></b-button>
-									<b-button variant="white" size="sm"><small><i class="flaticon2-trash"></i></small></b-button>
+									<b-button variant="white" size="sm" v-b-tooltip.hover title="Edit soal" @click="getData(row.id)"><small><i class="flaticon2-contract"></i> Edit</small></b-button>
+									<b-button variant="white" size="sm" v-b-tooltip.hover title="Hapus soal" @click="deleteData(row.id)"><small><i class="flaticon2-trash"></i></small></b-button>
 								</div>
 					 		</div>
 						</div>
@@ -93,6 +106,7 @@
 								</select>
 							</div>
 					    </div>
+					    <b-overlay :show="isLoading" no-wrap></b-overlay>
 				</div>
 				<div class="col-md-4">
 					<div class="card gutter-b" v-if="typeof question_bank.code != 'undefined'">
@@ -111,24 +125,25 @@
 										<div class="d-flex align-items-center pr-5">
 											<span class="svg-icon svg-icon-md svg-icon-primary">
 											</span>
-											<span class="text-muted font-weight-bold">{{ question_bank.subject.name }}</span>
+											<span class="text-muted font-weight-bold" v-if="typeof question_bank.subject != 'undefined'">{{ question_bank.subject.name }}</span>
 										</div>
 									</div>
-								</div>
-								<div>	
-									<b-button variant="light-success" size="sm"><i class="flaticon2-pen"></i></b-button>
 								</div>
 							</div>	
 						</div>
 						<div class="card-body p-4 pt-0">
-							<span class="badge bg-light-primary mr-1" v-if="question_bank.mc_count > 0"><i class="flaticon2-list-2"></i> {{ question_bank.mc_count }} [{{ question_bank.percentage.mc }}%]</span>
-							<span class="badge bg-light-success" v-if="question_bank.esay_count > 0"><i class="flaticon2-list-3"></i> {{ question_bank.esay_count }} [{{question_bank.percentage.esay}}%]</span>
+							<span class="badge bg-light-primary mr-1" v-b-tooltip.hover title="Jumlah soal pilihan ganda" v-if="question_bank.mc_count > 0"><i class="flaticon2-list-2"></i> {{ question_bank.mc_count }} [{{ question_bank.percentage.mc }}%]</span>
+							<span class="badge bg-light-success" v-if="question_bank.esay_count > 0" v-b-tooltip.hover title="Jumlah soal esay"><i class="flaticon2-list-3"></i> {{ question_bank.esay_count }} [{{question_bank.percentage.esay}}%]</span>
+							<br>
+							<span class="badge bg-light-info" v-if="typeof questions.data != 'undefined'" v-b-tooltip.hover title="Jumlah soal yang telah dibuat">
+								<i class="flaticon2-laptop"></i> {{ questions.total }}
+							</span>
 						</div>
 					</div>	
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Soal" size="xl" @hide="$store.commit('question/CLEAR_QUESTION')" no-close-on-backdrop>
+		<b-modal id="modal-create" title="Soal" size="lg" @hide="$store.commit('question/CLEAR_QUESTION')" no-close-on-backdrop>
 			<VuePerfectScrollbar
 				style="max-height: 60vh;"
 			>
@@ -138,11 +153,11 @@
 			</div>
 			</VuePerfectScrollbar>
 			<template v-slot:modal-footer="{ ok, cancel, hide }">
-		      	<b-button variant="secondary" @click="cancel()">
+		      	<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
 		        	Cancel
 		      	</b-button>
-				<b-button variant="success" @click="submit">
-		        	Simpan
+				<b-button variant="success" @click="submit" :disabled="isLoading">
+		        	{{ isLoading ? 'Processing...' : 'Simpan' }}
 		      	</b-button>
 			</template>
 		</b-modal>
@@ -150,7 +165,7 @@
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { BButton, BDropdown, BDropdownItem, BPagination, BCollapse, VBToggle   } from 'bootstrap-vue'
+import { BButton, BDropdown, BDropdownItem, BPagination, BCollapse, VBToggle, BOverlay   } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
 import FormQuestion from './FormQuestion'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
@@ -158,7 +173,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
 	name: 'ExamBankQuestion',
 	components: {
-		BButton, BDropdown, BDropdownItem,BPagination, BCollapse , VBToggle, FormQuestion, VuePerfectScrollbar
+		BButton, BDropdown, BDropdownItem,BPagination, BCollapse , VBToggle, FormQuestion, VuePerfectScrollbar, BOverlay
 	},
 	data: () => ({
 		perPage: 10,
@@ -181,18 +196,12 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('question', ['getDataQuestionBank','getDataQuestions', 'deleteDataQuestion', 'createDataQuestion']),
+		...mapActions('question', ['getDataQuestionBank','getDataQuestions', 'getDataQuestion', 'deleteDataQuestion', 'createDataQuestion', 'updateDataQuestion']),
 		changeData() {
 			this.getDataQuestions({ id: this.$route.params.id, perPage: this.perPage })
 			.catch((error) => {
 				this.$bvToast.toast(error.message, errorToas())
 			})
-		},
-		initOption() {
-			for(let i = 0; i < this.setting.opsi_max; i++) {
-				let option = ''
-				this.$store.state.question.question.options.push(option)
-			}
 		},
 		deleteData(id) {
 			this.$swal({
@@ -215,14 +224,36 @@ export default {
                 }
             })
 		},
-		addQuestion() {
-			this.$store.state.question.question.options = []
-			for(let i = 0; i < this.setting.opsi_max; i++) {
-				let option = ''
-				this.$store.state.question.question.options.push(option)
+		async addQuestion(type) {
+			if(type === 1){
+				this.$store.state.question.question.options = []
+				for(let i = 0; i < this.setting.opsi_max; i++) {
+					let option = ''
+					this.$store.state.question.question.options.push(option)
+				}
+			} else {
+				this.$store.state.question.question.type = 2	
 			}
 			this.$store.state.question.question.question_bank_id = this.$route.params.id
-			this.$bvModal.show('modal-create')
+			await this.$bvModal.show('modal-create')
+
+			let tag = document.getElementById("modal-create___BV_modal_content_")
+			if(tag !== null) {
+				tag.removeAttribute("tabindex");
+			}
+		},
+		getData(id) {
+			this.getDataQuestion(id)
+			.then((res) => {
+				this.$bvModal.show('modal-create')
+				let tag = document.getElementById("modal-create___BV_modal_content_")
+				if(tag !== null) {
+					tag.removeAttribute("tabindex");
+				}
+			})
+			.catch((error) => {
+				this.$bvToast.toast(error.message, errorToas())
+			})
 		},
 		async submit() {
 			try {
@@ -234,10 +265,14 @@ export default {
 			        })
 			        return
 			    }
-				await this.createDataQuestion()
-				this.initOption()
+			    if(typeof this.question.id != 'undefined') {
+			    	await this.updateDataQuestion()
+			    } else {
+					await this.createDataQuestion()
+			    }
 				this.$bvToast.toast('Soal berhasil disimpan', successToas())
-				this.$store.state.question.question.question_bank_id = this.$route.params.id
+				
+				this.$bvModal.hide('modal-create')
 				this.changeData()
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
@@ -261,3 +296,6 @@ export default {
 	}
 }
 </script>
+<style>
+	[tabindex="-1"]:focus:not(:focus-visible) { outline: 0 !important; }
+</style>

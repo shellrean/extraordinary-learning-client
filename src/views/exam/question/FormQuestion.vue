@@ -60,7 +60,8 @@ export default {
 		        'Authorization' : 'Bearer '+store.state.token
 		    },
 		    height: 200,
-		    extraPlugins : 'justify'
+		    extraPlugins : 'justify,sourcedialog',
+		    FloatingPanelsZIndex : 100001
 		}
 	}),
 	filters: {
