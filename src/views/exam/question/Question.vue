@@ -40,7 +40,7 @@
 								<b-dropdown-item @click="addQuestion(2)">
 									Esay
 								</b-dropdown-item>
-								<b-dropdown-item>
+								<b-dropdown-item v-b-modal.modal-import>
 									Import dari file .docx
 								</b-dropdown-item>
 							</b-dropdown>
@@ -50,13 +50,16 @@
 			</div>
 			<div class="row">
 				<div class="col-md-8" v-if="typeof questions.data != 'undefined'">
-					<div class="card" v-for="row in questions.data">
+					<div class="card" v-for="(row,index) in questions.data">
 						<div class="card-header p-4 pb-0">
 							
 					 		<div class="d-flex align-items-center">
-					 			<b-button size="sm" variant="white" v-b-toggle="'question_'+row.id" v-b-tooltip.hover title="Toggle detail soal"><i class="flaticon2-talk"></i></b-button>
+					 			<b-button size="sm" variant="white" v-b-toggle="'question_'+row.id" v-b-tooltip.hover title="Toggle detail soal">
+					 				<i class="flaticon2-talk"></i>
+					 			</b-button>
 					 			<div class="d-flex flex-column flex-grow-1">
 					 				<div>
+					 					<span class="badge bg-light-danger mr-1">{{ questions.from + index }}</span>
 										<span class="badge" :class="row.type == '1' ? 'badge-primary' : 'badge-success'">{{ row.type == '1' ? 'Pilihan ganda' : 'Esay' }}</span>
 					 				</div>
 								</div>
@@ -146,8 +149,7 @@
 				style="max-height: 60vh;"
 			>
 			<div class="container">
-				
-			<FormQuestion />
+				<FormQuestion />
 			</div>
 			</VuePerfectScrollbar>
 			<template v-slot:modal-footer="{ ok, cancel, hide }">
@@ -159,11 +161,29 @@
 		      	</b-button>
 			</template>
 		</b-modal>
+		<b-modal id="modal-import" title="Import soal" no-close-on-backdrop>
+			<b-form-file
+  			  accept=".docx"
+			  v-model="file"
+			  :state="Boolean(file)"
+			  placeholder="Choose a file docx or drop it here..."
+			  drop-placeholder="Drop file here..."
+			></b-form-file>
+			<a :href="baseURL+'/download/format-input-soal-doc.docx'" download>Download template import</a>
+			<template v-slot:modal-footer="{ ok, cancel, hide }">
+		      	<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
+		        	Cancel
+		      	</b-button>
+				<b-button variant="success" @click="submitFileImport" :disabled="isLoading">
+		        	{{ isLoading ? 'Processing...' : 'Import' }}
+		      	</b-button>
+			</template>
+		</b-modal>
 	</div>
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { BButton, BDropdown, BDropdownItem, BPagination, BCollapse, VBToggle, BOverlay   } from 'bootstrap-vue'
+import { BButton, BDropdown, BDropdownItem, BPagination, BCollapse, VBToggle, BOverlay,BFormFile  } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
 import FormQuestion from './FormQuestion'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
@@ -171,7 +191,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 export default {
 	name: 'ExamBankQuestion',
 	components: {
-		BButton, BDropdown, BDropdownItem,BPagination, BCollapse , VBToggle, FormQuestion, VuePerfectScrollbar, BOverlay
+		BButton, BDropdown, BDropdownItem,BPagination, BCollapse , VBToggle, FormQuestion, VuePerfectScrollbar, BOverlay, BFormFile
 	},
 	data: () => ({
 		perPage: 10,
@@ -179,10 +199,11 @@ export default {
 			{ key: 'details', label: 'Detail' },
 			{ key: 'no', label: 'Tipe soal' },
 			{ key: 'actions', label: 'Aksi' }
-		]
+		],
+		file: null
 	}),
 	computed: {
-		...mapGetters(['isLoading']),
+		...mapGetters(['isLoading','baseURL']),
 		...mapState('question', ['questions', 'question', 'setting', 'question_bank']),
 		page: {
 			get() {
@@ -194,7 +215,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('question', ['getDataQuestionBank','getDataQuestions', 'getDataQuestion', 'deleteDataQuestion', 'createDataQuestion', 'updateDataQuestion']),
+		...mapActions('question', ['getDataQuestionBank','getDataQuestions', 'getDataQuestion', 'deleteDataQuestion', 'createDataQuestion', 'updateDataQuestion', 'importDataQuestionBank']),
 		changeData() {
 			this.getDataQuestions({ id: this.$route.params.id, perPage: this.perPage })
 			.catch((error) => {
@@ -209,7 +230,8 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#c3c3c3',
-                confirmButtonText: 'Lanjutkan!'
+                confirmButtonText: 'Lanjutkan!',
+                showLoaderOnConfirm: true,
             }).then(async (result) => {
                 if (result.value) {
                 	try {
@@ -272,6 +294,23 @@ export default {
 				
 				this.$bvModal.hide('modal-create')
 				this.changeData()
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async submitFileImport() {
+			try {
+				let formData = new FormData()
+				formData.append('file', this.file)
+
+				await this.importDataQuestionBank({
+					id: this.$route.params.id,
+					data: formData
+				})
+				this.$bvModal.hide('modal-import')
+				this.changeData()
+				this.$bvToast.toast('Soal berhasil diimport', successToas())
+				this.file = null
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}

@@ -43,7 +43,7 @@
 											<b-button squared class="mr-1" variant="light-success" size="sm" @click="getData(row.id)" v-b-tooltip.hover title="Edit banksoal">
 												<i class="flaticon2-contract"></i> Edit
 											</b-button>
-											<b-button squared class="mr-1" variant="light-warning" size="sm" @click="getData(row.id)" v-b-tooltip.hover title="Gandakan banksoal">
+											<b-button squared class="mr-1" variant="light-warning" size="sm" @click="duplicateBank(row.id)" v-b-tooltip.hover title="Gandakan banksoal">
 												<i class="flaticon2-copy"></i>
 											</b-button>
 											<b-button squared variant="light-danger" size="sm" @click="deleteData(row.id)" v-b-tooltip.hover title="Hapus banksoal">
@@ -219,7 +219,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank', 'deleteDataQuestionBank', 'updateDataQuestionBank']),
+		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank', 'deleteDataQuestionBank', 'updateDataQuestionBank', 'duplicateDataQuestionBank']),
 		...mapActions('classroom', ['getDataClassromMine']),
 		changeData() {
 			this.getDataQuestionBanks({ perPage: this.perPage })
@@ -276,6 +276,26 @@ export default {
             		}
             	}
             })
+		},
+		duplicateBank(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Bnksoal akan digandakan beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+            	if(result.value) {
+            		try {
+            			await this.duplicateDataQuestionBank(id)
+            			this.changeData()
+            		} catch (error) {
+            			this.$bvToast.toast(error.message, errorToas())
+            		}
+            	}
+            })
 		}
 	},
 	created() {
@@ -283,7 +303,12 @@ export default {
 		this.getDataClassromMine()
 	},
 	watch: {
-		
+		page() {
+			this.changeData()
+		},
+		perPage() {
+			this.changeData()
+		}
 	}
 }
 </script>
