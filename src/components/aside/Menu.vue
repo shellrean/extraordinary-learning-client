@@ -185,6 +185,26 @@
           </li>
         </router-link>
         <router-link
+          :to="{ name: 'standart.index' }"
+          v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('1')"
+        >
+          <li
+            aria-haspopup="true"
+            data-menu-toggle="hover"
+            class="menu-item"
+            :class="[
+              isActive && 'menu-item-active',
+              isExactActive && 'menu-item-active'
+            ]"
+          >
+            <a :href="href" class="menu-link" @click="navigate">
+              <i class="menu-icon flaticon-open-box"></i>
+              <span class="menu-text">Standart</span>
+            </a>
+          </li>
+        </router-link>
+        <router-link
           :to="{ name: 'master.classroom.student' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
           v-if="$role('2')"

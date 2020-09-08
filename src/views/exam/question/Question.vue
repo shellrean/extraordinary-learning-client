@@ -89,26 +89,26 @@
 						</b-collapse>
 					</div>
 					<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
-					      <b-pagination
-					        v-model="page"
-					        :total-rows="questions.total"
-					        :per-page="questions.per_page"
-					        :disabled="isLoading"
-					      ></b-pagination>
-					      <div class="d-flex align-items-center py-3">
-								<div class="d-flex align-items-center" v-if="isLoading">
-									<div class="mr-2 text-muted">Loading...</div>
-									<div class="spinner spinner-primary mr-10"></div>
-								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="30">30</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-								</select>
+					    <b-pagination
+					      v-model="page"
+					      :total-rows="questions.total"
+					      :per-page="questions.per_page"
+					      :disabled="isLoading"
+					    ></b-pagination>
+					    <div class="d-flex align-items-center py-3">
+							<div class="d-flex align-items-center" v-if="isLoading">
+								<div class="mr-2 text-muted">Loading...</div>
+								<div class="spinner spinner-primary mr-10"></div>
 							</div>
-					    </div>
+							<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<option value="10">10</option>
+								<option value="20">20</option>
+								<option value="30">30</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="card gutter-b" v-if="typeof question_bank.code != 'undefined'">

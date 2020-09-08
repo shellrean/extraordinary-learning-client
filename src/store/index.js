@@ -17,6 +17,7 @@ import exam from './exam.store'
 import info from './info.store'
 import event from './event.store'
 import result from './result.store'
+import standart from './standart.store'
 
 Vue.use(Vuex)
 
@@ -94,6 +95,7 @@ export default new Vuex.Store({
         exam,
         info,
         event,
-        result
+        result,
+        standart
     }
 })

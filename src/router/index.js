@@ -25,6 +25,9 @@ const SubjectIndex = () => import('@/views/master/subject/Index')
 const SubjectData = () => import('@/views/master/subject/Subject')
 const SubjectMe = () => import('@/views/master/subject/SubjectMe')
 
+const StandartIndex = () => import('@/views/standart/Index')
+const StandartData = () => import('@/views/standart/Standart')
+
 const LectureIndex = () => import('@/views/lecture/Index')
 const LectureData = () => import('@/views/lecture/Lecture')
 const LectureAdd = () => import('@/views/lecture/Add')
@@ -202,6 +205,17 @@ Vue.use(VueRouter)
             path: ':id',
             name: 'event.view',
             component: EventShow
+          }
+        ]
+      },
+      {
+        path: 'standart',
+        component: StandartIndex,
+        children: [
+          {
+            path: '',
+            name: 'standart.index',
+            component: StandartData
           }
         ]
       },
