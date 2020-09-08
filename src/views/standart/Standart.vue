@@ -51,10 +51,10 @@
 					 				<b-button variant="white" size="sm" v-b-tooltip.hover title="Edit standart" @click="getData(row.id)">
 					 					<small><i class="flaticon2-contract"></i> Edit</small>
 					 				</b-button>
-									<b-button variant="white" size="sm" v-b-tooltip.hover title="Tambah standart" @click="">
+									<b-button variant="white" size="sm" v-b-tooltip.hover title="Tambah standart" @click="addChildStandart(row.id)">
 										<small><i class="flaticon-add-circular-button"></i> Tambah</small>
 									</b-button>
-									<b-button variant="white" size="sm" v-b-tooltip.hover title="Hapus standart" @click="">
+									<b-button variant="white" size="sm" v-b-tooltip.hover title="Hapus standart" @click="deleteStandart(row.id)">
 										<small><i class="flaticon2-trash"></i></small>
 									</b-button>
 					 			</div>
@@ -70,7 +70,7 @@
 					 					<td v-html="child.body"></td>
 					 					<td width="120">
 					 						<b-button variant="white" size="sm" v-b-tooltip.hover title="Edit standart" @click="getData(child.id)"><small><i class="flaticon2-contract"></i> Edit</small></b-button>
-											<b-button variant="white" size="sm" v-b-tooltip.hover title="Hapus standart" @click=""><small><i class="flaticon2-trash"></i></small></b-button>
+											<b-button variant="white" size="sm" v-b-tooltip.hover title="Hapus standart" @click="deleteStandart(child.id)"><small><i class="flaticon2-trash"></i></small></b-button>
 					 					</td>
 					 				</tr>
 					 			</table>
@@ -193,6 +193,30 @@
 				} catch (error) {
 					this.$bvToast.toast(error.message, errorToas())
 				}
+			},
+			addChildStandart(id) {
+				this.$store.state.standart.standart.standart_id = id
+				this.$bvModal.show('modal-create')
+			},
+			deleteStandart(id) {
+				this.$swal({
+	                title: 'Informasi',
+	                text: "Standart akan dihapus beserta dengan data yang terkait",
+	                icon: 'warning',
+	                showCancelButton: true,
+	                confirmButtonColor: '#3085d6',
+	                cancelButtonColor: '#c3c3c3',
+	                confirmButtonText: 'Lanjutkan!'
+	            }).then(async (result) => {
+	                if (result.value) {
+	                	try {
+	                		await this.deleteDataStandart(id)
+	                		this.changeData()
+	                	} catch (error) {
+	                		this.$bvToast.toast(error.message, errorToas())
+	                	}
+	                }
+				})
 			}
 		},
 		created() {
@@ -201,7 +225,12 @@
 			this.showEditor = true
 		},
 		watch: {
-
+			perPage() {
+				this.changeData()
+			},
+			page() {
+				this.changeData()
+			}
 		}
 	}
 </script>

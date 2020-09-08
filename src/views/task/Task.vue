@@ -77,12 +77,10 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="tasks.total"
 					        :per-page="tasks.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">

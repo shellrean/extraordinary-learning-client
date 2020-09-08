@@ -91,7 +91,6 @@
 						</b-table>
 						<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="schedules.total"
 					        :per-page="schedules.per_page"
