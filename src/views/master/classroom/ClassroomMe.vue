@@ -44,15 +44,17 @@
 									</div>
 								</div>
 								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-									<router-link  :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" class="text-dark mb-1 font-size-lg text-hover-primary">
+									<router-link  :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" class="text-dark mb-1 font-size-lg text-hover-primary" v-b-tooltip.hover title="Dashboard kelas">
 										{{ classroom.classroom.name }}
 									</router-link>
 									<span class="text-muted">{{ classroom.subject.name }}</span>
 								</div>
 								<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-									<template v-slot:button-content>
+									<template v-slot:button-content v-b-tooltip.hover title="Menu lainnya">
 									    <i class="flaticon-more"></i>
 									</template>
+									<b-dropdown-item @click="getSchedules(classroom.id)">Lihat Jadwal</b-dropdown-item>
+									<b-dropdown-item @click="addSchedule(classroom.id)">Tambah Jadwal</b-dropdown-item>
 									<b-dropdown-item @click="deleteClassroomSubject(classroom.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
 							</div>
@@ -87,13 +89,70 @@
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
 		      </b-button>
+		      <b-button size="sm" variant="success" @click="submit" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Simpan' }}
+		      </b-button>
 		    </template>
+		</b-modal>
+		<b-modal id="modal-schedule" size="xl" hide-footer title="Jadwal" @hide="id_show = null">
+			<template v-slot:modal-header="{ close }">
+		    	<b-button variant="primary" @click="addSchedule(id_show)"><i class="flaticon2-add-square"></i> Tambah jadwal</b-button>
+		    </template>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4" v-for="days in filteredSchedules" >
+						<div class="card">
+							<div class="card-body p-4">
+								<div class="d-flex align-items-center mb-2" v-for="schedule in days">
+									<div class="d-flex flex-column flex-grow-1">
+										<span class="text-dark-75 font-weight-bold font-size-lg mb-1">{{ schedule.day | dayIndex }}</span>
+										<span class="text-muted font-weight-bold"><span class="badge badge-success">{{ schedule.from_time }}</span> - <span class="badge badge-secondary">{{ schedule.end_time }}</span></span>
+									</div>
+									<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+										<template v-slot:button-content>
+											   <i class="flaticon-more"></i>
+										</template>
+										<b-dropdown-item @click="getSchedule(schedule.id)">Edit</b-dropdown-item>
+										<b-dropdown-item @click="deleteSchedule(schedule.id)">Hapus</b-dropdown-item>
+									</b-dropdown>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12" v-if="filteredSchedules.length === 0">
+						<i>Tidak ada data jadwal, buat jadwal terlebih dahulu</i>
+					</div>
+				</div>
+			</div>
+		</b-modal>
+		<b-modal id="modal-schedule-add" title="Jadwal" @hide="$store.commit('classroom/CLEAR_SCHEDULE')" no-close-on-backdrop>
+			<div class="form-group">
+				<label>Hari</label>
+				<v-select label="name" :reduce="item => item.id" :options="days" v-model="schedule.day">
+				</v-select>
+				<div class="text-danger" v-if="errors.day">{{ errors.day[0] }}</div>
+			</div>
+			<div class="form-group">
+				<label>Waktu mulai</label>
+				<VueCtkDateTimePicker v-model="schedule.from_time" only-time format='HH:mm' formatted='HH:mm' label="Waktu mulai" id="wkt_mlai"/>
+				<div class="text-danger" v-if="errors.from_time">{{ errors.from_time[0] }}</div>
+			</div>
+			<div class="form-group">
+				<label>Waktu berakhir</label>
+				<VueCtkDateTimePicker v-model="schedule.end_time" only-time format='HH:mm' formatted='HH:mm' label="Waktu berakhir" id="wkt_selesai"/>
+				<div class="text-danger" v-if="errors.end_time">{{ errors.end_time[0] }}</div>
+			</div>
+			<template v-slot:modal-footer="{ ok, cancel, hide }">
+			    <b-button size="sm" variant="secondary" @click="cancel()">
+			        Cancel
+			    </b-button>
+				<b-button size="sm" variant="success" @click="submitSchedule" :disabled="isLoading">
+			        {{ isLoading ? 'Processing...' : 'Simpan' }}
+			    </b-button>
+			</template>
 		</b-modal>
 	</div>
 </template>
@@ -101,24 +160,38 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { BButton, BDropdownItem, BDropdown } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+import VSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
 export default {
 	name: 'SubjectMe',
 	components: {
-		BButton, BDropdownItem, BDropdown
+		BButton, BDropdownItem, BDropdown,
+		VueCtkDateTimePicker, VSelect
 	},
 	data() {
 		return {
 			data: {
 				subject_id: null,
-				classroom_id: null
-			}
+				classroom_id: null,
+			},
+			days: [
+				{ id: 1, name: 'Senin' },
+				{ id: 2, name: 'Selasa' },
+				{ id: 3, name: 'Rabu' },
+				{ id: 4, name: 'Kamis' },
+				{ id: 5, name: 'Jumat' },
+				{ id: 6, name: 'Sabtu' }
+			],
+			id_show: null
 		}
 	},
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState(['errors']),
-		...mapState('classroom',['myclassrooms', 'classrooms']),
+		...mapState('classroom',['myclassrooms', 'classrooms', 'schedule', 'schedules']),
 		...mapState('subject', ['subjects']),
 		...mapState('user', ['authenticated']),
 		groupedClass() {
@@ -127,10 +200,34 @@ export default {
 			 	return r;
 			}, {});
 			return Object.values(group)
+		},
+		filteredSchedules() {
+			let group = this.schedules.reduce((r, a) => {
+				r[a.day] = [...r[a.day] || [], a];
+			 	return r;
+			}, {});
+			return Object.values(group)
+		}
+	},
+	filters: {
+		dayIndex(i){
+			let days= [
+				{ id: 1, name: 'Senin' },
+				{ id: 2, name: 'Selasa' },
+				{ id: 3, name: 'Rabu' },
+				{ id: 4, name: 'Kamis' },
+				{ id: 5, name: 'Jumat' },
+				{ id: 6, name: 'Sabtu' }
+			]
+			let index = days.map(item => item.id).indexOf(parseInt(i))
+			if(index !== -1) {
+				return days[index].name
+			}
+			return 'Day not found'
 		}
 	},
 	methods: {
-		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms', 'createNewClassroomSubject', 'deleteDataClassroomSubject']),
+		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms', 'createNewClassroomSubject', 'deleteDataClassroomSubject', 'updateDataSchedule', 'createDataSchedule', 'getDataSchedules', 'getDataSchedule', 'deleteDataSchedule']),
 		...mapActions('subject', ['getDataSubjects']),
 		clearForm() {
 			this.data = {
@@ -149,8 +246,25 @@ export default {
 			try {
 				await this.createNewClassroomSubject(this.data)
 				this.$bvModal.hide('modal-create')
+				this.$bvToast.toast('Kelas berhasil disimpan', successToas())
 				this.clearForm()
 				this.changeData()
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async submitSchedule() {
+			try {
+				if(typeof this.schedule.id != 'undefined') {
+					await this.updateDataSchedule()
+				} else {
+					await this.createDataSchedule()
+				}
+				if(this.id_show != null) {
+					this.getSchedules(this.id_show)
+				}
+				this.$bvModal.hide('modal-schedule-add')
+				this.$bvToast.toast('Jadwal berhasil disimpan', successToas())
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}
@@ -168,12 +282,57 @@ export default {
             	if (result.value) {
 					try {
 						await this.deleteDataClassroomSubject(id)
+						this.$bvToast.toast('Kelas berhasil dihapus', successToas())
 						this.changeData()
 					} catch (error) {	
 						this.$bvToast.toast(error.message, errorToas())
 					}
             	}	
             })
+		},
+		async deleteSchedule(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Jadwal akan dihapus beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+            	if (result.value) {
+					try {
+						await this.deleteDataSchedule(id)
+						this.$bvToast.toast('Jadwal berhasil dihapus', successToas())
+						if(this.id_show != null) {
+							this.getSchedules(this.id_show)
+						}
+					} catch (error) {	
+						this.$bvToast.toast(error.message, errorToas())
+					}
+            	}	
+            })
+		},
+		async getSchedules(id) {
+			try {
+				await this.getDataSchedules(id)
+				this.id_show = id
+				this.$bvModal.show('modal-schedule')
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async getSchedule(id) {
+			try {
+				await this.getDataSchedule(id)
+				this.$bvModal.show('modal-schedule-add')
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		addSchedule(id) {
+			this.schedule.classroom_subject_id = id
+			this.$bvModal.show('modal-schedule-add')
 		}
 	},
 	created() {

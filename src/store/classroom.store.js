@@ -13,10 +13,12 @@ const state = () => ({
 			
 		}
 	},
+	schedule: {},
 	myclassrooms: [],
 	students: [],
 	comments: [],
 	subjects: [],
+	schedules: [],
 	page: 1
 })
 
@@ -32,6 +34,12 @@ const mutations = {
 	},
 	ASSIGN_DATA_CLASSLIVES(state, payload) {
 		state.classlives = payload
+	},
+	ASSIGN_DATA_SCHEDULES(state, payload) {
+		state.schedules = payload
+	},
+	ASSIGN_DATA_SCHEDULE(state, payload) {
+		state.schedule = payload
 	},
 	ASSIGN_CLASSLIVE_COMMENTS(state, payload) {
 		state.comments = payload
@@ -51,6 +59,9 @@ const mutations = {
 
 			}
 		}
+	},
+	CLEAR_SCHEDULE(state, payload) {
+		state.schedule = {}
 	},
 	SET_PAGE(state, payload) {
 		state.page = payload
@@ -315,6 +326,86 @@ const actions = {
 				let network = await $axios.get(`classrooms/subject/mine`)
 
 				commit('ASSIGN_DATA_SUBJECTS', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataSchedules({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.get(`schedules/${payload}`)
+
+				commit('ASSIGN_DATA_SCHEDULES', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	getDataSchedule({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.get(`schedules/${payload}/show`)
+
+				commit('ASSIGN_DATA_SCHEDULE', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	createDataSchedule({ commit, state }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.post(`schedules`, state.schedule)
+
+				commit('CLEAR_SCHEDULE')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	updateDataSchedule({ commit, state }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.put(`schedules/${state.schedule.id}`, state.schedule)
+
+				commit('CLEAR_SCHEDULE')
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	deleteDataSchedule({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.delete(`schedules/${payload}`)
+
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
