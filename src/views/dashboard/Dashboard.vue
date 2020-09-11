@@ -4,7 +4,8 @@
 			<div class="container">
 				<div class="d-flex flex-column flex-md-row">
 					<div class="flex-md-row-auto w-md-275px w-xl-325px">
-						<SchoolProfile />
+						<SchoolProfile v-if="authenticated.role == '0'"/>
+						<ScheduleToday v-if="authenticated.role == '1'"/>
 					</div>
 					<div class="flex-md-row-fluid ml-md-6 ml-lg-8">
 						<div class="row">
@@ -22,16 +23,22 @@
 	</div>
 </template>
 <script>
-import SchoolProfile from '@/components/school/Profile'
-import SchoolInfo from '@/components/school/Information'
-import SchoolEvent from '@/components/school/UpcommingEvent'
+const SchoolProfile = () => import('@/components/school/Profile')
+const SchoolInfo = () => import('@/components/school/Information')
+const SchoolEvent = () => import('@/components/school/UpcommingEvent')
+const ScheduleToday = () => import('@/components/school/ScheduleToday')
+import { mapState } from 'vuex'
 
 export default {
 	name: 'SchoolDashboard',
 	components: {
 		SchoolProfile,
 		SchoolInfo,
-		SchoolEvent
+		SchoolEvent,
+		ScheduleToday
+	},
+	computed: {
+		...mapState('user', ['authenticated'])
 	}
 }
 

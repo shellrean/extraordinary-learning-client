@@ -29,7 +29,6 @@
 			</div>
 			<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 			  <b-pagination
-			  	pills 
 			    v-model="page"
 			    :total-rows="public_infos.total"
 			    :per-page="public_infos.per_page"

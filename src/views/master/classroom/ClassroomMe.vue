@@ -1,74 +1,78 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
-				<div class="card-header flex-wrap border-0 pt-6 pb-6">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Kelas saya</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Kelas saya mengajar</span>
-					</h3>
+			<div class="card mb-10">
+				<div class="card-header p-4 d-flex justify-content-between">
+					<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
+							<span class="symbol-label">
+								<i class="flaticon-clipboard text-primary"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+								Kelas saya
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary">
+									</span>
+									<span class="text-muted font-weight-bold">Kelas saya mengajar</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar">
-						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/Flatten.svg"
-						          />
-						        </span>
+						<div class="dropdown dropdown-inline">
+							<b-button variant="primary" v-b-modal.modal-create>
+								<i class="flaticon2-add-square"></i>
 								Tambah kelas
 							</b-button>
 						</div>
 					</div>
 				</div>
-				<div class="card-body">	
-					<div class="row" v-if="typeof authenticated.name != 'undefined' && typeof authenticated.classroom != 'undefined'">
-						<div class="col-md-5">
-							<div class="card card-custom card-stretch gutter-b">
-								<div class="card-body d-flex p-0">
-									<div class="flex-grow-1 bg-primary p-8 card-rounded flex-grow-1 bgi-no-repeat" style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 70%; background-image: url(/media/svg/banner/svg-coffe.svg)">
-										<h4 class="text-inverse-primary mt-2 font-weight-bolder">{{ authenticated.classroom.name }} - {{ authenticated.classroom.group}} ({{ authenticated.classroom.grade}})</h4>
-										<p class="text-inverse-primary my-6">Kode: {{ authenticated.classroom.invitation_code }} 
-										<br>Bagikan kode kelas hanya kepada murid anda</p>
+			</div>
+			<div class="row">
+				<div class="col-md-4" v-for="grade in groupedClass">
+					<table class="table table-borderless table-sm">
+						<tr v-for="classroom in grade">
+							<td>
+								<div class="card">
+									<div class="card-header p-0 d-flex justify-content-between">
+										<div class="d-flex align-items-center">
+											<b-button squared class="mr-1" variant="light-success" size="sm" @click="getSchedules(classroom.id)" v-b-tooltip.hover title="Daftar jadwal">
+												<i class="flaticon-list-2"></i>
+											</b-button>
+											<b-button squared class="mr-1" variant="light-primary" size="sm" @click="addSchedule(classroom.id)" v-b-tooltip.hover title="Tambah jadwal">
+												<i class="flaticon-file-1"></i>
+											</b-button>
+											<b-button squared variant="light-danger" size="sm" @click="deleteClassroomSubject(classroom.id)" v-b-tooltip.hover title="Hapus kelas">
+												<i class="flaticon2-trash"></i>
+											</b-button>
+										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row mt-2">
-						<div class="col-md-4" v-for="grade in groupedClass">
-							<div class="d-flex align-items-center mb-10" v-for="classroom in grade">
-								<div class="symbol symbol-40 symbol-light-primary mr-5">
-									<div class="symbol-label">
-										{{ classroom.classroom.grade }}
+								<div class="card" >
+								 	<div class="card-body p-4">
+										<div class="d-flex align-items-center">
+											<div class="d-flex flex-column flex-grow-1 font-weight-bold">
+												<span class="text-dark mb-1 font-size-lg">
+													{{ classroom.classroom.name }} - {{ classroom.classroom.grade }} 
+												</span>
+												<span class="text-muted">{{ classroom.subject.name }}</span>
+											</div>
+										</div>
+										<router-link :to="{}" class="stretched-link"></router-link>
 									</div>
 								</div>
-								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-									<router-link  :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" class="text-dark mb-1 font-size-lg text-hover-primary" v-b-tooltip.hover title="Dashboard kelas">
-										{{ classroom.classroom.name }}
-									</router-link>
-									<span class="text-muted">{{ classroom.subject.name }}</span>
-								</div>
-								<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-									<template v-slot:button-content v-b-tooltip.hover title="Menu lainnya">
-									    <i class="flaticon-more"></i>
-									</template>
-									<b-dropdown-item @click="getSchedules(classroom.id)">Lihat Jadwal</b-dropdown-item>
-									<b-dropdown-item @click="addSchedule(classroom.id)">Tambah Jadwal</b-dropdown-item>
-									<b-dropdown-item @click="deleteClassroomSubject(classroom.id)">Hapus</b-dropdown-item>
-								</b-dropdown>
-							</div>
-						</div>
-						<div class="col-md-12" v-if="groupedClass.length == 0">
-							<div class="text-center">
-								<img src="/media/svg/banner/svg-nodata4.svg" style="max-width: 130px">
-								<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas</p>
-							</div>
-						</div>
-					</div>
-					<div class="d-flex align-items-center" v-if="isLoading">
-						<div class="mr-2 text-muted">Loading...</div>
-						<div class="spinner spinner-primary mr-10"></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-12" v-if="groupedClass.length == 0">
+					<div class="text-center">
+						<img src="/media/svg/banner/svg-nodata4.svg" style="max-width: 230px">
+						<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas, silakan tambah kelas anda mengajar terlebih dahulu</p>
 					</div>
 				</div>
 			</div>
@@ -77,15 +81,13 @@
 			<form class="form">
 				<div class="form-group">
 					<label>Kelas</label>
-					<select class="form-control form-control-lg form-control-solid" v-model="data.classroom_id">
-						<option :value="classroom.id" v-for="classroom in classrooms.data">{{ classroom.name }}</option>
-					</select>
+					<v-select label="name" :reduce="item => item.id" :options="classrooms.data" v-model="data.classroom_id">
+					</v-select>
 				</div>
 				<div class="form-group">
 					<label>Matpel</label>
-					<select class="form-control form-control-lg form-control-solid" v-model="data.subject_id">
-						<option :value="subject.id" v-for="subject in subjects.data">{{ subject.name }}</option>
-					</select>
+					<v-select label="name" :reduce="item => item.id" :options="subjects.data" v-model="data.subject_id">
+					</v-select>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
@@ -97,7 +99,7 @@
 		      </b-button>
 		    </template>
 		</b-modal>
-		<b-modal id="modal-schedule" size="xl" hide-footer title="Jadwal" @hide="id_show = null">
+		<b-modal id="modal-schedule" size="xl" title="Jadwal" @hide="id_show = null">
 			<template v-slot:modal-header="{ close }">
 		    	<b-button variant="primary" @click="addSchedule(id_show)"><i class="flaticon2-add-square"></i> Tambah jadwal</b-button>
 		    </template>
@@ -123,10 +125,15 @@
 						</div>
 					</div>
 					<div class="col-md-12" v-if="filteredSchedules.length === 0">
-						<i>Tidak ada data jadwal, buat jadwal terlebih dahulu</i>
+						Tidak ada data jadwal, buat jadwal terlebih dahulu
 					</div>
 				</div>
 			</div>
+			<template v-slot:modal-footer="{ ok, cancel, hide }">
+				<b-button size="sm" variant="secondary" @click="cancel()">
+			        Tutup
+			    </b-button>
+			</template>
 		</b-modal>
 		<b-modal id="modal-schedule-add" title="Jadwal" @hide="$store.commit('classroom/CLEAR_SCHEDULE')" no-close-on-backdrop>
 			<div class="form-group">
