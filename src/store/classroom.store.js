@@ -349,6 +349,21 @@ const actions = {
 			}
 		})
 	},
+	getDataSchedulesToday({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.get(`schedules/today`)
+
+				commit('ASSIGN_DATA_SCHEDULES', network.data.data)
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	getDataSchedule({ commit }, payload) {
 		return new Promise(async (resolve, reject) => {
 			try {
