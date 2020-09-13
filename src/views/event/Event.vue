@@ -80,7 +80,7 @@
 			</div>
 			<div class="form-group">
 				<label>Kontent</label>
-				<ckeditor v-model="event.body" v-if="showEditor" :config="editorConfig" id="content"></ckeditor>
+				<ckeditor v-model="event.body" v-if="showEditor" :config="editorConfig" id="content" type="inline"></ckeditor>
 			</div>
 			<div class="form-group">
 				<label>Tanggal</label>
@@ -214,3 +214,8 @@ export default {
 	}
 }
 </script>
+<style >
+	div[contenteditable] {
+    outline: 1px solid #616161;
+}
+</style>
