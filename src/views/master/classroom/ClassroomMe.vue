@@ -32,6 +32,24 @@
 					</div>
 				</div>
 			</div>
+			<div class="row" v-if="typeof authenticated.name != 'undefined' && typeof authenticated.classroom != 'undefined'">
+				<div class="col-md-5">
+					<div class="card card-custom card-stretch gutter-b">
+						<div class="card-body d-flex p-0 card-header-right ribbon ribbon-clip ribbon-left">
+							<div class="ribbon-target" style="top: 12px;">
+								<span class="ribbon-inner bg-warning"></span>Wali kelas
+							</div>
+							<div class="flex-grow-1 bg-danger p-8 card-rounded flex-grow-1 bgi-no-repeat" 
+							style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 70%; background-image: url(/media/svg/banner/svg-coffe.svg)">
+								<h4 class="text-inverse-primary mt-5 font-weight-bolder">
+									{{ authenticated.classroom.name }} - {{ authenticated.classroom.group}} ({{ authenticated.classroom.grade}})
+								</h4>
+								<b-button variant="white" size="sm" @click="getStudents(authenticated.classroom.id)" :disabled="isLoading">Angggota kelas</b-button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-md-4" v-for="grade in groupedClass">
 					<table class="table table-borderless table-sm">
@@ -239,6 +257,42 @@
 				</b-button>
 			</div>
 		</b-modal>
+		<b-modal id="modal-student" title="Siswa kelas" hide-footer size="lg">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+			    <span class="input-group-text"><i class="flaticon-avatar"></i></span>
+			  </div>
+			  <input type="text" class="form-control" placeholder="Masukkan NIS" v-model="uid">
+			  <div class="input-group-append">
+			    <button class="btn btn-primary" type="button" @click="addToClassroom(authenticated.classroom.id)" :disabled="isLoading"><i class="flaticon-app"></i>Tambah</button>
+			  </div>
+			</div>
+			<div class="table-responsive">
+				<VuePerfectScrollbar
+					class="aside-menu scroll liveclass_comment"
+					style="max-height: 50vh; position: relative;"
+				>
+				<table class="table table-bordered table-stripped">
+					<tr  v-for="(student, index) in students">
+						<td>{{ index+1 }}</td>
+						<td>{{ student.student.uid }}</td>
+						<td>
+							{{ student.student.name }} <br>
+							{{ student.student.email }}
+						</td>
+						<td width="110px">
+							<b-button size="sm" variant="secondary" @click="deleteFromClassroom(student.student.id, authenticated.classroom.id)" :disabled="isLoading">
+								<i class="flaticon2-trash"></i> Hapus
+							</b-button>
+						</td>
+					</tr>
+					<tr v-if="students.length === 0">
+						<td colspan="4">Tidak ada siswa dikelas ini</td>
+					</tr>
+				</table>
+				</VuePerfectScrollbar>
+			</div>
+		</b-modal>
 	</div>
 </template>
 <script>
@@ -249,12 +303,13 @@ import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 import VSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
 	name: 'SubjectMe',
 	components: {
 		BButton, BDropdownItem, BDropdown,
-		VueCtkDateTimePicker, VSelect
+		VueCtkDateTimePicker, VSelect, VuePerfectScrollbar
 	},
 	data() {
 		return {
@@ -279,13 +334,14 @@ export default {
 			],
 			id_show: null,
 			schedule_show_id: '',
-			date_report: null
+			date_report: null,
+			uid: ''
 		}
 	},
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState(['errors']),
-		...mapState('classroom',['myclassrooms', 'classrooms', 'schedule', 'schedules']),
+		...mapState('classroom',['myclassrooms', 'classrooms', 'schedule', 'schedules', 'students']),
 		...mapState('subject', ['subjects']),
 		...mapState('user', ['authenticated']),
 		...mapState('abcent', ['abcents']),
@@ -325,7 +381,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms', 'createNewClassroomSubject', 'deleteDataClassroomSubject', 'updateDataSchedule', 'createDataSchedule', 'getDataSchedules', 'getDataSchedule', 'deleteDataSchedule']),
+		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms', 'createNewClassroomSubject', 'deleteDataClassroomSubject', 'updateDataSchedule', 'createDataSchedule', 'getDataSchedules', 'getDataSchedule', 'deleteDataSchedule', 'getDataStudents', 'addUserToClassroom', 'deleteUserFromClassroom']),
 		...mapActions('subject', ['getDataSubjects']),
 		...mapActions('abcent', ['getAbcentToday', 'downloadExcel']),
 		clearForm() {
@@ -468,6 +524,50 @@ export default {
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		},
+		async getStudents(id) {
+			try {
+				await this.getDataStudents(id)
+				this.$bvModal.show('modal-student')
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async addToClassroom(id) {
+			try {
+				await this.addUserToClassroom({
+					classroom_id: id,
+					data: {
+						uid: this.uid
+					}
+				})
+				this.getDataStudents(id)
+				this.$bvToast.toast('Siswa berhasil ditambahkan ke kelas', successToas())
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		async deleteFromClassroom(id, classroom_id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Siswa akan dihapus dari kelas ini",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+            	if (result.value) {
+					try {
+						await this.deleteUserFromClassroom(id)
+
+						this.getDataStudents(classroom_id)
+						this.$bvToast.toast('Siswa berhasil dihapus dari kelas', successToas())
+					} catch (error) {
+						this.$bvToast.toast(error.message, errorToas())
+					}
+            	}
+            })
+		}
 	},
 	created() {
 		this.changeData()

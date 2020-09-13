@@ -31,15 +31,23 @@
 				{{ isLoading ? '' : 'Mata pelajaran' }}
 			</button>
 		</div>
-		<b-modal id="modal-student" title="Siswa kelas" hide-footer>
+		<b-modal id="modal-student" title="Siswa kelas" hide-footer size="lg">
 			<div class="table-responsive">
 				<VuePerfectScrollbar
 					class="aside-menu scroll liveclass_comment"
 					style="max-height: 50vh; position: relative;"
 				>
-				<table class="table table-borderless">
-					<tr  v-for="student in students">
-						<td>{{ student.name }}</td>
+				<table class="table table-bordered table-stripped">
+					<tr  v-for="(student, index) in students">
+						<td>{{ index+1 }}</td>
+						<td>{{ student.student.uid }}</td>
+						<td>
+							{{ student.student.name }}<br>
+							{{ student.student.email }}
+						</td>
+					</tr>
+					<tr v-if="students.length === 0">
+						<td colspan="4">Tidak ada siswa dikelas ini</td>
 					</tr>
 				</table>
 				</VuePerfectScrollbar>
@@ -54,6 +62,9 @@
 				<table class="table table-borderless">
 					<tr  v-for="subject in classroom_subjects">
 						<td>{{ subject.subject.name }}</td>
+					</tr>
+					<tr v-if="classroom_subjects.length === 0"> 
+						<td>Tidak ada mata pelajaran dikelas ini</td>
 					</tr>
 				</table>
 				</VuePerfectScrollbar>

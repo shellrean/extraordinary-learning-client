@@ -32,7 +32,6 @@ const mutations = {
 	},
 	CLEAR_FORM_SUBJECT(state, payload) {
 		state.subject = {
-			id: '',
 			name: '',
 			description: '',
 			settings: {}

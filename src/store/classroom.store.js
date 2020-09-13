@@ -319,6 +319,37 @@ const actions = {
 			}
 		})
 	},
+	addUserToClassroom({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.post(`classrooms/${payload.classroom_id}/student`, payload.data)
+				
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				if (error.response.status == 422) {
+					commit('SET_ERRORS', error.response.data.errors, { root: true })
+				}
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
+	deleteUserFromClassroom({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.delete(`classrooms/student/${payload}`)
+				
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error) {
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	},
 	getDataTeacherSubject({ commit }, payload) {
 		return new Promise(async (resolve, reject) => {
 			try {

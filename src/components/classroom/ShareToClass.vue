@@ -8,8 +8,8 @@
 					</span>
 				</div>
 				<span class="text-muted font-weight-bold font-size-lg">
-					{{ authenticated.name }}, selamat datang di kelas kami <br>
-					<small>Apa yang ingin anda bagikan ke kelas ini?</small>
+					{{ authenticated.name }}<br>
+					<small>Selamat datang di kelas kami</small>
 				</span>
 			</div>
 			<div class="d-flex align-items-center">

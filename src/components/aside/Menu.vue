@@ -14,7 +14,7 @@
 	        ]"
 	      >
 	        <a :href="href" class="menu-link" @click="navigate">
-	          <i class="menu-icon flaticon2-layers"></i>
+	          <i class="menu-icon flaticon-squares-4"></i>
 	          <span class="menu-text">Dashboard</span>
 	        </a>
 	      </li>
@@ -139,7 +139,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon2-speaker"></i>
+            <i class="menu-icon flaticon-book"></i>
             <span class="menu-text">Informasi</span>
           </a>
         </li>
@@ -159,7 +159,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon-event-calendar-symbol"></i>
+            <i class="menu-icon flaticon-calendar"></i>
             <span class="menu-text">Kegiatan</span>
           </a>
         </li>

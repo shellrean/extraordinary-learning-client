@@ -26,6 +26,7 @@ const mutations = {
 			name: payload.name,
 			email: payload.email,
 			isactive: payload.isactive,
+			uid: payload.uid,
 			details: payload.details == null ? {} : payload.details
 		}
 	},
@@ -35,6 +36,7 @@ const mutations = {
 			name: payload.name,
 			email: payload.email,
 			isactive: payload.isactive,
+			uid: payload.uid,
 			details: payload.details == null ? {} : payload.details
 		}
 	},
@@ -46,6 +48,9 @@ const mutations = {
 	},
 	CLEAR_STUDENT(state, payload) {
 		state.student = {}
+	},
+	CLEAR_USER(state) {
+		state.user = {}
 	},
 	CLEAR_AUTH(state, payload) {
 		state.authenticated = {}
@@ -122,7 +127,7 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
-				let network = await $axios.get(`users/student?page=${state.page}&perPage=${perPage}&q=${search}`)
+				let network = await $axios.get(`users/student?page=${state.student_page}&perPage=${perPage}&q=${search}`)
 				commit('ASSIGN_DATA_STUDENTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)

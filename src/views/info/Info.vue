@@ -9,6 +9,7 @@
 					</h3>
 					<div class="card-toolbar"> 
 						<b-button variant="primary" v-b-modal.modal-info> 
+							<i class="flaticon2-add-square"></i>
 							Tambah informasi
 						</b-button>
 					</div>
@@ -43,7 +44,6 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="infos.total"
 					        :per-page="infos.per_page"
@@ -61,6 +61,7 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
+								<span class="badge badge-primary">Total {{ infos.total }} data</span>
 							</div>
 					    </div>
 					</div>
