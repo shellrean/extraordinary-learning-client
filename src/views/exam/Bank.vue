@@ -94,6 +94,7 @@
 								<option value="50">50</option>
 								<option value="100">100</option>
 							</select>
+							<span class="badge badge-primary">Total {{ question_banks.total }} data</span>
 						</div>
 					</div>
 				</div>

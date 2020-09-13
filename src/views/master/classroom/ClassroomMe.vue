@@ -102,12 +102,12 @@
 			<form class="form">
 				<div class="form-group">
 					<label>Kelas</label>
-					<v-select label="name" :reduce="item => item.id" :options="classrooms.data" v-model="data.classroom_id">
+					<v-select label="name" :reduce="item => item.id" :options="classrooms.data" v-model="data.classroom_id" :filterable="false" @search="onSearchClassroom">
 					</v-select>
 				</div>
 				<div class="form-group">
 					<label>Matpel</label>
-					<v-select label="name" :reduce="item => item.id" :options="subjects.data" v-model="data.subject_id">
+					<v-select label="name" :reduce="item => item.id" :options="subjects.data" v-model="data.subject_id" :filterable="false" @search="onSearchSubject">
 					</v-select>
 				</div>
 			</form>
@@ -304,6 +304,7 @@ import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 import VSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import _ from 'lodash'
 
 export default {
 	name: 'SubjectMe',
@@ -567,12 +568,30 @@ export default {
 					}
             	}
             })
-		}
+		},
+		onSearchSubject(search, loading) {
+	      loading(true);
+	      this.searchSubject(loading, search, this);
+	    },
+	    searchSubject: _.debounce((loading, search, vm) => {
+	    	vm.getDataSubjects({ perPage: 50, search: escape(search) })
+	    	.then((res) => {
+	    		loading(false)
+	    	})
+	    }, 350),
+	    onSearchClassroom(search, loading) {
+	      loading(true);
+	      this.searchClassroom(loading, search, this);
+	    },
+	    searchClassroom: _.debounce((loading, search, vm) => {
+	    	vm.getDataClassrooms({ perPage: 50, search: escape(search) })
+	    	.then((res) => {
+	    		loading(false)
+	    	})
+	    }, 350),
 	},
 	created() {
 		this.changeData()
-		this.getDataSubjects({ perPage: 200 })
-		this.getDataClassrooms({ perPage: 100 })
 	},
 	watch: {
 		schedule_show_id(val) {

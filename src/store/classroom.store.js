@@ -73,7 +73,8 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.get(`classrooms`)
+				let search = payload.search ? payload.search : ''
+				let network = await $axios.get(`classrooms?q=${search}`)
 
 				commit('ASSIGN_DATA_CLASSROOMS', network.data.data)
 				commit('SET_LOADING', false, { root: true })

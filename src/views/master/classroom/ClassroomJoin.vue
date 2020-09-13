@@ -8,15 +8,8 @@
 							<div class="card-body">
 								<div class="alert bg-light-info">
 									<strong>Informasi</strong><br>
-									Minta kode kelas ke wali kelas anda
+									Anda belum mendapatkan kelas, minta walikelas anda
 								</div>
-								<div class="input-group mb-3">
-								  <input type="text" class="form-control" :class="{ 'is-invalid' : errors.invitation_code }" placeholder="Kode kelas" v-model="data.invitation_code">
-								  <div class="input-group-append">
-								    <button class="btn btn-primary" type="button" id="button-addon2" :disabled="isLoading" @click="join">{{ isLoading ? 'Processing...' : 'Gabung' }}</button>
-								  </div>
-								</div>
-								<div class="invalid-feedback" v-if="errors.password">{{ errors.invitation_code[0] }} </div>
 							</div>
 						</div>
 					</div>
