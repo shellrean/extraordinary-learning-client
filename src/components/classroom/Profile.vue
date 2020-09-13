@@ -1,33 +1,19 @@
 <template>
 	<div class="card card-custom gutter-b">
-		<div class="card-body">
+		<div class="card-body ribbon ribbon-clip ribbon-left">
+			<div class="ribbon-target" style="top: 12px;">
+				<span class="ribbon-inner bg-danger"></span>Lobi kelas
+		  	</div>
 			<div class="d-flex justify-content-between flex-column h-100">
 				<div class="h-100">
 					<div class="d-flex flex-column flex-center">
 						<div class="bgi-no-repeat bgi-size-cover rounded min-h-180px w-100" style="background-image: url(/img/img-72.jpg)"></div>
-						<a href="#" class="card-title font-weight-bolder text-dark-75 pt-7 text-hover-primary font-size-h4 m-0 pb-1">{{ classroom.name }}</a>
-						<div class="font-weight-bold text-dark-50 font-size-sm pb-7">{{ classroom.grade }}, {{ classroom.group }}</div>
+						<span class="card-title font-weight-bolder text-dark-75 pt-7  font-size-h4 m-0 pb-1">{{ classroom.name }}</span>
+						<div class="font-weight-bold text-dark-50 font-size-sm">{{ classroom.grade }}, {{ classroom.group }}</div>
 					</div>
-					<VuePerfectScrollbar
-						class="aside-menu scroll liveclass_comment"
-						style="max-height: 50vh; position: relative;"
-					>
-					<div class="d-flex align-items-center mt-2" v-for="subject in classroom_subjects">
-                    	<div class="symbol symbol-40 symbol-light symbol-sm flex-shrink-0">					
-                    		<span class="symbol-label font-size-h4 font-weight-bold">
-                    			<i class="flaticon-medal"></i>
-                    		</span>
-                    	</div>								
-                    	<div class="ml-4">									
-                    		<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">
-                    			{{ subject.subject.name }}
-                    		</div>									
-                    	</div>							
-                    </div>
-                	</VuePerfectScrollbar>
-					<div class="pt-1">
+					<div class="pt-1" v-if="schedules.length !== 0">
 						<div class="d-flex flex-center" v-if="authenticated.role == '1'">
-							<router-link :to="{ name: 'master.classroom.live.add', params: { id: $route.params.id }}" class="btn btn-primary font-weight-bolder font-size-sm py-3 px-14">
+							<router-link :to="{ name: 'master.classroom.live.add', params: { id: $route.params.id }}" class="btn btn-primary font-weight-bolder font-size-sm py-3 px-14" v-b-tooltip.hover title="Mulai kelas anda sekarang">
 								Mulai Kelas
 							</router-link>
 						</div>
@@ -35,6 +21,44 @@
 				</div>
 			</div>
 		</div>
+		<div class="card-footer pt-4 pb-4 text-center">
+			<button class="btn btn-light-primary btn-sm mr-1" :class="isLoading ? 'spinner spinner-white spinner-right': ''" v-b-tooltip.hover title="Lihat daftar siswa kelas ini" @click="showStudent" :disabled="isLoading">
+				<i class="flaticon-users-1" v-if="authenticated.role == '1' || authenticated.role == '0'"></i>
+				{{ isLoading ? '' : 'Murid kelas' }}
+			</button>
+			<button class="btn btn-light-info btn-sm" v-b-tooltip.hover title="Lihat daftar mata pelajaran kelas ini" :class="isLoading ? 'spinner spinner-white spinner-right': ''" @click="showSubject" :disabled="isLoading">
+				<i class="flaticon-clipboard"></i>
+				{{ isLoading ? '' : 'Mata pelajaran' }}
+			</button>
+		</div>
+		<b-modal id="modal-student" title="Siswa kelas" hide-footer>
+			<div class="table-responsive">
+				<VuePerfectScrollbar
+					class="aside-menu scroll liveclass_comment"
+					style="max-height: 50vh; position: relative;"
+				>
+				<table class="table table-borderless">
+					<tr  v-for="student in students">
+						<td>{{ student.name }}</td>
+					</tr>
+				</table>
+				</VuePerfectScrollbar>
+			</div>
+		</b-modal>
+		<b-modal id="modal-subject" title="Mata pelajaran kelas" hide-footer>
+			<div class="table-responsive">
+				<VuePerfectScrollbar
+					class="aside-menu scroll liveclass_comment"
+					style="max-height: 50vh; position: relative;"
+				>
+				<table class="table table-borderless">
+					<tr  v-for="subject in classroom_subjects">
+						<td>{{ subject.subject.name }}</td>
+					</tr>
+				</table>
+				</VuePerfectScrollbar>
+			</div>
+		</b-modal>
 	</div>
 </template>
 <script>
@@ -53,13 +77,32 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters(['isLoading']),
 		...mapState('user', ['authenticated']),
-		...mapState('classroom', ['classroom']),
+		...mapState('classroom', ['classroom','schedules', 'students']),
 		...mapState('subject', ['classroom_subjects'])
 	},
 	methods: {
-		...mapActions('classroom', ['getDataClassroom']),
-		...mapActions('subject',['getDataClassroomSubjects'])
+		...mapActions('classroom', ['getDataClassroom', 'getDataStudents']),
+		...mapActions('subject',['getDataClassroomSubjects']),
+		showSubject() {
+			this.getDataClassroomSubjects(this.key)
+			.then((res) => {
+				this.$bvModal.show('modal-subject')
+			})
+			.catch((error) => {
+				this.$bvToast.toast(error.message, errorToas())
+			})
+		},
+		showStudent() {
+			this.getDataStudents(this.key) 
+			.then((res) => {
+				this.$bvModal.show('modal-student')
+			})
+			.catch((error) => {
+				this.$bvToast.toast(error.message, errorToas())
+			})
+		}
 	},
 	created() {
 		if(this.authenticated.role == '2') {
@@ -73,10 +116,6 @@ export default {
 		}
 
 		this.getDataClassroom(this.key)
-		.catch((error) => {
-			this.$bvToast.toast(error.message, errorToas())
-		})
-		this.getDataClassroomSubjects(this.key)
 		.catch((error) => {
 			this.$bvToast.toast(error.message, errorToas())
 		})

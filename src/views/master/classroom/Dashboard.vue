@@ -13,6 +13,7 @@
 							</div>
 							<div class="col-xxl-6">
 								<ClassStudentLoby />
+								<ScheduleToday />
 							</div>
 						</div>
 					</div>
@@ -25,6 +26,7 @@
 import ClassProfile from '@/components/classroom/Profile'
 import ClassTimeline from '@/components/classroom/Timeline'
 import ClassStudentLoby from '@/components/classroom/StudentOnline'
+import ScheduleToday from '@/components/classroom/ScheduleToday'
 import { mapState } from 'vuex'
 
 export default {
@@ -32,7 +34,8 @@ export default {
 	components: {
 		ClassProfile,
 		ClassTimeline,
-		ClassStudentLoby
+		ClassStudentLoby,
+		ScheduleToday
 	},
 	computed: {
 		...mapState('user',['authenticated'])

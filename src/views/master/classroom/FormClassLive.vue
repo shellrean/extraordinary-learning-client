@@ -5,7 +5,7 @@
 				<div class="card-body">
 					<div class="form-group">
 						<label>Body</label>
-						<ckeditor v-model="classlive.body" v-if="showEditor" :config="editorConfig"></ckeditor>			
+						<ckeditor v-model="classlive.body" v-if="showEditor" :config="editorConfig"  type="inline"></ckeditor>			
 					</div>
 				</div>
 			</div>
@@ -14,7 +14,7 @@
 			<div class="card card-custom">
 				<div class="card-body">
 					<div class="form-group">
-						<label>Type</label>
+						<label>Media</label>
 						<select class="form-control" v-model="classlive.settings.type">
 							<option value="youtube">Youtube</option>
 							<option value="jitsi">Jitsi Meet</option>
@@ -37,11 +37,10 @@
 						<label>Meet Password</label>
 						<input type="text" class="form-control" v-model="classlive.settings.password">
 					</div>
-					<div class="form-group" v-if="typeof subjects.data != 'undefined'">
+					<div class="form-group">
 						<label>Pelajaran</label>
-						<select class="form-control" v-model="classlive.subject_id">
-							<option v-for="subject in subjects.data" :value="subject.id">{{ subject.name }}</option>
-						</select>
+						<v-select label="subject_name" :reduce="item => item.schedule_id" :options="schedules" v-model="classlive.schedule_id">
+						</v-select>
 					</div>
 				</div>
 			</div>
@@ -52,9 +51,15 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import store from '@/store'
 import { uuid } from 'vue-uuid'; 
+import VSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'FormClassroomLive',
+	components:  {
+		VSelect
+	},
 	data() {
 		return {
 			showEditor: false,
@@ -76,20 +81,26 @@ export default {
 	},
 	computed: {
 		...mapState('subject',['subjects']),
-		...mapState('classroom',['classlive'])
+		...mapState('classroom',['classlive', 'schedules'])
 	},
 	methods: {
 		...mapActions('subject',['getDataSubjects']),
+		...mapActions('classroom', ['getDataSchedulesToday'])
 	},
 	async created() {
 		try {
 			this.$store.state.classroom.classlive.settings.id_meet = this.id_random
-			await this.getDataSubjects({ perPage: 100})
+			await this.getDataSchedulesToday()
 			this.editorConfig.filebrowserUploadUrl = `${this.baseURL}/api/v1/file?`
 			this.showEditor = true
 		} catch (error) {
-
+			this.$bvToast.toast(error.message, errorToas())
 		}
 	}
 }
 </script>
+<style >
+	div[contenteditable] {
+    outline: 1px solid #616161;
+}
+</style>

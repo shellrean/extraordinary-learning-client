@@ -32,14 +32,30 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'ScheduleToday',
+	data() {
+		return {
+			key: null
+		}
+	},
 	computed: {
+		...mapState('user', ['authenticated']),
 		...mapState('classroom',['schedules'])
 	},
 	methods: {
-		...mapActions('classroom', ['getDataSchedulesToday'])
+		...mapActions('classroom', ['getDataSchedulesClassroomToday'])
 	},
 	created() {
-		this.getDataSchedulesToday()
+		if(this.authenticated.role == '2') {
+			if(typeof this.authenticated.classroom == 'undefined') {
+				this.$router.push({ name: 'master.classroom.join' })
+				return
+			}
+			this.key = this.authenticated.classroom.id
+		} else {
+			this.key = this.$route.params.id
+		}
+
+		this.getDataSchedulesClassroomToday(this.key)
 		.catch((error) => {
 
 		})

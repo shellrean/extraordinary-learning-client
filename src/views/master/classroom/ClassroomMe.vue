@@ -62,7 +62,7 @@
 												<span class="text-muted">{{ classroom.subject.name }}</span>
 											</div>
 										</div>
-										<router-link :to="{}" class="stretched-link"></router-link>
+										<router-link :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" class="stretched-link"></router-link>
 									</div>
 								</div>
 							</td>

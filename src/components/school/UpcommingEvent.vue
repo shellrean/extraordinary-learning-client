@@ -47,6 +47,7 @@
 			<div class="text-center">
 				<img src="/media/svg/banner/svg-nodata3.svg" style="max-width: 130px">
 			</div>
+			<p class="text-center">Tidak ada kegiatan mendatang</p>
 		</div>
 		<!--end::Body-->
 	</div>

@@ -12,8 +12,10 @@
 			<div class="d-flex flex-column flex-row-fluid">
 				<div class="d-flex align-items-center flex-wrap">
 					<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder pr-6">{{ comment.user.name }}
-					<i class="flaticon2-correct text-primary" v-if="comment.user.role == '1'"></i>
-					<i class="flaticon-safe-shield-protection text-primary" v-if="comment.user.role == '0'"></i></span>
+		
+					<i class="flaticon2-correct text-primary small" v-if="comment.user.role == '1'"></i>
+					<i class="flaticon-safe-shield-protection text-primary small" v-if="comment.user.role == '0'"></i>
+				</span>
 				</div>
 				<span class="text-dark-75 font-size-sm font-weight-normal pt-1">{{ comment.content }}</span>
 			</div>

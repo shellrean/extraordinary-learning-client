@@ -4,7 +4,7 @@
 			<div class="container">
 				<div class="d-flex flex-column flex-md-row">
 					<div class="flex-md-row-auto w-md-275px w-xl-325px">
-						<SchoolProfile v-if="authenticated.role == '0'"/>
+						<SchoolProfile/>
 						<ScheduleToday v-if="authenticated.role == '1'"/>
 					</div>
 					<div class="flex-md-row-fluid ml-md-6 ml-lg-8">

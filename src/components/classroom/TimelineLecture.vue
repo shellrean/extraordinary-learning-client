@@ -30,16 +30,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="card card-custom gutter-b mt-5" v-if="classroom_lectures.data.length == 0 ">
-			<div class="card-body">
+		<div class="mt-7" v-if="classroom_lectures.data.length == 0 ">
+			<div class="">
 				<div class="text-center">
 					<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
 				</div>
+				<p class="text-center">Tidak ada materi yang dibagikan</p>
 			</div>
 		</div>
 		<b-pagination
 			v-if="classroom_lectures.data.length > 0"
-			pills 
 			v-model="page"
 			:total-rows="classroom_lectures.total"
 			:per-page="classroom_lectures.per_page"

@@ -37,11 +37,12 @@
 			</div>
 		</div>
 		<div v-else>
-			<div class="card card-custom gutter-b">
-				<div class="card-body">
+			<div class="">
+				<div class="">
 					<div class="text-center">
 						<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
 					</div>
+					<p class="text-center">Tidak ada informasi yang dibagikan</p>
 				</div>
 			</div>
 		</div>

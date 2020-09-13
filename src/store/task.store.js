@@ -1,7 +1,9 @@
 import $axios from '@/core/services/api.service'
 
 const state = () => ({
-	tasks: [],
+	tasks: {
+		data: []
+	},
 	classroom_tasks: [],
 	classroom_submit_tasks: [],
 	classroom_results: [],

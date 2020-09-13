@@ -30,11 +30,12 @@
 				</div>
 			</div>
 		</div>
-		<div class="card card-custom gutter-b mt-5" v-if="classroom_tasks.data.length == 0 ">
-			<div class="card-body">
+		<div class="mt-7" v-if="classroom_tasks.data.length == 0 ">
+			<div class="">
 				<div class="text-center">
 					<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
 				</div>
+				<p class="text-center">Tidak ada tugas yang dibagikan</p>
 			</div>
 		</div>
 		<b-pagination

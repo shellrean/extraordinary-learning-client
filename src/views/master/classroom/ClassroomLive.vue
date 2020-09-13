@@ -18,16 +18,16 @@
 						<div class="card card-custom">
 							<div class="card-header flex-wrap border-0 pt-6 pb-0">
 									<h3 class="card-title align-items-start flex-column">
-									<span class="card-label font-weight-bolder text-dark">Live Classroom  <span class="text-success">Online</span></span>
+									<span class="card-label font-weight-bolder text-dark">Kelas langsung <span class="text-success">Online</span></span>
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ classlive.created_at }}</span>
 								</h3>
 								<div class="card-toolbar" v-if="authenticated.role == '0' || authenticated.role == '1'">
 									<div class="form-group">
-										<button class="btn btn-light-primary mr-2" v-b-modal.modal-abcent>
-											Lihat absen
+										<button class="btn btn-light-primary mr-2" v-b-modal.modal-abcent v-b-tooltip.hover title="Lihat absensi hari ini">
+											<i class="flaticon2-indent-dots"></i> Lihat absen
 										</button>
-										<button class="btn btn-danger" @click="closeClass">
-											Tutup Kelas
+										<button class="btn btn-light-danger" @click="closeClass" v-b-tooltip.hover title="Tutup kelas pada hari ini">
+											<i class="flaticon2-rocket-1"></i> Tutup Kelas
 										</button>
 									</div>
 								</div>
@@ -69,7 +69,7 @@
                     <span class="badge badge-info">{{ row.item.isabcent ? 'Hadir' : 'Tidak hadir' }}</span>
                 </template>
                 <template v-slot:cell(type)="row">
-                	{{ row.item.details != null && typeof row.item.details.type != 'undefined' ? row.item.details.type : '-' }}
+                	{{ row.item.reason | textReason }}
                 </template>
             </b-table>
 			</VuePerfectScrollbar>
@@ -98,7 +98,14 @@ export default {
 			],
 			width: '',
 			height: '',
-			bg: true
+			bg: true,
+			reasons: [
+				"-",
+				"Tanpa keterangan",
+				"Sakit",
+				"Izin",
+				"Masalah"
+			]
 		}
 	},
 	components: {
@@ -106,6 +113,11 @@ export default {
 		StudentComment,
 		VuePerfectScrollbar,
 		VueJitsiMeet: JitsiMeet
+	},
+	filters: {
+		textReason(i) {
+			return this.reasons[parseInt(i)];
+		}
 	},
 	computed: {
 		...mapGetters(['isLoading']),
@@ -181,6 +193,7 @@ export default {
 	},
 	async created() {
 		try {
+			this.channel = 'classlive_'+this.$route.params.id
 			if(window.innerWidth >= 1200) {
 				this.width = 1130
 			} else if(window.innerWidth >= 992) {
@@ -196,8 +209,18 @@ export default {
 				this.videoId = this.$youtube.getIdFromUrl(this.classlive.settings.link)
 			}
 		} catch (error) {
+			if(error.code === 403) {
+				this.$router.push({ name: 'dashboard' })
+			}
 			this.$bvToast.toast(error.message, errorToas())
 		}
+	},
+	mounted() {
+		this.socket.open();
+		this.socket.emit('getin', {
+			user: this.authenticated,
+			channel: this.channel
+		});
 	},
 	watch: {
 		async classlive() {
@@ -206,8 +229,7 @@ export default {
 					await this.getDataStudents(this.classlive.classroom_id)
 				}
 				await this.getAbcentToday({
-					subject_id: this.classlive.subject_id,
-					classroom_id: this.classlive.classroom_id
+					schedule_id: this.classlive.schedule_id
 				})
 
 				let index = this.abcents.map(function(item) { 
@@ -217,8 +239,8 @@ export default {
 				if(index == '' || index == -1) {
 					await this.storeAbcentToday({
 						isabcent: true,
-						subject_id: this.classlive.subject_id,
-						classroom_id: this.classlive.classroom_id,
+						schedule_id: this.classlive.schedule_id,
+						reason: '0'
 					})
 				}
 			} catch (error) {
