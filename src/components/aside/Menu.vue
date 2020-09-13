@@ -385,30 +385,6 @@
             </a>
           </li>
         </router-link>
-        <li class="menu-section" v-if="$role('1')">
-            <h4 class="menu-text">Reporting</h4>
-            <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-        </li>
-        <router-link
-          :to="{ name: 'report.abcent' }"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-          v-if="$role('1')"
-        >
-          <li
-            aria-haspopup="true"
-            data-menu-toggle="hover"
-            class="menu-item"
-            :class="[
-              isActive && 'menu-item-active',
-              isExactActive && 'menu-item-active'
-            ]"
-          >
-            <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon2-box-1"></i>
-              <span class="menu-text">Report absensi</span>
-            </a>
-          </li>
-        </router-link>
         <li class="menu-section" v-if="$role('0')">
             <h4 class="menu-text">System</h4>
             <i class="menu-icon ki ki-bold-more-hor icon-md"></i>

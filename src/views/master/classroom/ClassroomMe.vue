@@ -40,13 +40,16 @@
 								<div class="card">
 									<div class="card-header p-0 d-flex justify-content-between">
 										<div class="d-flex align-items-center">
-											<b-button squared class="mr-1" variant="light-success" size="sm" @click="getSchedules(classroom.id)" v-b-tooltip.hover title="Daftar jadwal">
+											<b-button squared class="mr-1" variant="light-success" size="sm" @click="getSchedules(classroom.id)" v-b-tooltip.hover title="Daftar jadwal" :disabled="isLoading">
 												<i class="flaticon-list-2"></i>
 											</b-button>
-											<b-button squared class="mr-1" variant="light-primary" size="sm" @click="addSchedule(classroom.id)" v-b-tooltip.hover title="Tambah jadwal">
+											<b-button squared class="mr-1" variant="light-primary" size="sm" @click="addSchedule(classroom.id)" v-b-tooltip.hover title="Tambah jadwal" :disabled="isLoading">
 												<i class="flaticon-file-1"></i>
 											</b-button>
-											<b-button squared variant="light-danger" size="sm" @click="deleteClassroomSubject(classroom.id)" v-b-tooltip.hover title="Hapus kelas">
+											<b-button squared class="mr-1" variant="light-warning" size="sm" @click="modalAbsent(classroom.id)" v-b-tooltip.hover title="Laporan absensi" :disabled="isLoading">
+												<i class="flaticon-interface-10"></i>
+											</b-button>
+											<b-button squared variant="light-danger" size="sm" @click="deleteClassroomSubject(classroom.id)" v-b-tooltip.hover title="Hapus kelas" :disabled="isLoading">
 												<i class="flaticon2-trash"></i>
 											</b-button>
 										</div>
@@ -161,6 +164,81 @@
 			    </b-button>
 			</template>
 		</b-modal>
+		<b-modal id="modal-report-abcent" title="Laporan absensi" size="xl" hide-footer>
+			<template v-slot:modal-header>
+				<div class="input-icon">
+					<select class="form-control form-control-solid" v-model="schedule_show_id">
+						<option :value="schedule.id" v-for="schedule in schedules">
+							{{ schedule.day | dayIndex }} ({{ schedule.from_time.substring(0, 5) }} - {{ schedule.end_time.substring(0,5) }})
+						</option>
+					</select>
+					<span>
+						<i class="flaticon2-search-1 text-muted"></i>
+					</span>
+				</div>
+				<div v-if="schedule_show_id != ''">
+					<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
+						<template v-slot:button-content>
+							<b-button variant="light-primary" class="font-weight-bolder font-size-sm">
+								<i class="flaticon-file-2"></i>
+								Export/Cetak
+							</b-button>
+						</template>
+						<b-dropdown-item @click="print">Cetak/Pdf</b-dropdown-item>
+						<b-dropdown-item @click="download">Download excel</b-dropdown-item>
+					</b-dropdown>
+					<b-button v-b-modal.modal-1 variant="primary" v-b-tooltip.hover title="Fitler tanggal absensi">Filter tanggal
+					</b-button>
+				</div>
+			</template>
+			<div class="container">
+				
+				<div class="table-responsive-md"  id="printMe">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<td width="50px">No</td>
+								<td>Nama</td>
+								<td>Kehadiran</td>
+								<td>Status</td>
+								<td>Keterangan</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(abcent,index) in abcents">
+								<td>{{ index+1 }}</td>
+								<td>{{ abcent.user.name }}</td>
+								<td>{{ abcent.isabcent == 1 ? 'Hadir' : 'Tidak hadir' }}</td>
+								<td>{{ abcent.reason | textReason }}</td>
+								<td>{{ abcent.desc }}</td>
+							</tr>
+							<tr v-if="abcents.length == 0">
+								<td colspan="5">
+									Tidak ada data ditanggal ini
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="d-flex align-items-center py-3">
+						<div class="d-flex align-items-center" v-if="isLoading">
+							<div class="mr-2 text-muted">Loading...</div>
+							<div class="spinner spinner-primary mr-10"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</b-modal>
+		<b-modal id="modal-1" title="Filter tanggal" hide-footer>
+			<div class="form-group">
+				<label>Tanggal</label>
+				<input type="date" class="form-control form-control-lg form-control-solid" v-model="date_report"  name="">
+			</div>
+			<div class="form-group">
+				<b-button @click="filterDate" variant="primary" :disabled="isLoading">
+					{{ isLoading ? 'Processing...' : 'Filter' }}
+				</b-button>
+			</div>
+		</b-modal>
 	</div>
 </template>
 <script>
@@ -192,7 +270,16 @@ export default {
 				{ id: 5, name: 'Jumat' },
 				{ id: 6, name: 'Sabtu' }
 			],
-			id_show: null
+			reasons: [
+				"-",
+				"Tanpa keterangan",
+				"Sakit",
+				"Izin",
+				"Masalah"
+			],
+			id_show: null,
+			schedule_show_id: '',
+			date_report: null
 		}
 	},
 	computed: {
@@ -201,6 +288,7 @@ export default {
 		...mapState('classroom',['myclassrooms', 'classrooms', 'schedule', 'schedules']),
 		...mapState('subject', ['subjects']),
 		...mapState('user', ['authenticated']),
+		...mapState('abcent', ['abcents']),
 		groupedClass() {
 			let group = this.myclassrooms.reduce((r, a) => {
 				r[a.classroom.grade] = [...r[a.classroom.grade] || [], a];
@@ -231,11 +319,15 @@ export default {
 				return days[index].name
 			}
 			return 'Day not found'
+		},
+		textReason(i) {
+			return this.reasons[parseInt(i)];
 		}
 	},
 	methods: {
 		...mapActions('classroom', ['getDataClassromMine','getDataClassrooms', 'createNewClassroomSubject', 'deleteDataClassroomSubject', 'updateDataSchedule', 'createDataSchedule', 'getDataSchedules', 'getDataSchedule', 'deleteDataSchedule']),
 		...mapActions('subject', ['getDataSubjects']),
+		...mapActions('abcent', ['getAbcentToday', 'downloadExcel']),
 		clearForm() {
 			this.data = {
 				subject_id: null,
@@ -340,12 +432,59 @@ export default {
 		addSchedule(id) {
 			this.schedule.classroom_subject_id = id
 			this.$bvModal.show('modal-schedule-add')
-		}
+		},
+		async modalAbsent(id) {
+			try {
+				await this.getDataSchedules(id)
+				this.id_show = id
+				this.$bvModal.show('modal-report-abcent')
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
+		print () {
+      		this.$htmlToPaper('printMe');
+    	},
+    	async filterDate() {
+    		try {
+				if(this.classroom_id != '') {
+					this.getAbcentToday({ 
+						schedule_id: this.schedule_show_id,
+						date: this.date_report
+					})
+					this.$bvModal.hide('modal-1')
+				}
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+    	},
+    	async download() {
+			try {
+				await this.downloadExcel({
+					schedule_id: this.schedule_show_id,
+					date: this.date_report
+				})
+			} catch (error) {
+				this.$bvToast.toast(error.message, errorToas())
+			}
+		},
 	},
 	created() {
 		this.changeData()
 		this.getDataSubjects({ perPage: 200 })
 		this.getDataClassrooms({ perPage: 100 })
+	},
+	watch: {
+		schedule_show_id(val) {
+			this.getAbcentToday(val)
+		}
 	}
 }
 </script>
+<style>
+@media print {
+    @page {
+        size: landscape;
+    }
+}
+</style>
