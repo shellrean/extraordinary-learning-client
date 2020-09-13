@@ -39,7 +39,6 @@
 			</div>
 		</div>
 		<b-pagination
-			pills 
 			v-if="classroom_tasks.data.length > 0"
 			v-model="page"
 			:total-rows="classroom_tasks.total"

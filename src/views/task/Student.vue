@@ -39,7 +39,6 @@
 	                    </b-table>
 	                    <div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 						    <b-pagination
-						      	pills 
 						        v-model="page"
 						        :total-rows="classroom_tasks.total"
 						        :per-page="classroom_tasks.per_page"

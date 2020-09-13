@@ -10,12 +10,7 @@
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline">
 							<b-button variant="primary" v-b-modal.modal-create>
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/Flatten.svg"
-						          />
-						        </span>
+								<i class="flaticon2-add-square"></i>
 								Tambah jadwal
 							</b-button>
 						</div>

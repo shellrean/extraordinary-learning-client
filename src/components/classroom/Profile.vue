@@ -22,8 +22,8 @@
 			</div>
 		</div>
 		<div class="card-footer pt-4 pb-4 text-center">
-			<button class="btn btn-light-primary btn-sm mr-1" :class="isLoading ? 'spinner spinner-white spinner-right': ''" v-b-tooltip.hover title="Lihat daftar siswa kelas ini" @click="showStudent" :disabled="isLoading">
-				<i class="flaticon-users-1" v-if="authenticated.role == '1' || authenticated.role == '0'"></i>
+			<button class="btn btn-light-primary btn-sm mr-1" :class="isLoading ? 'spinner spinner-white spinner-right': ''" v-b-tooltip.hover title="Lihat daftar siswa kelas ini" @click="showStudent" :disabled="isLoading" v-if="authenticated.role == '1' || authenticated.role == '0'">
+				<i class="flaticon-users-1" ></i>
 				{{ isLoading ? '' : 'Murid kelas' }}
 			</button>
 			<button class="btn btn-light-info btn-sm" v-b-tooltip.hover title="Lihat daftar mata pelajaran kelas ini" :class="isLoading ? 'spinner spinner-white spinner-right': ''" @click="showSubject" :disabled="isLoading">

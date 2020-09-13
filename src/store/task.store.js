@@ -15,7 +15,8 @@ const state = () => ({
 		isactive: true,
 		deadline: ''
 	},
-	classroom_task_page: 1
+	classroom_task_page: 1,
+	upload_progress: 0
 })
 
 const mutations = {
@@ -57,6 +58,9 @@ const mutations = {
 	},
 	SET_CLASSROOM_TASK_PAGE(state, payload) {
 		state.classroom_task_page = payload
+	},
+	SET_UPLOAD_PROGRESS(state, payload) {
+		state.upload_progress = payload
 	}
 }
 
@@ -267,8 +271,12 @@ const actions = {
 					network = await $axios.post(`tasks/${id}/collect`, data, {
 						headers: {
 				            'content-type': 'multipart/form-data'
-				        }
+				        },
+				        onUploadProgress: function( progressEvent ) {
+	                        commit('SET_UPLOAD_PROGRESS', parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total)))
+	                    }.bind(this)
 					})
+
 				} else {
 					network = await $axios.post(`tasks/${id}/collect`, data)
 				}

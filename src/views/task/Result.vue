@@ -8,11 +8,28 @@
 						<span class="text-muted mt-1 font-weight-bold font-size-sm">Hasil nilai tugas siswa</span>
 					</h3>
 					<div class="card-toolbar">
-						<div class="form-group">
-							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary mr-2">
+						<div class="">
+							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary">
 								<i class="flaticon2-left-arrow-1"></i>Kembali
 							</router-link>
-							<button class="btn btn-primary"  @click="print">Pdf/Cetak</button>
+							<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret v-if="classroom_id != ''">
+								<template v-slot:button-content>
+									<b-button variant="primary" class="font-weight-bolder font-size-sm">
+										<i class="flaticon-interface-11"></i>
+										Export/Cetak
+									</b-button>
+								</template>
+								<b-dropdown-item @click="print">Cetak/Pdf</b-dropdown-item>
+								<b-dropdown-item>
+									 <download-excel
+	                                :data = "classroom_results"
+	                                :fields="json_fields"
+	                                :name="'Hasil tugas.xls'"
+	                            >
+	                                Download hasil ujian
+	                            </download-excel>
+								</b-dropdown-item>
+							</b-dropdown>
 						</div>
 					</div>
 				</div>
@@ -24,7 +41,7 @@
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
 											<select class="form-control form-control-solid" v-model="classroom_id">
-												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms">{{ classroom.classroom.name }} - {{ classroom.subject.name }}</option>
+												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms">{{ classroom.classroom.name }}</option>
 											</select>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
@@ -38,6 +55,7 @@
 					</div>
 					<div class="table-responsive-md" id="printMe">
 						<b-table 
+						bordered
                         id="table-transition-example" 
                         show-empty
                         :fields="fields"
@@ -45,23 +63,12 @@
                         >
                         	<template v-slot:cell(name)="row">
                         		<span>
-                        			<div class="d-flex align-items-center">
-                        				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">
-                        					<span class="symbol-label font-size-h4 font-weight-bold ">
-                        						{{ row.item.student.name.charAt(0) }}
-                        					</span>
-                        				</div>
-                        				<div class="ml-4 d-flex flex-column">
-                        					<span class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.student.name"></span>
-                        				</div>
-                        			</div>
+                        			{{ row.item.student.name }}
                         		</span>
                         	</template>
                         	<template v-slot:cell(result)="row">
                         		<span>
-                        			<div class="d-flex align-items-center">
-                        				<span class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.result.point"></span>
-                        			</div>
+                        			{{ row.item.result.point }}
                         		</span>
                         	</template>
                     	</b-table>
@@ -82,18 +89,26 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { errorToas, successToas } from '@/core/entities/notif'
+import { BDropdown, BDropdownItem, BButton } from 'bootstrap-vue'
+import downloadExcel from 'vue-json-excel';
 
 export default {
 	name: 'TaskResult',
 	components: {
-
+		BDropdownItem, BDropdown, BButton, downloadExcel
 	},
 	data: () => ({
 		classroom_id: '',
 		fields: [
-			{ key: 'name', thStyle: { display: 'none' }},
-			{ key: 'result', thStyle: { display: 'none' }}
-		]
+			{ key: 'uid', label: 'NIS' },
+			{ key: 'name', label:'Nama' },
+			{ key: 'result', label: 'Hasil' }
+		],
+		json_fields: {
+			'NIS': 'uid',
+			'NAMA PESERTA DIDIK': 'student.name',
+			'NILAI': 'result.point'
+		}
 	}),
 	computed: {
 		...mapGetters(['isLoading']),

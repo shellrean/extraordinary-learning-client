@@ -1,5 +1,5 @@
 <template>
-	<div>	
+	<div class="mt-3">	
 		<div class="card card-custom" v-if="!task.status">
 			<div class="card-header  flex-wrap border-0 pt-6 pb-0">
 				<h3 class="card-title align-items-start flex-column">
@@ -7,7 +7,7 @@
 					<span class="text-primary mt-1 font-weight-bold font-size-sm">Batas {{ task.lastsubmit }}</span>
 				</h3>
 				<div class="card-toolbar">
-					<div class="form-group">		
+					<div class="">		
 						<button class="btn btn-primary" :disabled="isLoading" @click="submit"><i class="flaticon-edit-1"></i> {{ isLoading ? 'Processing...' : 'Submit' }}</button>
 					</div>
 				</div>
@@ -22,6 +22,7 @@
 				   </template>
 				</b-form-file>
 				<ckeditor v-model="content" v-if="task.type == '2' && showEditor" :config="editorConfig"></ckeditor>
+				<b-progress :value="upload_progress" :max="100" show-progress animated></b-progress>
 			</div>
 		</div>
 		<div v-else>
@@ -30,7 +31,7 @@
 	</div>
 </template>
 <script>
-import { BFormFile, BBadge } from 'bootstrap-vue'
+import { BFormFile, BBadge, BProgress } from 'bootstrap-vue'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
 import store from '@/store'
@@ -39,7 +40,7 @@ export default {
 	name: 'SendTask',
 	components: {
 		BFormFile,
-		BBadge
+		BBadge, BProgress
 	},
 	data() {
 		return {
@@ -59,7 +60,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['isLoading', 'baseURL']),
-		...mapState('task',['task']),
+		...mapState('task',['task', 'upload_progress']),
 	},
 	methods: {
 		...mapActions('task',['sendTask']),
