@@ -69,12 +69,12 @@ const mutations = {
 }
 
 const actions = {
-	getDataClassrooms({ commit }, payload) {
+	getDataClassrooms({ commit, state }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
 				let search = payload.search ? payload.search : ''
-				let network = await $axios.get(`classrooms?q=${search}`)
+				let network = await $axios.get(`classrooms?page=${state.page}&q=${search}`)
 
 				commit('ASSIGN_DATA_CLASSROOMS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
