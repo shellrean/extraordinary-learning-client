@@ -1,5 +1,27 @@
 <template>
 	<div class="card card-custom gutter-b">
+		<div class="card-header  p-4 d-flex justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="symbol symbol-45 symbol-light-primary mr-5">
+					<b-button variant="primary"  v-b-toggle="'dent_1'">
+			 			<i class="flaticon2-talk"></i>
+					</b-button>
+				</div>
+				<div class="d-flex flex-column flex-grow-1">
+					<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+						Data sekolah
+					</span>
+					<div class="d-flex">
+						<div class="d-flex align-items-center pr-5">
+							<span class="svg-icon svg-icon-md svg-icon-primary">
+							</span>
+							<span class="text-muted font-weight-bold">Data sekolah singkat</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<b-collapse :id="'dent_1'">
 		<div class="card-body">
 			<div class="d-flex justify-content-between flex-column h-100" v-if="typeof school.settings != 'undefined'">
 				<div class="h-100">
@@ -53,13 +75,18 @@
 				</div>
 			</div>
 		</div>
+		</b-collapse>
 	</div>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import { BButton, BCollapse } from 'bootstrap-vue'
 
 export default {
 	name: 'SchoolProfile',
+	components: {
+		BButton, BCollapse
+	},
 	computed: {
 		...mapState('setting', ['school']),
 		...mapState('classroom',['classrooms']),
