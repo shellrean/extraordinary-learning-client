@@ -72,11 +72,11 @@ const actions = {
 			}
 		})
 	},
-	createNewTeacher({ commit }, payload) {
+	createNewTeacher({ commit, state }, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
-				let network = await $axios.post(`users/teacher`, payload)
+				let network = await $axios.post(`users/teacher`, state.user)
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
 			} catch (error) {
