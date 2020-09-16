@@ -11,13 +11,13 @@
 						</div>
 						<div class="d-flex flex-column flex-grow-1">
 							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
-								Standart
+								Perangkat pengajaran
 							</span>
 							<div class="d-flex">
 								<div class="d-flex align-items-center pr-5">
 									<span class="svg-icon svg-icon-md svg-icon-primary">
 									</span>
-									<span class="text-muted font-weight-bold">Daftar standart</span>
+									<span class="text-muted font-weight-bold">Daftar perangkat pengajaran</span>
 								</div>
 							</div>
 						</div>
@@ -26,7 +26,7 @@
 						<div class="dropdown dropdown-inline">
 							<b-button variant="primary" v-b-modal.modal-create>
 								<i class="flaticon2-add-square"></i>
-								Tambah standart
+								Tambah perangkat
 							</b-button>
 						</div>
 					</div>
@@ -34,7 +34,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-8" v-if="typeof standarts.data != 'undefined'">
-					<div class="card" v-for="(row,index) in standarts.data">
+					<div class="card" v-for="(row,index) in standarts.data" :key="index">
 						<div class="card-header p-4 pb-0">
 							<div class="d-flex align-items-center">
 								<b-button size="sm" variant="white" v-b-toggle="'standart_'+row.id" v-b-tooltip.hover title="Toggle list standart">
@@ -102,7 +102,7 @@
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Standart" size="lg" @hide="$store.commit('standart/CLEAR_DATA_STANDART')">
+		<b-modal id="modal-create" title="Perangkat pengajaran" size="lg" @hide="$store.commit('standart/CLEAR_DATA_STANDART')">
 			<div class="form-group">
 				<label>Type</label>
 				<input type="text" class="form-control form-control-lg form-control-solid" v-model="standart.type"/>
@@ -180,7 +180,7 @@
 						await this.createDataStandart()
 					}
 					this.changeData()
-					this.$bvToast.toast('Standart berhasil disimpan', successToas())
+					this.$bvToast.toast('Perangkat pengajaran berhasil disimpan', successToas())
 					this.$bvModal.hide('modal-create')
 				} catch (error) {
 					this.$bvToast.toast(error.message, errorToas())
@@ -202,7 +202,7 @@
 			deleteStandart(id) {
 				this.$swal({
 	                title: 'Informasi',
-	                text: "Standart akan dihapus beserta dengan data yang terkait",
+	                text: "Perangkat akan dihapus beserta dengan data yang terkait",
 	                icon: 'warning',
 	                showCancelButton: true,
 	                confirmButtonColor: '#3085d6',

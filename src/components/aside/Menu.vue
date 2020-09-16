@@ -200,7 +200,7 @@
           >
             <a :href="href" class="menu-link" @click="navigate">
               <i class="menu-icon flaticon2-crisp-icons"></i>
-              <span class="menu-text">Standart</span>
+              <span class="menu-text">Perangkat</span>
             </a>
           </li>
         </router-link>
