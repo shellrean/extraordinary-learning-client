@@ -185,7 +185,7 @@
           </li>
         </router-link>
         <router-link
-          :to="{ name: 'standart.index' }"
+          :to="{ name: 'paper.dashboard' }"
           v-slot="{ href, navigate, isActive, isExactActive }"
           v-if="$role('1')"
         >

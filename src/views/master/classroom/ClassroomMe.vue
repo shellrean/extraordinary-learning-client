@@ -51,24 +51,24 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4" v-for="grade in groupedClass">
+				<div class="col-md-4" v-for="grade in groupedClass"> 
 					<table class="table table-borderless table-sm">
-						<tr v-for="classroom in grade">
+						<tr v-for="classroom in grade" :key="classroom.id">
 							<td>
 								<div class="card">
 									<div class="card-header p-0 d-flex justify-content-between">
 										<div class="d-flex align-items-center">
 											<b-button squared class="mr-1" variant="light-success" size="sm" @click="getSchedules(classroom.id)" v-b-tooltip.hover title="Daftar jadwal" :disabled="isLoading">
-												<i class="flaticon-list-2"></i>
+												<i class="flaticon-list-2"></i> Jadwal
 											</b-button>
 											<b-button squared class="mr-1" variant="light-primary" size="sm" @click="addSchedule(classroom.id)" v-b-tooltip.hover title="Tambah jadwal" :disabled="isLoading">
-												<i class="flaticon-file-1"></i>
+												<i class="flaticon-file-1"></i> + Jadwal
 											</b-button>
 											<b-button squared class="mr-1" variant="light-warning" size="sm" @click="modalAbsent(classroom.id)" v-b-tooltip.hover title="Laporan absensi" :disabled="isLoading">
-												<i class="flaticon-interface-10"></i>
+												<i class="flaticon-interface-10"></i> Laporan
 											</b-button>
 											<b-button squared variant="light-danger" size="sm" @click="deleteClassroomSubject(classroom.id)" v-b-tooltip.hover title="Hapus kelas" :disabled="isLoading">
-												<i class="flaticon2-trash"></i>
+												<i class="flaticon2-trash"></i> Hapus
 											</b-button>
 										</div>
 									</div>

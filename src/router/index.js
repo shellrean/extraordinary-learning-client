@@ -29,6 +29,9 @@ const SubjectMe = () => import('@/views/master/subject/SubjectMe')
 const StandartIndex = () => import('@/views/standart/Index')
 const StandartData = () => import('@/views/standart/Standart')
 
+const PaperIndex = () => import('@/views/paper/Index')
+const PaperDashboard = () => import('@/views/paper/Dashboard')
+
 const LectureIndex = () => import('@/views/lecture/Index')
 const LectureData = () => import('@/views/lecture/Lecture')
 const LectureAdd = () => import('@/views/lecture/Add')
@@ -222,6 +225,17 @@ Vue.use(VueRouter)
             path: '',
             name: 'standart.index',
             component: StandartData
+          }
+        ]
+      },
+      {
+        path: 'paper',
+        component: PaperIndex,
+        children: [
+          {
+            path: '',
+            name: 'paper.dashboard',
+            component: PaperDashboard
           }
         ]
       },
