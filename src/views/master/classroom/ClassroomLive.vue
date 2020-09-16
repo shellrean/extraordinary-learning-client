@@ -116,7 +116,14 @@ export default {
 	},
 	filters: {
 		textReason(i) {
-			return this.reasons[parseInt(i)];
+			let reasons = [
+				"-",
+				"Tanpa keterangan",
+				"Sakit",
+				"Izin",
+				"Masalah"
+			]
+			return reasons[parseInt(i)];
 		}
 	},
 	computed: {

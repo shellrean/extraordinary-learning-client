@@ -17,7 +17,7 @@
 				<VuePerfectScrollbar
 					style="max-height: 40vh; position: relative;"
 				>
-				<div class="d-flex align-items-center mb-8 mt-2" v-for=" student in no_attends">
+				<div class="d-flex align-items-center mb-8 mt-2" v-for=" student in no_attends" :key="student.id">
 					<!--begin::Symbol-->
 					<div class="symbol symbol-40 symbol-light mr-5">
 						<div class="symbol-label text-warning">
@@ -56,7 +56,7 @@
 					style="max-height: 40vh; position: relative;"
 				>
 				<!--begin::Item-->
-				<div class="d-flex align-items-center mb-8 mt-2" v-for="user in users">
+				<div class="d-flex align-items-center mb-8 mt-2" v-for="user in users" :key="user.id">
 					<!--begin::Symbol-->
 					<div class="symbol symbol-40 symbol-light mr-5">
 						<div class="symbol-label text-success">
@@ -159,10 +159,10 @@ export default {
 			try {
 				await this.storeAbcentToday({
 					user_id: this.id_set,
-					subject_id: this.classlive.subject_id,
-					classroom_id: this.classlive.classroom_id,
+					schedule_id: this.classlive.schedule_id,
 					isabcent: false,
-					desc: this.data.details.desc,
+					reason: this.data.reason,
+					desc: this.data.desc,
 					details: this.data.details
 				})
 				this.$bvModal.hide('modal-desc')
