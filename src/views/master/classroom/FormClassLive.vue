@@ -85,12 +85,12 @@ export default {
 	},
 	methods: {
 		...mapActions('subject',['getDataSubjects']),
-		...mapActions('classroom', ['getDataSchedulesToday'])
+		...mapActions('classroom', ['getDataSchedulesToday', 'getDataSchedulesClassroomToday'])
 	},
 	async created() {
 		try {
 			this.$store.state.classroom.classlive.settings.id_meet = this.id_random
-			await this.getDataSchedulesToday()
+			await this.getDataSchedulesClassroomToday(this.$route.params.id)
 			this.editorConfig.filebrowserUploadUrl = `${this.baseURL}/api/v1/file?`
 			this.showEditor = true
 		} catch (error) {
