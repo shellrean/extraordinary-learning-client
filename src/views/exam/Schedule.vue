@@ -39,7 +39,7 @@
 						  	<template v-slot:cell(details)="row">
 								<b-button size="sm" variant="white" @click="row.toggleDetails">
 									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-primary"></i>
+										<i :class="row.detailsShowing ? 'flaticon-circle' : 'flaticon-plus'" class="text-primary"></i>
 									</small>
 								</b-button>
 							</template>
@@ -55,7 +55,7 @@
 							</template>
 							<template v-slot:row-details="row">
 								<div class="card">
-									<div class="card-body">
+									<div class="card-body p-2">
 										<div class="table-responsive-md">
 											<table class="table table-bordered">
 												<tr>

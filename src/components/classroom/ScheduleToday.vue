@@ -23,7 +23,7 @@
 					</div>
 				</div>
 			</div>
-			<span v-if="schedules.length === 0">Tidak ada jadwal mengajar hari ini</span>
+			<span v-if="schedules.length === 0">Tidak ada jadwal pelajaran hari ini</span>
 		</div>
 	</div>
 </template>
