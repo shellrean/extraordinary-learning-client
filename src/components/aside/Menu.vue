@@ -259,7 +259,7 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon-notes"></i>
+              <i class="menu-icon flaticon-interface-11"></i>
               <span class="menu-text">Materi</span>
             </a>
           </li>

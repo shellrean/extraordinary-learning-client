@@ -3,10 +3,16 @@
 		<ShareToClass v-if="authenticated.role == '1'"/>
 		<TimelineClassLive />
 		<b-tabs align="center">
-	    	<b-tab title="Materi" active>
+	    	<b-tab active>
+	    		<template v-slot:title>
+		       		<i class="flaticon-list-1"></i>Materi
+		      	</template>
 				<TimelineLecture class="mt-5"/>
 	      	</b-tab>
-	      	<b-tab title="Tugas">
+	      	<b-tab>
+	      		<template v-slot:title>
+		       		<i class="flaticon-edit-1"></i>Materi
+		      	</template>
 	    		<TimelineTask class="mt-5"/>
 	      	</b-tab>
 	    </b-tabs>
