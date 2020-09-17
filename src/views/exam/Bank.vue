@@ -1,121 +1,109 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
-				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Banksoal</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Daftar bnaksoal</span>
-					</h3>
+			<div class="card mb-10">
+				<div class="card-header p-4 d-flex justify-content-between">
+					<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
+							<span class="symbol-label">
+								<i class="flaticon2-crisp-icons text-primary"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+								Banksoal
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary">
+									</span>
+									<span class="text-muted font-weight-bold">Daftar banksoal</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline">
 							<b-button variant="primary" v-b-modal.modal-create>
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/Flatten.svg"
-						          />
-						        </span>
+								<i class="flaticon2-add-square"></i>
 								Tambah banksoal
 							</b-button>
 						</div>
 					</div>
 				</div>
-				<div class="card-body">
-					<div class="table-responsive-md" v-if="typeof question_banks.data != 'undefined'">
-						<b-table :fields="fields"
-						  :items="question_banks.data">
-							<template v-slot:cell(details)="row">
-								<b-button size="sm" variant="white" @click="row.toggleDetails">
-									<small>
-										<i :class="row.detailsShowing ? 'flaticon2-cross' : 'flaticon2-right-arrow'" class="text-primary"></i>
-									</small>
-								</b-button>
-							</template>
-							<template v-slot:cell(code)="row">
-								<span style="width: 250px;">
-									<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-										<router-link :to="{ name: 'exam.bank.questions', params: { id: row.item.id } }" class="text-dark mb-1 font-size-lg text-hover-primary">
-											{{ row.item.code }}
-										</router-link>
-										<span class="text-muted font-weight-bold">{{ row.item.subject.name }}</span>
-									</div>
-								</span>
-							</template>
-							<template v-slot:row-details="row">
-								<div class="card">
-									<div class="card-body">
-										<div class="table-responsive-md">
-											<table class="table table-bordered">
-												<tr>
-													<td width="150px">Jumlah PG</td>
-													<td>
-														<div class="d-flex justify-content-between">
-															<span>
-																{{ row.item.mc_count }}
-															</span>
-															<span class="badge badge-success">
-																{{ row.item.percentage.mc }} %
-															</span>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>Jumlah esay</td>
-													<td>
-														<div class="d-flex justify-content-between">
-															<span>
-																{{ row.item.esay_count }}		
-															</span>
-															<span class="badge badge-success">
-																{{ row.item.percentage.esay }} %
-															</span>
-														</div>
-													</td>
-												</tr>
-											</table>
+			</div>
+			<div class="row">
+				<div class="col-md-8" v-if="typeof question_banks.data != 'undefined'">
+					<table class="table table-borderless table-sm">
+						<tr v-for="row in question_banks.data">
+							<td>
+								<div class="card ">
+									<div class="card-header p-0 d-flex justify-content-between">
+										<div class="d-flex align-items-center">
+											<b-button squared class="mr-1" variant="light-success" size="sm" @click="getData(row.id)" v-b-tooltip.hover title="Edit banksoal">
+												<i class="flaticon2-contract"></i> Edit
+											</b-button>
+											<b-button squared class="mr-1" variant="light-warning" size="sm" @click="duplicateBank(row.id)" v-b-tooltip.hover title="Gandakan banksoal">
+												<i class="flaticon2-copy"></i>
+											</b-button>
+											<b-button squared variant="light-danger" size="sm" @click="deleteData(row.id)" v-b-tooltip.hover title="Hapus banksoal">
+												<i class="flaticon2-trash"></i>
+											</b-button>
 										</div>
 									</div>
 								</div>
-							</template>
-							<template v-slot:cell(actions)="row">
-                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
-									<template v-slot:button-content>
-									    <i class="flaticon-more"></i>
-									</template>
-									<b-dropdown-item @click="getData(row.item.id)">Edit</b-dropdown-item>
-									<b-dropdown-item @click="deleteData(row.item.id)">Hapus</b-dropdown-item>
-								</b-dropdown>
-                        	</template>
-						</b-table>
-						<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
-					      <b-pagination
-					      	pills 
+								<div class="card" >
+								  <div class="card-body p-4">
+									  	<div class="d-flex align-items-center justify-content-between">
+										    <div class="d-flex flex-column flex-grow-1">
+												<a href="#" class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+													{{ row.code }}
+												</a>
+												<span class="text-muted font-weight-bold">{{ row.subject.name }}</span>
+											</div>
+											<div class="d-flex flex-column align-items-right">
+												<div>
+												<span class="badge bg-light-primary mr-1" v-if="row.mc_count > 0"><i class="flaticon2-list-2"></i> {{ row.mc_count }} [{{ row.percentage.mc }}%]</span>
+												<span class="badge bg-light-success" v-if="row.esay_count > 0"><i class="flaticon2-list-3"></i> {{ row.esay_count }} [{{row.percentage.esay}}%]</span>
+												</div>
+
+											</div>
+										</div>
+										<router-link :to="{ name: 'exam.bank.questions', params: { id: row.id } }" class="stretched-link"></router-link>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
+					    <b-pagination
 					        v-model="page"
 					        :total-rows="question_banks.total"
 					        :per-page="question_banks.per_page"
 					        :disabled="isLoading"
-					        last-number
-					      ></b-pagination>
-					      <div class="d-flex align-items-center py-3">
-								<div class="d-flex align-items-center" v-if="isLoading">
-									<div class="mr-2 text-muted">Loading...</div>
-									<div class="spinner spinner-primary mr-10"></div>
-								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="30">30</option>
-									<option value="50">50</option>
-									<option value="100">100</option>
-								</select>
+					    ></b-pagination>
+					    <div class="d-flex align-items-center py-3">
+							<div class="d-flex align-items-center" v-if="isLoading">
+								<div class="mr-2 text-muted">Loading...</div>
+								<div class="spinner spinner-primary mr-10"></div>
 							</div>
-					    </div>
+							<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<option value="10">10</option>
+								<option value="20">20</option>
+								<option value="30">30</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
+							<span class="badge badge-primary">Total {{ question_banks.total }} data</span>
+						</div>
 					</div>
+				</div>
+				<div class="col-md-4">
+
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah banksoal" @hide="$store.commit('question/CLEAR_QUESTION_BANK')" no-close-on-backdrop>
+		<b-modal id="modal-create" title="Banksoal" @hide="$store.commit('question/CLEAR_QUESTION_BANK')" no-close-on-backdrop>
 			<div class="form-group">
 				<label>Mata pelajaran</label>
 				<v-select label="name" :reduce="item => item.id" :options="subjects" v-model="question_bank.subject_id">
@@ -123,7 +111,7 @@
 				<span class="text-danger" v-if="errors.subject_id">{{ errors.subject_id[0] }}</span>
 			</div>
 			<div class="form-group">
-				<label>Kode banksoal</label>
+				<label>Nama banksoal</label>
 				<input type="text" class="form-control form-control-lg form-control-solid" :class="{ 'is-invalid' : errors.code }" v-model="question_bank.code">
 				<div class="invalid-feedback" v-if="errors.code">{{ errors.code[0] }}</div>
 			</div>
@@ -177,12 +165,12 @@
 				Total harus 100 !!!
 			</div>
 			<template v-slot:modal-footer="{ cancel }">
-				<b-button variant="primary" @click="submit" :disabled="isLoading" v-if="!total_error">
-					{{ isLoading ? 'Processing...' : 'Simpan' }}
-				</b-button>
 				<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
                 	Tutup
              	</b-button>
+				<b-button variant="success" @click="submit" :disabled="isLoading" v-if="!total_error">
+					{{ isLoading ? 'Processing...' : 'Simpan' }}
+				</b-button>
 			</template>
 		</b-modal>
 	</div>
@@ -190,14 +178,14 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BButton, BDropdown, BDropdownItem, BPagination } from 'bootstrap-vue'
+import { BButton, BDropdown, BDropdownItem, BPagination, BBadge } from 'bootstrap-vue'
 import VSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 
 export default {
 	name: 'ExamBank',
 	components: {
-		BButton, BDropdown, BDropdownItem, BPagination,
+		BButton, BDropdown, BDropdownItem, BPagination,BBadge,
 		VSelect
 	},
 	data: () => ({
@@ -232,7 +220,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank', 'deleteDataQuestionBank', 'updateDataQuestionBank']),
+		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank', 'deleteDataQuestionBank', 'updateDataQuestionBank', 'duplicateDataQuestionBank']),
 		...mapActions('classroom', ['getDataClassromMine']),
 		changeData() {
 			this.getDataQuestionBanks({ perPage: this.perPage })
@@ -289,6 +277,26 @@ export default {
             		}
             	}
             })
+		},
+		duplicateBank(id) {
+			this.$swal({
+                title: 'Informasi',
+                text: "Bnksoal akan digandakan beserta dengan data yang terkait",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#c3c3c3',
+                confirmButtonText: 'Lanjutkan!'
+            }).then(async (result) => {
+            	if(result.value) {
+            		try {
+            			await this.duplicateDataQuestionBank(id)
+            			this.changeData()
+            		} catch (error) {
+            			this.$bvToast.toast(error.message, errorToas())
+            		}
+            	}
+            })
 		}
 	},
 	created() {
@@ -296,7 +304,12 @@ export default {
 		this.getDataClassromMine()
 	},
 	watch: {
-		
+		page() {
+			this.changeData()
+		},
+		perPage() {
+			this.changeData()
+		}
 	}
 }
 </script>

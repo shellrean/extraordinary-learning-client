@@ -10,21 +10,11 @@
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/PenAndRuller.svg"
-						          />
-						        </span>
+								<i class="flaticon-tool-1"></i>
 								Import
 							</b-button>
 							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/Flatten.svg"
-						          />
-						        </span>
+								<i class="flaticon2-add-square"></i>
 								Tambah matpel
 							</b-button>
 						</div>
@@ -49,6 +39,7 @@
 					</div>
 					<div class="table-responsive-md" v-if="typeof subjects.data != 'undefined'">
 						<b-table 
+						small
                         show-empty
                         :fields="fields"
                         :items="subjects.data"
@@ -58,7 +49,7 @@
                         	</template>
                         	<template v-slot:cell(name)="row">
                         		<div class="d-flex flex-column">
-                        			<div  class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0">
+                        			<div  class="text-dark-75 font-weight-bolder font-size-lg mb-0">
                         				{{ row.item.name }}
                         			</div>
                         			<span class="text-muted font-weight-bold">{{ row.item.description }}</span>
@@ -76,7 +67,6 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="subjects.total"
 					        :per-page="subjects.per_page"
@@ -94,70 +84,40 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
+								<span class="badge badge-primary">Total {{ subjects.total }} data</span>
 							</div>
 					    </div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah matpel" size="lg"  @hide="$store.commit('subject/CLEAR_FORM_SUBJECT')" no-close-on-backdrop>
-			<form class="form pt-9">
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+		<b-modal id="modal-create" title="Mata pelajaran"@hide="$store.commit('subject/CLEAR_FORM_SUBJECT')" no-close-on-backdrop>
+			<form class="9">
+				<div class="form-group">
+					<label>
 						Nama
 					</label>
-					<div class="col-lg-9 col-xl-6">
+					<div>
 						<input type="text" class="form-control form-control-lg form-control-solid" v-model="subject.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+				<div class="form-group ">
+					<label>
 						Deskripsi
 					</label>
-					<div class="col-lg-9 col-xl-6">
+					<div >
 						<textarea  class="form-control form-control-lg form-control-solid" v-model="subject.description" :class="{ 'is-invalid' : errors.description }" placeholder="Optional"></textarea>
 						<div class="invalid-feedback" v-if="errors.description">{{ errors.email[0] }}</div>
 					</div>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submitNewSubject" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
 		      </b-button>
-		    </template>
-		</b-modal>
-
-		<b-modal id="modal-update" title="Edit matpel" size="lg"  @hide="$store.commit('subject/CLEAR_FORM_SUBJECT')" no-close-on-backdrop>
-			<form class="form pt-9">
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Nama
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="subject.name" :class="{ 'is-invalid' : errors.name }">
-						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Deskripsi
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<textarea  class="form-control form-control-lg form-control-solid" v-model="subject.description" :class="{ 'is-invalid' : errors.description }" placeholder="Optional"></textarea>
-						<div class="invalid-feedback" v-if="errors.description">{{ errors.email[0] }}</div>
-					</div>
-				</div>
-			</form>
-			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="updateSubject" :disabled="isLoading">
+		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
 		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
-		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
-		        Cancel
 		      </b-button>
 		    </template>
 		</b-modal>
@@ -169,12 +129,13 @@
 		      placeholder="Choose a file excel or drop it here..."
 		      drop-placeholder="Drop file here..."
 		    ></b-form-file>
+		    <a href="/download/format-import-subject.xlsx" download="">Download import format</a>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="upload" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Upload' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
+		      </b-button>
+		      <b-button size="sm" variant="primary" @click="upload" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Upload' }}
 		      </b-button>
 		    </template>
 		</b-modal>
@@ -228,9 +189,13 @@ export default {
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		},
-		async submitNewSubject() {
+		async submit() {
 			try {
-				await this.createNewSubject()
+				if(typeof this.subject.id != 'undefined') {
+					await this.updateDataSubject()
+				} else {
+					await this.createNewSubject()
+				}
 				this.changeData()
 				this.$bvModal.hide('modal-create')
 			} catch (error) {
@@ -260,16 +225,7 @@ export default {
 		async getSubject(id) {
 			try {
 				await this.getDataSubject(id)
-				this.$bvModal.show('modal-update')
-			} catch (error) {
-				this.$bvToast.toast(error.message, errorToas())
-			}
-		},
-		async updateSubject() {
-			try {
-				await this.updateDataSubject()
-				this.changeData()
-				this.$bvModal.hide('modal-update')
+				this.$bvModal.show('modal-create')
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}

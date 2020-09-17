@@ -9,7 +9,7 @@
 					</h3>
 					<div class="card-toolbar">
 						<div class="form-group">
-							<router-link :to="{ name: 'task.index' }" class="btn btn-ligh-primary mr-2">
+							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary mr-2">
 								<i class="flaticon2-left-arrow-1"></i>Kembali
 							</router-link>
 						</div>
@@ -23,7 +23,7 @@
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
 											<select class="form-control form-control-solid" v-model="classroom_id">
-												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms">{{ classroom.classroom.name }} - {{ classroom.subject.name }}</option>
+												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms">{{ classroom.classroom.name }}</option>
 											</select>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
@@ -84,7 +84,7 @@
 			    	<div  v-if="typeof use_data.content != 'undefined'">
 						<div v-for="file in use_data.content.file">
 							<img :src="`${baseURL}/storage/attachment/${file}`" class="img-thumbnail"  v-if="file.match(/jpg.*/) || file.match(/png.*/)">
-							<a :href="`${baseURL}/storage/attachment/${file}`" download v-else>{{ file }}</a>
+							<a :href="`${baseURL}/storage/attachment/${file}`" target="_blank" v-else>{{ file }}</a>
 						</div>
 			    	</div>
 			    	<div v-if="typeof use_data.content != 'undefined' && use_data.content.type == 'text'" v-html="use_data.content.body">
@@ -92,7 +92,7 @@
 			    	</div>
 				</VuePerfectScrollbar>
 				<div class="form-group mb-3">
-				  <input type="number" min="0" max="100" class="form-control form-control-lg form-control-solid" placeholder="Nilai: 0 - 100" v-model.number="point">
+				  <input type="number" :min="0" :max="100" class="form-control form-control-lg form-control-solid" placeholder="Nilai: 0 - 100" v-model.number="point">
 				</div>
 				<template v-slot:modal-footer="{ cancel }">
 			      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">

@@ -5,7 +5,9 @@
 			<div class="card-header pt-3 border-0">
 				<h3 class="card-title align-items-start flex-column">
 					<span class="card-label font-weight-bolder text-warning">Siswa</span>
-					<span class="text-muted mt-1 font-weight-bold font-size-sm">Tanpa keterangan = {{ no_attends.length }}</span>
+					<span class="text-muted mt-1 font-weight-bold font-size-sm">
+						<span class="badge badge-warning" v-b-tooltip.hover title="Siswa yang belum diberikan keterangan">{{ no_attends.length }} Siswa belum ada keterangan</span>
+					</span>
 				</h3>
 			</div>
 			<!--end::Header-->
@@ -15,7 +17,7 @@
 				<VuePerfectScrollbar
 					style="max-height: 40vh; position: relative;"
 				>
-				<div class="d-flex align-items-center mb-8 mt-2" v-for=" student in no_attends">
+				<div class="d-flex align-items-center mb-8 mt-2" v-for=" student in no_attends" :key="student.id">
 					<!--begin::Symbol-->
 					<div class="symbol symbol-40 symbol-light mr-5">
 						<div class="symbol-label text-warning">
@@ -26,7 +28,7 @@
 					<!--end::Symbol-->
 					<!--begin::Text-->
 					<div class="d-flex flex-column font-weight-bold">
-						<a href="#" @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</a>
+						<a href="#" v-b-tooltip.hover title="Beri keterangan" @click="desert(student.student_id)" class="text-dark text-hover-warning mb-1 font-size-lg">{{ student.student.name }}</a>
 						<span class="text-muted">{{ student.student.email }}</span>
 					</div>
 					<!--end::Text-->
@@ -42,7 +44,9 @@
 			<div class="card-header border-0 pt-3">
 				<h3 class="card-title align-items-start flex-column">
 					<span class="card-label font-weight-bolder text-success">Siswa & Guru</span>
-					<span class="text-muted mt-1 font-weight-bold font-size-sm">Sedang di channel = {{ users.length }}</span>
+					<span class="text-muted mt-1 font-weight-bold font-size-sm">
+						<span class="badge badge-success" v-b-tooltip.hover title="Admin siswa guru yang saat ini sedang berada disini">{{ users.length }} User sedang di channel</span>
+					</span>
 				</h3>
 			</div>
 			<!--end::Header-->
@@ -52,7 +56,7 @@
 					style="max-height: 40vh; position: relative;"
 				>
 				<!--begin::Item-->
-				<div class="d-flex align-items-center mb-8 mt-2" v-for="user in users">
+				<div class="d-flex align-items-center mb-8 mt-2" v-for="user in users" :key="user.id">
 					<!--begin::Symbol-->
 					<div class="symbol symbol-40 symbol-light mr-5">
 						<div class="symbol-label text-success">
@@ -75,16 +79,17 @@
 			<b-modal id="modal-desc" title="Keterangan siswa" no-close-on-backdrop hide-header-close  no-close-on-esc>
    				<div class="form-group">
    					<label>Keterangan</label>
-   					<select class="form-control" v-model="data.details.type">
-   						<option value="sakit">Sakit</option>
-   						<option value="izin">Izin</option>
-   						<option value="izin">Alpha</option>
-   						<option value="masalah">Masalah</option>
+   					<select class="form-control" v-model="data.reason">
+   						<option value="0">-</option>
+   						<option value="1">Alpha</option>
+   						<option value="2">Sakit</option>
+   						<option value="3">Izin</option>
+   						<option value="4">Masalah</option>
    					</select>
    				</div>
    				<div class="form-group">
    					<label>Penjelasan</label>
-   					<textarea class="form-control" placeholder="Beri sedikit penjelasan tentang keterangan yang diberikan" v-model="data.details.desc">
+   					<textarea class="form-control" placeholder="Beri sedikit penjelasan tentang keterangan yang diberikan" v-model="data.desc">
    						
    					</textarea>
    				</div>
@@ -154,17 +159,16 @@ export default {
 			try {
 				await this.storeAbcentToday({
 					user_id: this.id_set,
-					subject_id: this.classlive.subject_id,
-					classroom_id: this.classlive.classroom_id,
+					schedule_id: this.classlive.schedule_id,
 					isabcent: false,
-					desc: this.data.details.desc,
+					reason: this.data.reason,
+					desc: this.data.desc,
 					details: this.data.details
 				})
 				this.$bvModal.hide('modal-desc')
 				this.clearForm()
 				this.getAbcentToday({
-					subject_id: this.classlive.subject_id,
-					classroom_id: this.classlive.classroom_id
+					schedule_id: this.classlive.schedule_id
 				})
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
@@ -174,10 +178,11 @@ export default {
 	async created() {
 		try {
 			this.channel = 'classlive_'+this.$route.params.id
-			this.getAbcentToday({
-				subject_id: this.classlive.subject_id,
-				classroom_id: this.classlive.classroom_id
-			})
+			if(typeof this.classlive.schedule_id != 'undefined') {
+				this.getAbcentToday({
+					schedule_id: this.classlive.schedule_id
+				})
+			}
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
 		}

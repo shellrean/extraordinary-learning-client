@@ -10,21 +10,11 @@
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/PenAndRuller.svg"
-						          />
-						        </span>
+								<i class="flaticon-tool-1"></i>
 								Import
 							</b-button>
 							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/Flatten.svg"
-						          />
-						        </span>
+								<i class="flaticon2-add-square"></i>
 								Tambah guru
 							</b-button>
 						</div>
@@ -67,7 +57,7 @@
                         				</div>								
                         				<div class="ml-4">									
                         					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.name"></div>									
-                        					<a href="#" class="text-muted font-weight-bold" v-text="row.item.email"></a>								
+                        					<span class="text-muted font-weight-bold" v-text="row.item.email"></span>								
                         				</div>							
                         			</div>
                         		</span>
@@ -87,7 +77,6 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="teachers.total"
 					        :per-page="teachers.per_page"
@@ -105,94 +94,56 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
+								<span class="badge badge-primary">Total {{ teachers.total }} data</span>
 							</div>
 					    </div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Tambah guru" size="lg">
-			<form class="form pt-9">
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+		<b-modal id="modal-create" title="Guru" @hide="$store.commit('user/CLEAR_USER')">
+			<form class="">
+				<div class="form-group">
+					<label>NIP</label>
+					<input type="text"  class="form-control form-control-lg form-control-solid" v-model="user.uid">
+				</div>
+				<div class="form-group">
+					<label>
 						Nama
 					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="data.name" :class="{ 'is-invalid' : errors.name }">
+					<div>
+						<input type="text" class="form-control form-control-lg form-control-solid" v-model="user.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+				<div class="form-group">
+					<label >
 						Email
 					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="email" class="form-control form-control-lg form-control-solid" v-model="data.email" :class="{ 'is-invalid' : errors.email }">
+					<div>
+						<input type="email" class="form-control form-control-lg form-control-solid" v-model="user.email" :class="{ 'is-invalid' : errors.email }">
 						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label form-control-solid">
+				<div class="form-group" v-if="typeof user.id == 'undefined'">
+					<label>
 						Password
 					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="password" class="form-control form-control-lg form-control-solid" v-model="data.password" :class="{ 'is-invalid' : errors.password }">
+					<div>
+						<input type="password" class="form-control form-control-lg form-control-solid" v-model="user.password" :class="{ 'is-invalid' : errors.password }">
 						<div class="invalid-feedback" v-if="errors.password">{{ errors.password[0] }}</div>
 					</div>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submitNewTeacher" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
 		      </b-button>
-		    </template>
-		</b-modal>
-
-		<b-modal id="modal-edit" title="Edit guru" size="lg">
-			<form class="form pt-9">
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Nama
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="user.name" :class="{ 'is-invalid' : errors.name }">
-						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Email
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<input type="email" class="form-control form-control-lg form-control-solid" v-model="user.email" :class="{ 'is-invalid' : errors.email }">
-						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
-						Status
-					</label>
-					<div class="col-lg-9 col-xl-6">
-						<select class="form-control" v-model="user.isactive">
-							<option value="1">Aktif</option>
-							<option value="0">Tidak aktif</option>
-						</select>
-					</div>
-				</div>
-			</form>
-			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="updateData" :disabled="isLoading">
+		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
 		        {{ isLoading ? 'Processing...' : 'Simpan' }}
 		      </b-button>
-		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
-		        Cancel
-		      </b-button>
 		    </template>
 		</b-modal>
-
 		<b-modal id="modal-import" title="Import guru" size="lg">
 			<b-form-file
 		      v-model="file"
@@ -200,12 +151,13 @@
 		      placeholder="Choose a file excel or drop it here..."
 		      drop-placeholder="Drop file here..."
 		    ></b-form-file>
+		    <a href="/download/format-import-user.xlsx" download>Download format import</a>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="upload" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Upload' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
+		      </b-button>
+		      <b-button size="sm" variant="primary" @click="upload" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Upload' }}
 		      </b-button>
 		    </template>
 		</b-modal>
@@ -237,7 +189,8 @@ export default {
 			fields: [
 				{ key: 'no', label: '#' },
 				{ key: 'user', label: 'User', shortable: true },
-				{ key: 'id', label: 'ID Pengajar' },
+				{ key: 'id', label: 'ID' },
+				{ key: 'uid', label: 'NIP' },
 				{ key: 'status', label: 'Status' },
 				{ key: 'actions', label: 'Aksi' }
 			],
@@ -262,20 +215,16 @@ export default {
         }
 	},
 	methods: {
-		...mapActions('user', ['createNewTeacher', 'getTeacherDataTable', 'deleteUser', 'getUser', 'updateUser', 'importTeacher']),
-		clearForm() {
-			this.data = {
-				name: '',
-				email: '',
-				password: ''
-			}
-		},	
-		async submitNewTeacher() {
+		...mapActions('user', ['createNewTeacher', 'getTeacherDataTable', 'deleteUser', 'getUser', 'updateUser', 'importTeacher']),	
+		async submit() {
 			try {
-				await this.createNewTeacher(this.data)
+				if(typeof this.user.id != 'undefined') {
+					await this.updateUser()
+				} else {
+					await this.createNewTeacher()
+				}
 				this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
 				this.$bvModal.hide('modal-create')
-				this.clearForm()
 				this.$store.commit('CLEAR_ERROR')
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
@@ -305,17 +254,7 @@ export default {
 			try {
 				await this.getUser(id)
 
-				this.$bvModal.show('modal-edit')
-			} catch (error) {
-				this.$bvToast.toast(error.message, errorToas())
-			}
-		},
-		async updateData() {
-			try {
-				await this.updateUser()
-
-				this.$bvModal.hide('modal-edit')
-				this.getTeacherDataTable({ search: this.search, perPage: this.perPage })
+				this.$bvModal.show('modal-create')
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}

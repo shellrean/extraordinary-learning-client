@@ -10,21 +10,11 @@
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/PenAndRuller.svg"
-						          />
-						        </span>
+								<i class="flaticon-tool-1"></i>
 								Import
 							</b-button>
 							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/Flatten.svg"
-						          />
-						        </span>
+								<i class="flaticon2-add-square"></i>
 								Tambah kelas
 							</b-button>
 						</div>
@@ -64,13 +54,13 @@
                         				</div>								
                         				<div class="ml-4">									
                         					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.name"></div>									
-                        					<a href="#" class="text-muted font-weight-bold" v-text="row.item.group"></a>	
+                        					<span class="text-muted font-weight-bold" v-text="row.item.group"></span>	
                         				</div>							
                         			</div>
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-button size="sm" :to="{ name: 'master.classroom.dashboard', params: { id: row.item.id }}" class="btn-text-primary btn-hover-primary btn-icon mr-2"><i class="flaticon-buildings"></i></b-button>
+                        		<b-button variant="light-primary" size="sm" :to="{ name: 'master.classroom.dashboard', params: { id: row.item.id }}" v-b-tooltip.hover title="Ke lobi kelas"><i class="flaticon-buildings"></i></b-button>
                         		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
 									<template v-slot:button-content>
 									    <i class="flaticon-more"></i>
@@ -82,7 +72,6 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="classrooms.total"
 					        :per-page="classrooms.per_page"
@@ -100,57 +89,57 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
-								<span class="text-muted">Menampilkan {{ classrooms.data.length }} dari {{ classrooms.total }} records</span>
+					    		<span class="badge badge-primary">Total {{ classrooms.total }} data</span>
 							</div>
 					    </div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Kelas" size="lg" @hide="$store.commit('classroom/CLEAR_CLASSROOM')">
-			<form class="form pt-9">
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+		<b-modal id="modal-create" title="Kelas" @hide="$store.commit('classroom/CLEAR_CLASSROOM')">
+			<form class="">
+				<div class="form-group">
+					<label>
 						Nama
 					</label>
-					<div class="col-lg-9 col-xl-6">
+					<div>
 						<input type="text" class="form-control form-control-lg form-control-solid" v-model="classroom.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</div>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+				<div class="form-group">
+					<label>
 						Grade
 					</label>
-					<div class="col-lg-9 col-xl-6">
+					<div>
 						<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="classroom.grade" :class="{ 'is-invalid' : errors.grade }">
 						<div class="invalid-feedback" v-if="errors.grade">{{ errors.grade[0] }}</div>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+				<div class="form-group">
+					<label>
 						Group
 					</label>
-					<div class="col-lg-9 col-xl-6">
+					<div>
 						<input type="TEXT" class="form-control form-control-lg form-control-solid" v-model="classroom.group" :class="{ 'is-invalid' : errors.group }">
 						<div class="invalid-feedback" v-if="errors.group">{{ errors.group[0] }}</div>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+				<div class="form-group">
+					<label>
 						Wali kelas
 					</label>
-					<div class="col-lg-9 col-xl-6">
+					<div>
 						<select class="form-control form-control-lg form-control-solid" v-model="classroom.teacher_id">
 							<option :value="teacher.id" v-for="teacher in teachers.data">{{ teacher.name }}</option>
 						</select>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-xl-3 col-lg-9 text-right col-form-label">
+				<div class="form-group">
+					<label>
 						Telegram ID
 					</label>
-					<div class="col-lg-9 col-xl-6">
+					<div>
 						<input type="text" class="form-control form-control-lg form-control-solid" v-model="classroom.settings.telegram_id">
 					</div>
 				</div>
@@ -171,12 +160,13 @@
 		      placeholder="Choose a file excel or drop it here..."
 		      drop-placeholder="Drop file here..."
 		    ></b-form-file>
+		    <a href="/download/format-import-classroom.xlsx" download="">Download import format</a>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="importDataClassroom" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
+		      </b-button>
+		      <b-button size="sm" variant="primary" @click="importDataClassroom" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Upload' }}
 		      </b-button>
 		    </template>
 		</b-modal>

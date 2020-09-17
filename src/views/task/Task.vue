@@ -10,12 +10,7 @@
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="primary" :to="{ name: 'task.add' }">
-								<span class="svg-icon svg-icon">
-						          <inline-svg
-						            class="svg-icon"
-						            src="/media/svg/icons/Design/Flatten.svg"
-						          />
-						        </span>
+								<i class="flaticon2-add-square"></i>
 								Tambah tugas
 							</b-button>
 						</div>
@@ -77,12 +72,10 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="tasks.total"
 					        :per-page="tasks.per_page"
 					        :disabled="isLoading"
-					        last-number
 					      ></b-pagination>
 					      <div class="d-flex align-items-center py-3">
 								<div class="d-flex align-items-center" v-if="isLoading">
@@ -96,6 +89,7 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
+								<span class="badge badge-primary">Total {{ tasks.total }} data</span>
 							</div>
 					    </div>
                     </div>

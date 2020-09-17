@@ -1,24 +1,25 @@
 <template>
 	<div class="card card-custom gutter-b">
 		<div class="card-body">
-			<div class="d-flex align-items-center mb-2">
+			<div class="d-flex align-items-center mb-5">
 				<div class="symbol symbol-40 symbol-light-success mr-5">
 					<span class="symbol-label">
 						<img src="/img/007-boy-2.svg" class="h-75 align-self-end" alt="" />
 					</span>
 				</div>
 				<span class="text-muted font-weight-bold font-size-lg">
-					{{ authenticated.name }}, selamat datang di kelas kami
+					{{ authenticated.name }}<br>
+					<small>Selamat datang di kelas kami</small>
 				</span>
 			</div>
 			<div class="d-flex align-items-center">
-				<b-button v-b-modal.modal-sharee variant="white" class="btn btn-hover-text-primary btn-hover-icon-primary btn-sm btn-text-dark-50 bg-hover-light-primary rounded font-weight-bolder font-size-sm p-2 mr-2">
+				<b-button v-b-modal.modal-sharee variant="white" class="btn btn-hover-text-primary btn-hover-icon-primary btn-sm btn-text-dark-50 bg-hover-light-primary rounded font-weight-bolder font-size-sm p-2 mr-2" v-b-tooltip.hover title="Bagikan materi ke kelas ini">
 					<span class="svg-icon svg-icon-md svg-icon-dark-25 pr-2">
 						<i class="flaticon-file-2"></i>
 					</span>
 					Bagikan materi
 				</b-button>
-				<b-button v-b-modal.modal-task variant="white"  class="btn btn-sm btn-text-dark-50 btn-hover-icon-primary btn-hover-text-primary bg-hover-light-primary font-weight-bolder rounded font-size-sm p-2">
+				<b-button v-b-modal.modal-task variant="white"  class="btn btn-sm btn-text-dark-50 btn-hover-icon-primary btn-hover-text-primary bg-hover-light-primary font-weight-bolder rounded font-size-sm p-2" v-b-tooltip.hover title="Bagikan tugas ke kelas ini">
 					<span class="svg-icon svg-icon-md svg-icon-dark-25 pr-1">
 						<i class="flaticon-list"></i>
 					</span>
@@ -30,24 +31,25 @@
 			<form>
 				<div class="form-group">
 					<label>Materi</label>
-					<select class="form-control" v-model="lecture_id" v-if="typeof lectures.data != 'undefined' && lectures.data.length > 0">
-						<option :value="lecture.id"  v-for="lecture in lectures.data" >{{ lecture.title }}</option>
-					</select>
-					<span v-else><small>Tidak ada materi, silakan buat terlebih dahulu</small></span>
+					<v-select label="title" :reduce="item => item.id" :options="lectures.data" v-model="lecture_id" :filterable="false" @search="onSearchLecture">
+						<template slot="no-options">
+					    	Ketik untuk mencari materi anda..
+					    </template>
+					</v-select>
 				</div>
 				<div class="form-group">
 					<label>Body</label>
-					<textarea class="form-control" v-model="body" placeholder="Ungkapkan sedikit alasan mengapa anda membagikan materi ini">
+					<textarea class="form-control" v-model="body" placeholder="Tulis sedikit text">
 						
 					</textarea>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-				<b-button size="sm" variant="primary" @click="sharee" :disabled="isLoading">
-					{{ isLoading ? 'Processing...' : 'Bagikan' }}
-				</b-button>
 				<b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 					Cancel
+				</b-button>
+				<b-button size="sm" variant="primary" @click="sharee" :disabled="isLoading">
+					{{ isLoading ? 'Processing...' : 'Bagikan' }}
 				</b-button>
 			</template>
 		</b-modal>
@@ -55,23 +57,25 @@
 			<form>
 				<div class="form-group">
 					<label>Tugas</label>
-					<select  class="form-control" v-model="task_id">
-						<option :value="task.id" v-for="task in tasks.data">{{ task.title }}</option>
-					</select>
+					<v-select label="title" :reduce="item => item.id" :options="tasks.data" v-model="task_id" :filterable="false" @search="onSearchTask">
+						<template slot="no-options">
+					    	Ketik untuk mencari tugas anda..
+					    </template>
+					</v-select>
 				</div>
 				<div class="form-group">
 					<label>Body</label>
-					<textarea class="form-control" v-model="task_body" placeholder="Ungkapkan sedikit alasan mengapa anda membagikan tugas ini">
+					<textarea class="form-control" v-model="task_body" placeholder="Tulis sedikit text">
 						
 					</textarea>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-				<b-button size="sm" variant="primary" @click="submitshareeTask" :disabled="isLoading">
-					{{ isLoading ? 'Processing...' : 'Bagikan' }}
-				</b-button>
 				<b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 					Cancel
+				</b-button>
+				<b-button size="sm" variant="primary" @click="submitshareeTask" :disabled="isLoading">
+					{{ isLoading ? 'Processing...' : 'Bagikan' }}
 				</b-button>
 			</template>
 		</b-modal>
@@ -81,11 +85,14 @@
 import { BButton } from 'bootstrap-vue'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
+import VSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+import _ from 'lodash'
 
 export default {
 	name: 'ShareToClassroom',
 	components: {
-		BButton
+		BButton, VSelect
 	},
 	data() {
 		return {
@@ -137,16 +144,30 @@ export default {
 			} catch (error) {
 				this.$bvToast.toast(error.message, errorToas())
 			}	
-
-		}
+		},
+		onSearchLecture(search, loading) {
+	      loading(true);
+	      this.searchLecture(loading, search, this);
+	    },
+	    searchLecture: _.debounce((loading, search, vm) => {
+	    	vm.getDataLectures({ perPage: 50, search: escape(search) })
+	    	.then((res) => {
+	    		loading(false)
+	    	})
+	    }, 350),
+	    onSearchTask(search, loading) {
+	      loading(true);
+	      this.searchTask(loading, search, this);
+	    },
+	    searchTask: _.debounce((loading, search, vm) => {
+	    	vm.getDataTasks({ perPage: 50, search: escape(search) })
+	    	.then((res) => {
+	    		loading(false)
+	    	})
+	    }, 350)
 	},
 	created() {
-		try {
-			this.getDataLectures({ perPage: 100 })
-			this.getDataTasks({ perPage: 100 })
-		} catch (error) {
-			this.$bvToast.toast(error.message, errorToas())
-		}
+		
 	}
 }
 </script>

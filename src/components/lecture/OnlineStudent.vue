@@ -4,7 +4,10 @@
 		<div class="card-header pt-3 border-0">
 			<h3 class="card-title align-items-start flex-column">
 				<span class="card-label font-weight-bolder text-success">Siswa & Guru </span>
-				<span class="text-muted mt-1 font-weight-bold font-size-sm">Sedang di materi ini</span>
+				<span class="text-muted mt-1 font-weight-bold font-size-sm">
+					<span class="badge badge-success"  v-b-tooltip.hover title="Admin siswa guru yang saat ini sedang berada disini">{{ users.length }} user sedang di lobi kelas
+					</span>
+				</span>
 			</h3>
 		</div>
 		<!--end::Header-->

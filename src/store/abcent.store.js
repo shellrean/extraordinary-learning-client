@@ -30,7 +30,7 @@ const actions = {
 		return new Promise(async(resolve, reject) => {
 			try {
 				let date = typeof payload.date != 'undefined' ? payload.date : ''
-				let network = await $axios.get(`abcents/subject/${payload.subject_id}/classroom/${payload.classroom_id}?date=${date}`)
+				let network = await $axios.get(`abcents/schedule/${payload.schedule_id}?date=${date}`)
 
 				commit('ASSIGN_DATA_ABCENTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })
@@ -44,7 +44,9 @@ const actions = {
 	downloadExcel({ state, commit}, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise((resolve, reject) => {
-			$axiosexcel.get(`abcents/subject/${payload.subject_id}/classroom/${payload.classroom_id}/export`)
+			let date = typeof payload.date != 'undefined' ? payload.date : ''
+			
+			$axiosexcel.get(`abcents/schedule/${payload.schedule_id}/export?date=${date}`)
 			.then((response) => {
 				const type = response.headers['content-type']
 			    const blob = new Blob([response.data], { type: type, encoding: 'UTF-8' })

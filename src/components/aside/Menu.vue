@@ -14,7 +14,7 @@
 	        ]"
 	      >
 	        <a :href="href" class="menu-link" @click="navigate">
-	          <i class="menu-icon flaticon2-layers"></i>
+	          <i class="menu-icon flaticon-squares-4"></i>
 	          <span class="menu-text">Dashboard</span>
 	        </a>
 	      </li>
@@ -139,7 +139,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon2-speaker"></i>
+            <i class="menu-icon flaticon-book"></i>
             <span class="menu-text">Informasi</span>
           </a>
         </li>
@@ -159,7 +159,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon-event-calendar-symbol"></i>
+            <i class="menu-icon flaticon-calendar"></i>
             <span class="menu-text">Kegiatan</span>
           </a>
         </li>
@@ -179,8 +179,28 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon-presentation"></i>
+              <i class="menu-icon flaticon2-browser-1"></i>
               <span class="menu-text">Kelas</span>
+            </a>
+          </li>
+        </router-link>
+        <router-link
+          :to="{ name: 'paper.dashboard' }"
+          v-slot="{ href, navigate, isActive, isExactActive }"
+          v-if="$role('1')"
+        >
+          <li
+            aria-haspopup="true"
+            data-menu-toggle="hover"
+            class="menu-item"
+            :class="[
+              isActive && 'menu-item-active',
+              isExactActive && 'menu-item-active'
+            ]"
+          >
+            <a :href="href" class="menu-link" @click="navigate">
+              <i class="menu-icon flaticon2-crisp-icons"></i>
+              <span class="menu-text">Perangkat</span>
             </a>
           </li>
         </router-link>
@@ -362,30 +382,6 @@
             <a :href="href" class="menu-link" @click="navigate">
               <i class="menu-icon flaticon-list-1"></i>
               <span class="menu-text">Ulangan</span>
-            </a>
-          </li>
-        </router-link>
-        <li class="menu-section" v-if="$role('1')">
-            <h4 class="menu-text">Reporting</h4>
-            <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-        </li>
-        <router-link
-          :to="{ name: 'report.abcent' }"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-          v-if="$role('1')"
-        >
-          <li
-            aria-haspopup="true"
-            data-menu-toggle="hover"
-            class="menu-item"
-            :class="[
-              isActive && 'menu-item-active',
-              isExactActive && 'menu-item-active'
-            ]"
-          >
-            <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon2-box-1"></i>
-              <span class="menu-text">Report absensi</span>
             </a>
           </li>
         </router-link>

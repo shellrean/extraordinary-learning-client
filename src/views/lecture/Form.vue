@@ -5,7 +5,7 @@
 				<div class="card-body">
 					<div class="form-group">
 						<label>Body</label>
-						<ckeditor v-model="lecture.body" v-if="showEditor" :config="editorConfig"></ckeditor>
+						<ckeditor v-model="lecture.body" v-if="showEditor" :config="editorConfig" type="inline"></ckeditor>
 						<span class="text-danger" v-if="errors.body">{{ errors.body[0] }}</span>
 					</div>
 					<div class="form-group" v-if="$route.name == 'lecture.add'">
@@ -99,3 +99,8 @@ export default {
 	}
 }
 </script>
+<style >
+	div[contenteditable] {
+    outline: 1px solid #616161;
+}
+</style>

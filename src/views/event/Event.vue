@@ -9,6 +9,7 @@
 					</h3>
 					<div class="card-toolbar"> 
 						<b-button variant="primary" v-b-modal.modal-event> 
+							<i class="flaticon2-add-square"></i>
 							Tambah kegiatan
 						</b-button>
 					</div>
@@ -45,7 +46,6 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
 					      <b-pagination
-					      	pills 
 					        v-model="page"
 					        :total-rows="events.total"
 					        :per-page="events.per_page"
@@ -63,6 +63,7 @@
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</select>
+								<span class="badge badge-primary">Total {{ events.total }} data</span>
 							</div>
 					    </div>
 					</div>
@@ -80,7 +81,7 @@
 			</div>
 			<div class="form-group">
 				<label>Kontent</label>
-				<ckeditor v-model="event.body" v-if="showEditor" :config="editorConfig" id="content"></ckeditor>
+				<ckeditor v-model="event.body" v-if="showEditor" :config="editorConfig" id="content" type="inline"></ckeditor>
 			</div>
 			<div class="form-group">
 				<label>Tanggal</label>
@@ -214,3 +215,8 @@ export default {
 	}
 }
 </script>
+<style >
+	div[contenteditable] {
+    outline: 1px solid #616161;
+}
+</style>

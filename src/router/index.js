@@ -16,6 +16,7 @@ const StudentData = () => import('@/views/master/student/Student')
 const ClassroomIndex = () => import('@/views/master/classroom/Index')
 const ClassroomData = () => import('@/views/master/classroom/Classroom')
 const ClassroomMe = () => import('@/views/master/classroom/ClassroomMe')
+const ClassroomSchedule = () => import('@/views/master/classroom/ClassroomSchedule')
 const ClassroomDashboard = () => import('@/views/master/classroom/Dashboard')
 const ClassroomLive = () => import('@/views/master/classroom/ClassroomLive')
 const ClassroomLiveAdd = () => import('@/views/master/classroom/ClassroomLiveAdd')
@@ -24,6 +25,12 @@ const ClassroomJoin = () => import('@/views/master/classroom/ClassroomJoin')
 const SubjectIndex = () => import('@/views/master/subject/Index')
 const SubjectData = () => import('@/views/master/subject/Subject')
 const SubjectMe = () => import('@/views/master/subject/SubjectMe')
+
+const StandartIndex = () => import('@/views/standart/Index')
+const StandartData = () => import('@/views/standart/Standart')
+
+const PaperIndex = () => import('@/views/paper/Index')
+const PaperDashboard = () => import('@/views/paper/Dashboard')
 
 const LectureIndex = () => import('@/views/lecture/Index')
 const LectureData = () => import('@/views/lecture/Lecture')
@@ -134,6 +141,11 @@ Vue.use(VueRouter)
                 component: ClassroomMe
               },
               {
+                path: 'me/:id/schedule',
+                name: 'master.classroom.me.schedule',
+                component: ClassroomSchedule
+              },
+              {
                 path: ':id/dashboard',
                 name: 'master.classroom.dashboard',
                 component: ClassroomDashboard
@@ -202,6 +214,28 @@ Vue.use(VueRouter)
             path: ':id',
             name: 'event.view',
             component: EventShow
+          }
+        ]
+      },
+      {
+        path: 'standart',
+        component: StandartIndex,
+        children: [
+          {
+            path: '',
+            name: 'standart.index',
+            component: StandartData
+          }
+        ]
+      },
+      {
+        path: 'paper',
+        component: PaperIndex,
+        children: [
+          {
+            path: '',
+            name: 'paper.dashboard',
+            component: PaperDashboard
           }
         ]
       },
