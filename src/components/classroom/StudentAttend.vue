@@ -94,11 +94,11 @@
    					</textarea>
    				</div>
    				<template v-slot:modal-footer="{ cancel }">
-			      <b-button size="sm" variant="primary" :disabled="isLoading" @click="submit">
-			        {{ isLoading ? 'Processing...' : 'Simpan' }}
-			      </b-button>
 			      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 			        Cancel
+			      </b-button>
+			      <b-button size="sm" variant="primary" :disabled="isLoading" @click="submit">
+			        {{ isLoading ? 'Processing...' : 'Simpan' }}
 			      </b-button>
 			    </template>
   			</b-modal>
