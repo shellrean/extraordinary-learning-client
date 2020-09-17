@@ -57,34 +57,20 @@ export default {
 		...mapState(['token']),
 		...mapGetters(['loadPage']),
 		...mapState('user', ['authenticated']),
-		...mapState('channel',['center', 'socket', 'setUserToChannel'])
+		...mapState('channel',['socket', 'setUserToChannel'])
 	},
 	async created() {
 		try {
-			this.center.open();
-			this.channel = process.env.VUE_APP_KEY
-			if(typeof this.authenticated.name != 'undefined') {
-				this.center.emit('getin', {
-					user: this.authenticated,
-					channel: this.channel
-				});
-			}
-
+			
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {
-		authenticated() {
-			this.center.emit('getin', {
-				user: this.authenticated,
-				channel: this.channel
-			});
-		}
+
 	},
 	destroyed() {
-        this.center.emit('exit', { channel: this.channel })
-        this.center.close()
+
     },
 }
 </script>
