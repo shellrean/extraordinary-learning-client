@@ -4,6 +4,7 @@ module.exports = {
     msTileColor: "#130f40",
     name: "Extraordinary-LMS",
     manifestOptions: {
+      display: "standalone",
       icons: [
         {
           src: "./img/icons/android-chrome-192x192.png",
