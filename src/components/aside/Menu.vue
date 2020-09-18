@@ -179,7 +179,7 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon2-browser-1"></i>
+              <i class="menu-icon flaticon-home-2"></i>
               <span class="menu-text">Kelas</span>
             </a>
           </li>

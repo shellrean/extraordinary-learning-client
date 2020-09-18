@@ -59,8 +59,9 @@
 					class="aside-menu scroll liveclass_comment"
 					style="max-height: 50vh; position: relative;"
 				>
-				<table class="table table-borderless">
-					<tr  v-for="subject in classroom_subjects">
+				<table class="table table-bordered">
+					<tr  v-for="(subject, index) in classroom_subjects">
+						<td>{{ index+1 }}</td>
 						<td>{{ subject.subject.name }}</td>
 					</tr>
 					<tr v-if="classroom_subjects.length === 0"> 
