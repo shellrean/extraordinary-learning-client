@@ -1,21 +1,28 @@
 <template>
 	<div class="card card-custom gutter-b">
 		<!--begin::Header-->
-		<div class="card-header border-0 pt-5">
-			<h3 class="card-title align-items-start flex-column">
-				<span class="card-label font-weight-bolder text-dark">Kegiatang</span>
-				<span class="text-muted mt-1 font-weight-bold font-size-sm">Daftar kegiatan sekolah</span>
-			</h3>
-			<div class="card-toolbar">
-				<ul class="nav nav-pills nav-pills-sm nav-dark-75">
-					<li class="nav-item">
-						<a class="nav-link py-2 px-4 active font-weight-bolder" href="#">Yang akan datang</a>
-					</li>
-				</ul>
+		<div class="card-header  p-4 d-flex justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="symbol symbol-45 symbol-light-primary mr-5">
+					<b-button variant="primary"  v-b-toggle="'dent_2'">
+			 			<i class="flaticon-alert"></i>
+					</b-button>
+				</div>
+				<div class="d-flex flex-column flex-grow-1">
+					<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+						Kegiatang
+					</span>
+					<div class="d-flex">
+						<div class="d-flex align-items-center pr-5">
+							<span class="svg-icon svg-icon-md svg-icon-primary">
+							</span>
+							<span class="text-muted font-weight-bold">Daftar kegiatan sekolah</span>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<!--end::Header-->
-		<!--begin::Body-->
+		<b-collapse :id="'dent_2'">
 		<div class="card-body pt-2" v-if="public_events.length > 0">
 			<!--begin::Item-->
 			<div class="d-flex align-items-center justify-content-between mb-10" v-for="event in public_events"> 
@@ -50,14 +57,19 @@
 			<p class="text-center">Tidak ada kegiatan mendatang</p>
 		</div>
 		<!--end::Body-->
+		</b-collapse>
 	</div>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
+import { BButton, BCollapse } from 'bootstrap-vue'
 
 export default {
 	naem: 'UpcommingEvent',
+	components: {
+		BButton, BCollapse
+	},
 	computed: {
 		...mapState('event', ['public_events'])
 	},

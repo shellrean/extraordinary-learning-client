@@ -3,10 +3,25 @@
 		<div class="container">
 			<div class="card card-custom">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Kelas</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage Kelas</span>
-					</h3>
+					<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
+							<span class="symbol-label">
+								<i class="flaticon-home-2 text-primary"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+								Kelas
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary">
+									</span>
+									<span class="text-muted font-weight-bold">Manage Kelas</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
@@ -52,18 +67,17 @@
                         				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">					
                         					<span class="symbol-label font-size-h4 font-weight-bold">{{ row.item.grade }}</span>								
                         				</div>								
-                        				<div class="ml-4">									
-                        					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.name"></div>									
+                        				<div class="ml-4 d-flex flex-column">									
+                        					<router-link :to="{ name: 'master.classroom.dashboard', params: { id: row.item.id }}" v-b-tooltip.hover title="Ke lobi kelas" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-0" v-text="row.item.name"></router-link>				
                         					<span class="text-muted font-weight-bold" v-text="row.item.group"></span>	
                         				</div>							
                         			</div>
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-button variant="light-primary" size="sm" :to="{ name: 'master.classroom.dashboard', params: { id: row.item.id }}" v-b-tooltip.hover title="Ke lobi kelas"><i class="flaticon-buildings"></i></b-button>
-                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
 									<template v-slot:button-content>
-									    <i class="flaticon-more"></i>
+									    <i class="flaticon-squares-4"></i>
 									</template>
 									<b-dropdown-item  @click="getClassroom(row.item.id)" >Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteClassroom(row.item.id)">Hapus</b-dropdown-item>

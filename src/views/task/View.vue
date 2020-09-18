@@ -2,7 +2,7 @@
 	<div>
 		<div class="d-flex flex-column-fluid">
 			<div class="container">
-				<div class="row justify-content-center">
+				<div class="row">
 					<div class="col-md-8">	
 						<div class="card card-custom">
 							<div class="card-header flex-wrap border-0 pt-6 pb-0">

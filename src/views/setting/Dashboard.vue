@@ -5,7 +5,7 @@
 				<div class="col-md-4">
 					<div class="list-group">
 					  <router-link :to="{}" class="list-group-item list-group-item-action active">
-					    Setting general
+					    v1.0.1 High School Version
 					  </router-link>
 					  <router-link :to="{ name: 'setting.school' }" class="list-group-item list-group-item-action">Data sekolah</router-link>
 					</div>

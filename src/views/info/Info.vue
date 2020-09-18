@@ -3,10 +3,25 @@
 		<div class="container">
 			<div class="card card-custom">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Informasi</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage informasi sekolah</span>
-					</h3>
+					<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
+							<span class="symbol-label">
+								<i class="flaticon2-crisp-icons text-primary"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+								Informasi
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary">
+									</span>
+									<span class="text-muted font-weight-bold">Manage informasi sekolah</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar"> 
 						<b-button variant="primary" v-b-modal.modal-info> 
 							<i class="flaticon2-add-square"></i>
@@ -33,9 +48,9 @@
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
 									<template v-slot:button-content>
-									    <i class="flaticon-more"></i>
+									   <i class="flaticon-squares-4"></i>
 									</template>
 									<b-dropdown-item @click="getData(row.item.id)">Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteData(row.item.id)">Hapus</b-dropdown-item>
@@ -82,11 +97,11 @@
 				{{info.status == 1 ? 'Aktif' : 'Tidak aktif' }}
 			</b-form-checkbox>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
+		      </b-button>
+		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Simpan' }}
 		      </b-button>
 		    </template>
 		</b-modal>

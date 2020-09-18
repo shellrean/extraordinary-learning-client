@@ -1,29 +1,29 @@
 <template>
-	<div class="d-flex flex-column-fluid">
-		<div class="container">
-			<div class="card mb-10">
-				<div class="card-header p-4 d-flex justify-content-between">
-					<div class="d-flex align-items-center">
-						<div class="symbol symbol-45 symbol-light-primary mr-5">
-							<span class="symbol-label">
-								<i class="flaticon2-crisp-icons text-primary"></i>
-							</span>
-						</div>
-						<div class="d-flex flex-column flex-grow-1">
-							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
-								Perangkat pengajaran
-							</span>
-							<div class="d-flex">
-								<div class="d-flex align-items-center pr-5">
-									<span class="svg-icon svg-icon-md svg-icon-primary">
-									</span>
-									<span class="text-muted font-weight-bold">Daftar perangkat pengajaran</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+    <div class="d-flex flex-column-fluid">
+        <div class="container">
+            <div class="card mb-10">
+                <div class="card-header p-4 d-flex justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="symbol symbol-45 symbol-light-primary mr-5">
+                            <span class="symbol-label">
+                                <i class="flaticon2-crisp-icons text-primary"></i>
+                            </span>
+                        </div>
+                        <div class="d-flex flex-column flex-grow-1">
+                            <span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+                                Perangkat pengajaran
+                            </span>
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center pr-5">
+                                    <span class="svg-icon svg-icon-md svg-icon-primary">
+                                    </span>
+                                    <span class="text-muted font-weight-bold">Daftar perangkat pengajaran</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-6">
                     <table class="table table-borderless table-sm">
@@ -54,12 +54,27 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr v-if="myclassrooms.length === 0">
+                            <td>Tidak ada data kelas, silakan tambah terlebih daulu</td>
+                        </tr>
                     </table>
                 </div>
                 <div class="col-md-6">
-                    <div class="alert bg-light-primary">
-                        <strong>Informasi</strong> <br>
-                        Klik silabus atau RPP untuk melihat dan menambahkan data baru 
+                    <div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+                        <div class="alert-icon">
+                            <i class="flaticon-info"></i>
+                        </div>
+                        <div class="alert-text">
+                            <strong>Informasi</strong><br>
+                            Klik silabus atau RPP untuk melihat dan menambahkan data baru 
+                        </div>
+                        <div class="alert-close">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">
+                                    <i class="ki ki-close"></i>
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -134,9 +134,9 @@
 										<span class="text-dark-75 font-weight-bold font-size-lg mb-1">{{ schedule.day | dayIndex }}</span>
 										<span class="text-muted font-weight-bold"><span class="badge badge-success">{{ schedule.from_time }}</span> - <span class="badge badge-secondary">{{ schedule.end_time }}</span></span>
 									</div>
-									<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+									<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
 										<template v-slot:button-content>
-											   <i class="flaticon-more"></i>
+											   <i class="flaticon-squares-4"></i>
 										</template>
 										<b-dropdown-item @click="getSchedule(schedule.id)">Edit</b-dropdown-item>
 										<b-dropdown-item @click="deleteSchedule(schedule.id)">Hapus</b-dropdown-item>
@@ -378,7 +378,14 @@ export default {
 			return 'Day not found'
 		},
 		textReason(i) {
-			return this.reasons[parseInt(i)];
+			let reasons = [
+				"-",
+				"Tanpa keterangan",
+				"Sakit",
+				"Izin",
+				"Masalah"
+			];
+			return reasons[parseInt(i)];
 		}
 	},
 	methods: {
@@ -595,7 +602,10 @@ export default {
 	},
 	watch: {
 		schedule_show_id(val) {
-			this.getAbcentToday(val)
+			this.getAbcentToday({
+				schedule_id: val,
+				date: this.date_report
+			})
 		}
 	}
 }
