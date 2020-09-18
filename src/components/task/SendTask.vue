@@ -1,16 +1,11 @@
 <template>
-	<div class="mt-3">	
+	<div>	
 		<div class="card card-custom" v-if="!task.status">
 			<div class="card-header  flex-wrap border-0 pt-6 pb-0">
 				<h3 class="card-title align-items-start flex-column">
 					<span class="card-label font-weight-bolder text-dark">Kumpulkan Tugas</span>
 					<span class="text-primary mt-1 font-weight-bold font-size-sm">Batas {{ task.lastsubmit }}</span>
 				</h3>
-				<div class="card-toolbar">
-					<div class="">		
-						<button class="btn btn-primary" :disabled="isLoading" @click="submit"><i class="flaticon-edit-1"></i> {{ isLoading ? 'Processing...' : 'Submit' }}</button>
-					</div>
-				</div>
 			</div>
 			<div class="card-body">
 				<b-form-file multiple @change="onFileChange" v-if="task.type == '0' || task.type == '1'">
@@ -22,7 +17,9 @@
 				   </template>
 				</b-form-file>
 				<ckeditor v-model="content" v-if="task.type == '2' && showEditor" :config="editorConfig"></ckeditor>
-				<b-progress :value="upload_progress" :max="100" show-progress animated></b-progress>
+				<b-progress v-if="upload_progress != 0" :value="upload_progress" :max="100" show-progress animated></b-progress>
+
+				<button class="btn btn-primary mt-3 btn-block" :disabled="isLoading" @click="submit"><i class="flaticon-edit-1"></i> {{ isLoading ? 'Processing...' : 'Submit' }}</button>
 			</div>
 		</div>
 		<div v-else>

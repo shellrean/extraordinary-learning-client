@@ -99,7 +99,22 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-
+					<div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+                        <div class="alert-icon">
+                            <i class="flaticon-warning"></i>
+                        </div>
+                        <div class="alert-text">
+                            <strong>Peringatan</strong><br>
+                            Kami tidak menyarankan untuk mengubah banksoal setelah digunakan untuk ujian, karena dapat berpengaruh kepada analisis, gunakan fitur gandakan banksoal
+                        </div>
+                        <div class="alert-close">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">
+                                    <i class="ki ki-close"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		</div>

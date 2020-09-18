@@ -47,27 +47,76 @@
 						<div class="navi mt-2">
 							<a href="#" class="navi-item">
 								<span class="navi-link p-0 pb-2">
-									<span class="navi-icon mr-1">
-										<i class="flaticon-email"></i>
-									</span>
-									<span class="navi-text text-muted text-hover-primary">{{ authenticated.email }}</span>
+									<span class="navi-text text-muted">{{ authenticated.email }}</span>
 								</span>
 							</a>
 							<a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5" @click="logout" :disabled="isLoading">{{ isLoading ? 'Processing...': 'Sign Out' }}</a>
 						</div>
 					</div>
 				</div>
+				<div class="separator separator-dashed mt-8 mb-5"></div>
+				<div class="navi navi-spacer-x-0 p-0">
+					<!--begin::Item-->
+					<a href="#" v-b-modal.modal-profile class="navi-item">
+						<div class="navi-link">
+							<div class="symbol symbol-40 bg-light mr-3">
+								<div class="symbol-label">
+									<i class="flaticon-user"></i>
+								</div>
+							</div>
+							<div class="navi-text">
+								<div class="font-weight-bold">My Profile</div>
+								<div class="text-muted">Ubah profile & password<span class="label label-light-danger label-inline font-weight-bold">update</span></div>
+							</div>
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
+		<b-modal id="modal-profile" title="My profile">
+			<div class="form-group">
+				<label>Nama</label>
+				<input type="text" class="form-control" v-model="authenticated.name">
+			</div>
+			<div class="form-group">
+				<label>Password</label>
+				<input type="password" class="form-control" name="" v-model="password">
+				<small class="text-muted">Kosongkan bila tidak ingin diubah</small>
+			</div>
+			<div class="form-group">
+				<label>Re-Password</label>
+				<input type="password" class="form-control" name="" v-model="repassword" :class="{ 'is-invalid' : not_same }">
+			</div>
+			<template v-slot:modal-footer="{ cancel }">
+				<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
+			    	Cancel
+			    </b-button>
+			    <b-button variant="primary" @click="submit" :disabled="isLoading" v-if="!not_same">
+			    	{{ isLoading ? 'Processing...' : 'Simpan' }}
+			    </b-button>
+			</template>
+		</b-modal>
 	</div>
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import KTLayoutQuickUser from "@/assets/js/layout/extended/quick-user.js";
 import KTOffcanvas from "@/assets/js/components/offcanvas.js";
+import { BButton } from 'bootstrap-vue'
+import { successToas, errorToas } from '@/core/entities/notif'
 
 export default {
 	name: 'KTQuickUser',
+	components: {
+		BButton
+	},
+	data() {
+		return {
+			not_same: false,
+			password: '',
+			repassword: ''
+		}
+	},
 	mounted() {
     	KTLayoutQuickUser.init(this.$refs["kt_quick_user"]);
   	},
@@ -77,12 +126,42 @@ export default {
   	},
   	methods: {
   		...mapActions('auth',['loggedOut']),
+  		...mapActions('user', ['updateDataProfile']),
   		async logout() {
   			await this.loggedOut()
   			localStorage.removeItem('token')
             this.$store.state.token = localStorage.getItem('token')
             this.$store.commit('user/CLEAR_AUTH')
             this.$router.push('/login')
+  		},
+  		submit() {
+  			this.updateDataProfile({
+  				name: this.authenticated.name,
+  				password: this.password
+  			})
+  			.then((res) => {
+  				this.$bvModal.hide('modal-profile')
+  				this.$bvToast.toast('Profile berhasil diupdate', successToas())
+  			})
+  			.catch((error) => {
+  				this.$bvToast.toast(error.message, errorToas())
+  			})
+  		}
+  	},
+  	watch: {
+  		repassword(val) {
+  			if(val != this.password) {
+  				this.not_same = true
+  			} else {
+  				this.not_same = false
+  			}
+  		},
+  		password(val) {
+  			if(val != this.repassword) {
+  				this.not_same = true
+  			} else {
+  				this.not_same = false
+  			}
   		}
   	}
 }
