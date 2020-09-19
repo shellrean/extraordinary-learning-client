@@ -64,6 +64,20 @@ const actions = {
 			})
 		})
 	},
+	updateDataAbcent({ commit }, payload) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				commit('SET_LOADING', true, { root: true })
+				let network = await $axios.put(`abcents/${payload.id}`, payload)
+
+				commit('SET_LOADING', false, { root: true })
+				resolve(network.data)
+			} catch (error){
+				commit('SET_LOADING', false, { root: true })
+				reject(error.response.data)
+			}
+		})
+	}
 }
 
 export default {

@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-body">
 					<div class="form-group">
 						<label>Judul</label>

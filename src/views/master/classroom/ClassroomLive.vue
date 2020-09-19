@@ -16,7 +16,10 @@
 				<div class="row justify-content-center">
 					<div class="col-md-8">	
 						<div class="card card-custom shadow-none border">
-							<div class="card-header flex-wrap p-4">
+							<div class="card-header flex-wrap pb-0 pt-12 ribbon ribbon-clip ribbon-left">
+								<div class="ribbon-target" style="top: 12px;">
+							<span class="ribbon-inner bg-success"></span>Online
+							</div>
 									<h3 class="card-title align-items-start flex-column">
 									<span class="card-label font-weight-bolder text-dark">Kelas langsung</span>
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ classlive.created_at }}</span>
@@ -32,12 +35,12 @@
 									</div>
 								</div>
 							</div>
-							<div class="card-body p-4" v-html="classlive.body">
+							<div class="card-body " v-html="classlive.body">
 								
 							</div>
 						</div>
 						<div class="card card-custom shadow-none border">
-							<div class="card-body">
+							<div class="card-body p-4">
 								<StudentComment />
 							</div>
 						</div>
@@ -79,13 +82,52 @@
                     </span>
                 </template>
                 <template v-slot:cell(isattend)="row">
-                    <span class="badge badge-info">{{ row.item.isabcent ? 'Hadir' : 'Tidak hadir' }}</span>
+                    <span class="badge" :class="row.item.isabcent ? 'badge-success' : 'badge-danger'">{{ row.item.isabcent ? 'Hadir' : 'Tidak hadir' }}</span>
                 </template>
                 <template v-slot:cell(type)="row">
                 	{{ row.item.reason | textReason }}
                 </template>
+								<template v-slot:cell(actions)="row">
+                    <b-button variant="secondary" class="btn-icon" size="sm" @click="getAbcent(row.item.id)" v-if="authenticated.role == '1'">
+											<i class="flaticon-edit"></i>
+										</b-button>
+								</template>
             </b-table>
 			</VuePerfectScrollbar>
+			<span class="badge badge-primary">Total {{ filteredAbcent.length }} data</span>
+		</b-modal>
+		<b-modal id="modal-edit-absent" title="Edit keterangan siswa"  no-close-on-backdrop hide-header-close  no-close-on-esc>
+				<div class="form-group">
+					<label>Status</label>
+						<select class="form-control" v-model="edit_absent.isabcent">
+   						<option :value="0">Tidak hadir</option>
+   						<option :value="1">Hadir</option>
+   					</select>
+				</div>
+				<div class="form-group">
+   					<label>Keterangan</label>
+   					<select class="form-control" v-model="edit_absent.reason">
+   						<option value="0">-</option>
+   						<option value="1">Alpha</option>
+   						<option value="2">Sakit</option>
+   						<option value="3">Izin</option>
+   						<option value="4">Masalah</option>
+   					</select>
+   				</div>
+   				<div class="form-group">
+   					<label>Tambahan</label>
+   					<textarea class="form-control" placeholder="Beri sedikit penjelasan tentang keterangan yang diberikan" v-model="edit_absent.desc">
+   						
+   					</textarea>
+   				</div>
+   				<template v-slot:modal-footer="{ cancel }">
+			      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
+			        Cancel
+			      </b-button>
+			      <b-button size="sm" variant="primary" :disabled="isLoading" @click="updateAbsent">
+			        {{ isLoading ? 'Processing...' : 'Simpan' }}
+			      </b-button>
+			    </template>
 		</b-modal>
 	</div>
 </template>
@@ -96,6 +138,7 @@ import StudentComment from '@/components/classroom/StudentComment'
 import { successToas, errorToas } from '@/core/entities/notif'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { JitsiMeet } from '@mycure/vue-jitsi-meet';
+import { BDropdown, BDropdownItem, BButton } from 'bootstrap-vue'
 
 export default {
 	name: 'ClassroomLive',
@@ -104,10 +147,12 @@ export default {
 			videoId: '',
 			fields: [
 				{ key: 'no', label: '#' },
+				{ key: 'user.uid', label: 'NIS' },
 				{ key: 'user.name', label: 'Nama' },
 				{ key: 'isattend', label: 'Status' },
 				{ key: 'type', label: 'Keterangan'},
-				{ key: 'desc', label: 'Detail' }
+				{ key: 'desc', label: 'Tambahan' },
+				{ key: 'actions', label: 'Aksi' }
 			],
 			width: '',
 			height: '',
@@ -118,14 +163,16 @@ export default {
 				"Sakit",
 				"Izin",
 				"Masalah"
-			]
+			],
+			edit_absent: {}
 		}
 	},
 	components: {
 		StudentAttend,
 		StudentComment,
 		VuePerfectScrollbar,
-		VueJitsiMeet: JitsiMeet
+		VueJitsiMeet: JitsiMeet,
+		BDropdownItem, BDropdown, BButton
 	},
 	filters: {
 		textReason(i) {
@@ -178,7 +225,7 @@ export default {
 	},
 	methods: {
 		...mapActions('classroom',['storeLiveClassroom', 'getDataliveClassroom', 'getDataStudents', 'stopLiveClassroom']),
-		...mapActions('abcent',['getAbcentToday','storeAbcentToday']),
+		...mapActions('abcent',['getAbcentToday','storeAbcentToday', 'updateDataAbcent']),
 		playVideo() {
       		this.player.playVideo()
     	},
@@ -209,7 +256,24 @@ export default {
     	},
     	onIFrameLoad () {
       		// do stuff
-    	},
+			},
+			getAbcent(id) {
+				let index = this.abcents.map(item => item.id).indexOf(id)
+				if(index !== -1) {
+					this.edit_absent = this.abcents[index]
+					this.$bvModal.show('modal-edit-absent')
+				}
+			},
+			updateAbsent() {
+				this.updateDataAbcent(this.edit_absent)
+				.then((res) => {
+					this.$bvToast.toast('Data absent berhasil diubah', successToas())
+					this.$bvModal.hide('modal-edit-absent')
+				})
+				.catch((error) => {
+					this.$bvToast.toast(error.message, errorToas())
+				})
+			}
 	},
 	async created() {
 		try {
@@ -270,3 +334,8 @@ export default {
 	}
 }
 </script>
+<style>
+	.table > tbody > tr > td {
+     vertical-align: middle;
+}
+</style>

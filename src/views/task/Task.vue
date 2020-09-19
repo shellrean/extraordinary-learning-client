@@ -166,13 +166,19 @@ export default {
 		...mapGetters(['isLoading']),
 		...mapState('task', ['tasks']),
 		...mapState('classroom',['myclassrooms']),
-		classrooms() {
-			return this.myclassrooms.map(item => {
-				return {
-					id : item.classroom.id,
-					name :item.classroom.name
+			classrooms() {
+			const result = []
+			const map = new Map()
+			for (const item of this.myclassrooms) {
+				if(!map.has(item.classroom.id)) {
+					map.set(item.classroom.id, true);
+					result.push(item)
 				}
-			})
+			}
+			return result.map(item => ({
+				id: item.classroom.id,
+				name: item.classroom.name
+			}));
 		},
 		page: {
             get() {

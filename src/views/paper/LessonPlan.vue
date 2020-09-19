@@ -37,7 +37,7 @@
 				</template>
 			</b-form-file>
             <small class="text-danger" v-if="errors.file">{{ errors.file[0] }}</small>
-            <b-progress :value="progress" :max="100" show-progress animated class="mt-2"></b-progress>
+            <b-progress :value="progress" :max="100" show-progress animated class="mt-2" v-show="progress !== 0"></b-progress>
             <template v-slot:modal-footer="{ cancel }">
                 <b-button variant="secondary" @click="cancel()" :disabled="isLoading">
                     Cancel

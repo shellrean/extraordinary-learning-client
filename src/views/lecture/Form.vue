@@ -26,7 +26,7 @@
 					<div class="form-group" v-if="typeof subjects.data != 'undefined'">
 						<label>Pelajaran</label>
 						<select class="form-control" v-model="lecture.subject_id" :class="{ 'is-invalid' : errors.subject_id }">
-							<option v-for="classroom in myclassrooms" :value="classroom.subject.id">{{ classroom.subject.name }}</option>
+							<option v-for="classroom in filteredSubjects" :value="classroom.subject.id">{{ classroom.subject.name }}</option>
 						</select>
 						<div class="invalid-feedback" v-if="errors.subject_id">{{ errors.subject_id[0] }}</div>
 					</div>
@@ -74,6 +74,17 @@ export default {
 			lecture: state => state.lecture
 		}),
 		...mapState('classroom', ['myclassrooms']),
+		filteredSubjects() {
+			const result = []
+			const map = new Map()
+			for (const item of this.myclassrooms) {
+				if(!map.has(item.subject.id)) {
+					map.set(item.subject.id, true);
+					result.push(item)
+				}
+			}
+			return result;
+		},
 	},
 	methods: {
 		...mapActions('subject',['getDataSubjects']),

@@ -1,5 +1,27 @@
 <template>
 	<div class="card card-custom gutter-b border shadow-none">
+		<div class="card-header  p-4 d-flex justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="symbol symbol-45 symbol-light-primary mr-5">
+					<b-button variant="primary" class="btn-icon" v-b-toggle="'profile_kelas'">
+			 			<i class="flaticon-app"></i>
+					</b-button>
+				</div>
+				<div class="d-flex flex-column flex-grow-1">
+					<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+						Data kelas
+					</span>
+					<div class="d-flex">
+						<div class="d-flex align-items-center pr-5">
+							<span class="svg-icon svg-icon-md svg-icon-primary">
+							</span>
+							<span class="text-muted font-weight-bold">Data kelas ini</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			<b-collapse :id="'profile_kelas'">
 		<div class="card-body ribbon ribbon-clip ribbon-left">
 			<div class="ribbon-target" style="top: 12px;">
 				<span class="ribbon-inner bg-danger"></span>Lobi kelas
@@ -32,6 +54,7 @@
 				{{ 'Mata pelajaran' }}
 			</button>
 		</div>
+			</b-collapse>
 		<b-modal id="modal-student" title="Siswa kelas" hide-footer size="lg">
 			<div class="table-responsive">
 				<VuePerfectScrollbar
@@ -78,11 +101,12 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import { BButton, BCollapse } from 'bootstrap-vue'
 
 export default {
 	name: 'ClassroomProfile',
 	components: {
-		VuePerfectScrollbar
+		VuePerfectScrollbar, BButton, BCollapse
 	},
 	data() {
 		return {

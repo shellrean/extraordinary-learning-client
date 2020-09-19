@@ -250,6 +250,7 @@
 					</div>
 				</div>
 			</div>
+			<span class="badge badge-primary">Total {{ abcents.length }} data </span>
 		</b-modal>
 		<b-modal id="modal-1" title="Filter tanggal" hide-footer>
 			<div class="form-group">
@@ -299,6 +300,7 @@
 				</table>
 				</VuePerfectScrollbar>
 			</div>
+			<span class="badge badge-primary">Total {{ students.length }} data</span>
 		</b-modal>
 	</div>
 </template>

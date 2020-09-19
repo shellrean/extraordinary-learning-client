@@ -77,6 +77,13 @@
 			</div>
 			<!--end::Body-->
 			<b-modal id="modal-desc" title="Keterangan siswa" no-close-on-backdrop hide-header-close  no-close-on-esc>
+					<div class="form-group">
+					<label>Status</label>
+						<select class="form-control" v-model="data.isabcent">
+   						<option :value="0">Tidak hadir</option>
+   						<option :value="1">Hadir</option>
+   					</select>
+				</div>
    				<div class="form-group">
    					<label>Keterangan</label>
    					<select class="form-control" v-model="data.reason">
@@ -88,7 +95,7 @@
    					</select>
    				</div>
    				<div class="form-group">
-   					<label>Penjelasan</label>
+   					<label>Tambahan</label>
    					<textarea class="form-control" placeholder="Beri sedikit penjelasan tentang keterangan yang diberikan" v-model="data.desc">
    						
    					</textarea>
@@ -121,6 +128,7 @@ export default {
 			channel:'',
 			no_attends: [],
 			data: {
+				isabcent: 0,
 				details: {
 					type: '',
 					desc: ''
@@ -145,6 +153,7 @@ export default {
 		clearForm() {
 			this.id_set = ''
 			this.data = {
+				isabcent: 0,
 				details: {
 					type: '',
 					desc: ''
@@ -160,7 +169,7 @@ export default {
 				await this.storeAbcentToday({
 					user_id: this.id_set,
 					schedule_id: this.classlive.schedule_id,
-					isabcent: false,
+					isabcent: this.data.isabcent,
 					reason: this.data.reason,
 					desc: this.data.desc,
 					details: this.data.details

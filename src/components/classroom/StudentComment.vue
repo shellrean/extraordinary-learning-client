@@ -3,23 +3,27 @@
 		<VuePerfectScrollbar
 			style="max-height: 50vh; position: relative;"
 		>
-		<div class="d-flex py-5" v-for="comment in comments">
-			<div class="symbol symbol-40 symbol-light-primary mr-5 mt-1 symbol-circle">
-				<span class="symbol-label">
-					{{ comment.user.name.charAt(0) }}
-				</span>
-			</div>
-			<div class="d-flex flex-column flex-row-fluid">
-				<div class="d-flex align-items-center flex-wrap">
-					<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder pr-6">{{ comment.user.name }}
-		
-					<i class="flaticon2-correct text-primary small" v-if="comment.user.role == '1'"></i>
-					<i class="flaticon-safe-shield-protection text-primary small" v-if="comment.user.role == '0'"></i>
-				</span>
-				</div>
-				<span class="text-dark-75 font-size-sm font-weight-normal pt-1">{{ comment.content }}</span>
-			</div>
-		</div>
+		  <div class="timeline timeline-justified timeline-4">
+    <div class="timeline-bar"></div>
+    <div class="timeline-items">
+        <div class="timeline-item" v-for="comment in comments" :key="comment.id">
+            <div class="timeline-badge">
+                <div class="bg-success"></div>
+            </div>
+
+            <div class="timeline-label">
+                <span class="text-primary font-weight-bold">{{ comment.user.name }}
+									<i class="flaticon2-correct text-primary small" v-if="comment.user.role == '1'"></i>
+							<i class="flaticon-safe-shield-protection text-primary small" v-if="comment.user.role == '0'"></i>
+								</span>
+            </div>
+
+            <div class="timeline-content  max-w-400px">
+                	{{ comment.content }}
+            </div>
+        </div>
+    </div>
+</div>
 		</VuePerfectScrollbar>
 		<div class="separator separator-solid mt-5 mb-4"></div>								
 		<form class="position-relative"  @submit.prevent="submit()">
