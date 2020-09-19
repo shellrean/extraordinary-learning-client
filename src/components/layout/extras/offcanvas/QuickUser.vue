@@ -19,7 +19,7 @@
 		    	class="offcanvas-header d-flex align-items-center justify-content-between pb-5"
 		    >
 		    	<h3 class="font-weight-bold m-0">
-		    		User Profile
+		    		Hei there !
 		    	</h3>
 		    	<a
 		          href="#"
@@ -32,28 +32,29 @@
 			</div>
 			<div class="offcanvas-content pr-5 mr-n5 scroll ps ps--active-y" style="height: 529px; overflow: hidden;">
 				<!--begin::Header-->
-				<div class="d-flex align-items-center mt-5">
-					<div class="symbol symbol-100 mr-5">
+				<div class="d-flex align-items-center mt-5 mb-2">
+					<div class="symbol symbol-40 mr-5">
 						<div class="symbol-label" style="background-image:url('/media/users/default.jpg')"></div>
 						<i class="symbol-badge bg-success"></i>
 					</div>
 					<div class="d-flex flex-column">
-						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ authenticated.name }}</a>
-						<div class="text-muted mt-1">
+						<a href="#" class="font-weight-bold font-size-h5 text-dark-75">{{ authenticated.name }}</a>
+						<!-- <div class="text-muted mt-1">
 							<span v-if="authenticated.role == '0'">Administrator</span>
 							<span v-if="authenticated.role == '1'">Guru</span>
 							<span v-if="authenticated.role == '2'">Siswa</span>
-						</div>
-						<div class="navi mt-2">
+						</div> -->
+						<div class="navi">
 							<a href="#" class="navi-item">
 								<span class="navi-link p-0 pb-2">
 									<span class="navi-text text-muted">{{ authenticated.email }}</span>
 								</span>
 							</a>
-							<a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5" @click="logout" :disabled="isLoading">{{ isLoading ? 'Processing...': 'Sign Out' }}</a>
 						</div>
 					</div>
+
 				</div>
+							<a href="#" class="btn btn-sm btn-primary font-weight-bolder py-2 px-5" @click="logout" :disabled="isLoading">{{ isLoading ? 'Processing...': 'Sign Out' }}</a>
 				<div class="separator separator-dashed mt-8 mb-5"></div>
 				<div class="navi navi-spacer-x-0 p-0">
 					<!--begin::Item-->
