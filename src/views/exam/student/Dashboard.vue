@@ -11,7 +11,7 @@
 						<div class="card-toolbar">
 							<div class="form-group">
 								<router-link :to="{ name: 'home' }" class="btn btn-light-primary mr-2">
-									<i class="flaticon2-layers"></i>Dashboard
+									<i class="flaticon-squares-4"></i>Dashboard
 								</router-link>
 							</div>
 						</div>
@@ -32,12 +32,7 @@
 								</div>
 							</div>
 							<div v-else>
-								<div class="alert alert-custom alert-light-primary fade show mb-5">
-									<div class="alert-icon">
-										<i class="flaticon-warning"></i>
-									</div>
-									<div class="alert-text">Tidak ada jadwal ujian saat ini</div>
-								</div>
+								<p class="text-muted">Tidak ada jadwal ujian untuk anda saat ini</p>
 							</div>
 						</form>
 					</div>

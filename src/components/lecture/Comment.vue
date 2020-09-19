@@ -5,7 +5,7 @@
 			style="max-height: 60vh; position: relative;"
 		>
 		<div class="d-flex py-5" v-for="comment in comments">
-			<div class="symbol symbol-40 symbol-light-primary mr-5 mt-1">
+			<div class="symbol symbol-40 symbol-light-primary mr-5 mt-1 symbol-circle">
 				<span class="symbol-label">
 					{{ comment.user.name.charAt(0) }}
 				</span>

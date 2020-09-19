@@ -1,13 +1,13 @@
 <template>
 	<div>	
 		<div class="card card-custom shadow-none border" v-if="!task.status">
-			<div class="card-header  flex-wrap border-0 pt-6 pb-0">
+			<div class="card-header  flex-wrap border-0 p-4">
 				<h3 class="card-title align-items-start flex-column">
 					<span class="card-label font-weight-bolder text-dark">Kumpulkan Tugas</span>
 					<span class="text-dark mt-1 font-weight-bold font-size-sm">Batas {{ task.lastsubmit }}</span>
 				</h3>
 			</div>
-			<div class="card-body">
+			<div class="card-body p-4">
 				<b-form-file multiple @change="onFileChange" v-if="task.type == '0' || task.type == '1'">
 				   <template slot="file-name" slot-scope="{ names }">
 				     <b-badge variant="success">{{ names[0] }}</b-badge>

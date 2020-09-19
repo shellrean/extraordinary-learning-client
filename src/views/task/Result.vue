@@ -3,10 +3,25 @@
 		<div class="container">
 			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Hasil nilai tugas</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Hasil nilai tugas siswa</span>
-					</h3>
+						<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
+							<span class="symbol-label">
+								<i class="flaticon2-crisp-icons text-primary"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+							Hasil nilai tugas
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary">
+									</span>
+									<span class="text-muted font-weight-bold">Hasil nilai tugas siswa</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar">
 						<div class="">
 							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary">
@@ -38,17 +53,21 @@
 						<div class="row align-items-center">
 							<div class="col-lg-9 col-xl-8">
 								<div class="row align-items-center">
-									<div class="col-md-4 my-2 my-md-0">
-										<div class="input-icon">
-											<select class="form-control" v-model="classroom_id">
-												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms">{{ classroom.classroom.name }}</option>
-											</select>
-											<span>
+									<div class="col-md-5 my-2 my-md-0">
+										<!-- <div class="input-icon"> -->
+											<!-- <span>
 												<i class="flaticon2-search-1 text-muted"></i>
 											</span>
+										</div> -->
+										<div class="input-group mb-3">
+											<select class="form-control" v-model="classroom_id">
+												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms" :key="classroom.id">{{ classroom.classroom.name }}</option>
+											</select>
+											<div class="input-group-append">
+									<button @click="getData" :disabled="isLoading" class="btn btn-primary">Tampilkan</button>
+											</div>
 										</div>
 									</div>
-									<button @click="getData" :disabled="isLoading" class="btn btn-light-primary px-6 font-weight-bold">Tampilkan</button>
 								</div>
 							</div>
 						</div>
@@ -106,7 +125,7 @@ export default {
 		],
 		json_fields: {
 			'NIS': 'uid',
-			'NAMA PESERTA DIDIK': 'student.name',
+			'NAMA PESERTA DIDIK': 'name',
 			'NILAI': 'result.point'
 		}
 	}),

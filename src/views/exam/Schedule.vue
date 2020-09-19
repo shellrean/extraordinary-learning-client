@@ -37,9 +37,9 @@
 						  show-empty
 						  :items="schedules.data">
 						  	<template v-slot:cell(details)="row">
-								<b-button size="sm" variant="white" @click="row.toggleDetails">
+								<b-button size="sm" variant="primary" class="btn-icon" @click="row.toggleDetails">
 									<small>
-										<i :class="row.detailsShowing ? 'flaticon-circle' : 'flaticon-plus'" class="text-primary"></i>
+										<i :class="row.detailsShowing ? 'flaticon-circle' : 'flaticon-plus'" class="text-white"></i>
 									</small>
 								</b-button>
 							</template>
@@ -57,7 +57,7 @@
 								<div class="card">
 									<div class="card-body p-2">
 										<div class="table-responsive-md">
-											<table class="table table-bordered">
+											<table class="table table-bordered mb-0">
 												<tr>
 													<td width="150px">Tanggal</td>
 													<td>{{ row.item.date }}</td>
@@ -88,9 +88,9 @@
 								</b-form-checkbox>
 							</template>
 							<template v-slot:cell(actions)="row">
-                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
 									<template v-slot:button-content>
-									    <i class="flaticon-squares-4"></i>
+									    <span class="flaticon-squares-4"></span>
 									</template>
 									<b-dropdown-item :to="{ name: 'exam.schedule.point', params: { id: row.item.id }}">Hasil</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'exam.schedule.check', params: { id: row.item.id }}">Koreksi</b-dropdown-item>
@@ -111,7 +111,7 @@
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
 								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.number="perPage">
 									<option value="10">10</option>
 									<option value="20">20</option>
 									<option value="30">30</option>
@@ -200,10 +200,10 @@ export default {
 	data: () => ({
 		perPage: 10,
 		fields: [
-			{ key: 'details', label: 'Detail' },
-			{ key: 'name', label: 'Jadwal' },
-			{ key: 'status', label: 'Status' },
-			{ key: 'actions' }
+			{ key: 'details', label: '', thStyle: { display: 'none'} },
+			{ key: 'name', label: '',thStyle: { display: 'none'} },
+			{ key: 'status', label: '', thStyle: { display: 'none'} },
+			{ key: 'actions', thStyle: { display: 'none'}}
 		]
 	}),
 	computed: {
@@ -316,3 +316,8 @@ export default {
 	}
 }
 </script>
+<style>
+	.table > tbody > tr > td {
+     vertical-align: middle;
+}
+</style>

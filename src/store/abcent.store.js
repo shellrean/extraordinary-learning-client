@@ -44,7 +44,7 @@ const actions = {
 	downloadExcel({ state, commit}, payload) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise((resolve, reject) => {
-			let date = typeof payload.date != 'undefined' ? payload.date : ''
+			let date = typeof payload.date != 'undefined' && payload.date != null  ? payload.date : ''
 			
 			$axiosexcel.get(`abcents/schedule/${payload.schedule_id}/export?date=${date}`)
 			.then((response) => {

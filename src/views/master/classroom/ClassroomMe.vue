@@ -129,7 +129,7 @@
 			<template v-slot:modal-header="{  }">
 		    	<b-button variant="primary" @click="addSchedule(id_show)"><i class="flaticon2-add-square"></i> Tambah jadwal</b-button>
 		    </template>
-			<div class="container">
+			<div class="">
 				<div class="row">
 					<div class="col-md-4" v-for="(days,index) in filteredSchedules" :key="index">
 						<div class="card">
@@ -139,9 +139,9 @@
 										<span class="text-dark-75 font-weight-bold font-size-lg mb-1">{{ schedule.day | dayIndex }}</span>
 										<span class="text-muted font-weight-bold"><span class="badge badge-success">{{ schedule.from_time }}</span> - <span class="badge badge-secondary">{{ schedule.end_time }}</span></span>
 									</div>
-									<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
+									<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
 										<template v-slot:button-content>
-											   <i class="flaticon-squares-4"></i>
+											   <span class="flaticon-squares-4"></span>
 										</template>
 										<b-dropdown-item @click="getSchedule(schedule.id)">Edit</b-dropdown-item>
 										<b-dropdown-item @click="deleteSchedule(schedule.id)">Hapus</b-dropdown-item>
@@ -156,7 +156,7 @@
 				</div>
 			</div>
 			<template v-slot:modal-footer="{ cancel }">
-				<b-button size="sm" variant="secondary" @click="cancel()">
+				<b-button  variant="secondary" @click="cancel()">
 			        Tutup
 			    </b-button>
 			</template>
@@ -190,7 +190,7 @@
 		<b-modal id="modal-report-abcent" title="Laporan absensi" size="xl" hide-footer>
 			<template v-slot:modal-header>
 				<div class="input-icon">
-					<select class="form-control form-control-solid" v-model="schedule_show_id">
+					<select class="form-control" v-model="schedule_show_id">
 						<option :value="schedule.id" v-for="schedule in schedules" :key="schedule.id">
 							{{ schedule.day | dayIndex }} ({{ schedule.from_time.substring(0, 5) }} - {{ schedule.end_time.substring(0,5) }})
 						</option>
@@ -214,7 +214,7 @@
 					</b-button>
 				</div>
 			</template>
-			<div class="container">
+			<div class="">
 				
 				<div class="table-responsive-md"  id="printMe">
 					<table class="table table-bordered">
@@ -254,12 +254,14 @@
 		<b-modal id="modal-1" title="Filter tanggal" hide-footer>
 			<div class="form-group">
 				<label>Tanggal</label>
-				<input type="date" class="form-control form-control-lg form-control-solid" v-model="date_report"  name="">
-			</div>
-			<div class="form-group">
-				<b-button @click="filterDate" variant="primary" :disabled="isLoading">
-					{{ isLoading ? 'Processing...' : 'Filter' }}
-				</b-button>
+			<div class="input-group mb-3">
+				<input type="date" class="form-control" v-model="date_report"  name="">
+  <div class="input-group-append">
+    <button class="btn btn-primary" type="button" @click="filterDate"  :disabled="isLoading">
+				{{ isLoading ? 'Processing...' : 'Filter' }}
+		</button>
+  </div>
+</div>
 			</div>
 		</b-modal>
 		<b-modal id="modal-student" title="Siswa kelas" hide-footer size="lg">

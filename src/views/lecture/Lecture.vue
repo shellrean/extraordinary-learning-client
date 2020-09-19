@@ -62,18 +62,19 @@
                         					</span>								
                         				</div>								
                         				<div class="ml-4 d-flex flex-column">									
-                        					<router-link :to="{ name: 'lecture.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.title"></router-link>									
-                        					<span class="text-muted font-weight-bold" v-text="row.item.subject.name"></span>	
+                        					<router-link :to="{ name: 'lecture.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bold font-size-lg mb-0" v-text="row.item.title"></router-link>									
+                        					<span class="text-muted" v-text="row.item.subject.name"></span>	
                         				</div>							
                         			</div>
                         		</span>
                         	</template>
                         	
                         	<template v-slot:cell(actions)="row">
-                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
 									<template v-slot:button-content>
-									    <i class="flaticon-squares-4"></i>
+									    <span class="flaticon-squares-4"></span>
 									</template>
+									<b-dropdown-item  :to="{ name: 'lecture.view', params: { id: row.item.id }}">Lihat</b-dropdown-item>
 									<b-dropdown-item @click="shareeLecutre(row.item.id)">Bagikan</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'lecture.edit', params: { id: row.item.id}}" >Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteLecture(row.item.id)">Hapus</b-dropdown-item>
@@ -92,7 +93,7 @@
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
 								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.number="perPage">
 									<option value="10">10</option>
 									<option value="20">20</option>
 									<option value="30">30</option>

@@ -3,10 +3,25 @@
 		<div class="container">
 			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
-					<h3 class="card-title align-items-start flex-column">
-						<span class="card-label font-weight-bolder text-dark">Koreksi tugas</span>
-						<span class="text-muted mt-1 font-weight-bold font-size-sm">Koreksi tugas siswa</span>
-					</h3>
+						<div class="d-flex align-items-center">
+						<div class="symbol symbol-45 symbol-light-primary mr-5">
+							<span class="symbol-label">
+								<i class="flaticon2-crisp-icons text-primary"></i>
+							</span>
+						</div>
+						<div class="d-flex flex-column flex-grow-1">
+							<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
+								Koreksi tugas
+							</span>
+							<div class="d-flex">
+								<div class="d-flex align-items-center pr-5">
+									<span class="svg-icon svg-icon-md svg-icon-primary">
+									</span>
+									<span class="text-muted font-weight-bold">Koreksi tugas siswa</span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card-toolbar">
 						<div class="form-group">
 							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary mr-2">
@@ -20,17 +35,16 @@
 						<div class="row align-items-center">
 							<div class="col-lg-9 col-xl-8">
 								<div class="row align-items-center">
-									<div class="col-md-4 my-2 my-md-0">
-										<div class="input-icon">
-											<select class="form-control" v-model="classroom_id">
-												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms">{{ classroom.classroom.name }}</option>
-											</select>
-											<span>
-												<i class="flaticon2-search-1 text-muted"></i>
-											</span>
+									<div class="col-md-5 my-2 my-md-0">
+											<div class="input-group mb-3">
+												<select class="form-control" v-model="classroom_id">
+													<option :value="classroom.classroom.id" v-for="classroom in myclassrooms" :key="classroom.id">{{ classroom.classroom.name }}</option>
+												</select>
+											<div class="input-group-append">
+												<button class="btn btn-primary" type="button" @click="getData">Tampilkan</button>
+											</div>
 										</div>
 									</div>
-									<button :disabled="isLoading"  @click="getData" class="btn btn-primary px-6 font-weight-bold">Tampilkan</button>
 								</div>
 							</div>
 						</div>
@@ -72,9 +86,9 @@
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
 								</div>
+							<span class="badge badge-primary">Total {{ classroom_submit_tasks.length }} data</span>
 							</div>
                     	</div>
-							<span class="badge badge-primary">Total {{ classroom_submit_tasks.length }} data</span>
 					</div>
 				</div>
 			</div>

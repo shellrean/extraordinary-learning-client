@@ -62,7 +62,7 @@
                         					</span>								
                         				</div>								
                         				<div class="ml-4 d-flex flex-column">									
-                        					<router-link :to="{ name: 'task.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.title">
+                        					<router-link :to="{ name: 'task.view', params: { id: row.item.id }}" class="text-dark-75 text-hover-primary font-weight-bold font-size-lg mb-0" v-text="row.item.title">
                         						
                         					</router-link>
                         					<span class="text-muted">Batas {{ row.item.lastsubmit }}</span>				
@@ -71,10 +71,11 @@
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-	                        	<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
+	                        	<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
 									<template v-slot:button-content>
-									   <i class="flaticon-squares-4"></i>
+									   <span class="flaticon-squares-4"></span>
 									</template>
+									<b-dropdown-item :to="{ name: 'task.view', params: { id: row.item.id }}">Lihat</b-dropdown-item>
 									<b-dropdown-item @click="sharee(row.item.id)">Bagikan</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'task.check', params: { id: row.item.id }}">Koreksi</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'task.result', params: { id: row.item.id }}">Hasil</b-dropdown-item>

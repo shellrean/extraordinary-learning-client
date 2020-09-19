@@ -127,7 +127,7 @@
 			</div>
 			<div class="form-group">
 				<label>Nama banksoal</label>
-				<input type="text" class="form-control form-control-lg form-control-solid" :class="{ 'is-invalid' : errors.code }" v-model="question_bank.code">
+				<input type="text" class="form-control" :class="{ 'is-invalid' : errors.code }" v-model="question_bank.code">
 				<div class="invalid-feedback" v-if="errors.code">{{ errors.code[0] }}</div>
 			</div>
 			<div class="form-group">
@@ -138,7 +138,7 @@
 							<strong>-</strong>
 						</button>
 					</div>
-					<input type="number" class="form-control form-control-lg form-control-solid" :class="{ 'is-invalid' : errors.mc_count }" v-model.number="question_bank.mc_count">
+					<input type="number" class="form-control" :class="{ 'is-invalid' : errors.mc_count }" v-model.number="question_bank.mc_count">
 					<div class="input-group-append">
 						<button class="btn btn-light-success" type="button" @click="question_bank.mc_count += 1">
 							<strong>+</strong>
@@ -154,7 +154,7 @@
 							<strong>-</strong>
 						</button>
 					</div>
-					<input type="number" class="form-control form-control-lg form-control-solid" :class="{ 'is-invalid' : errors.esay_count }" v-model.number="question_bank.esay_count">
+					<input type="number" class="form-control" :class="{ 'is-invalid' : errors.esay_count }" v-model.number="question_bank.esay_count">
 					<div class="input-group-append">
 						<button class="btn btn-light-success" type="button" @click="question_bank.esay_count += 1">
 							<strong>+</strong>
@@ -166,13 +166,13 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>% Pilihan ganda</label>
-						<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="question_bank.percentage.mc" @input="checkTotal">
+						<input type="number" class="form-control" v-model.number="question_bank.percentage.mc" @input="checkTotal">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>% Esay</label>
-						<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="question_bank.percentage.esay" @input="checkTotal">
+						<input type="number" class="form-control" v-model.number="question_bank.percentage.esay" @input="checkTotal">
 					</div>
 				</div>
 			</div>
@@ -328,3 +328,8 @@ export default {
 	}
 }
 </script>
+<style>
+	.table > tbody > tr > td {
+     vertical-align: middle;
+}
+</style>

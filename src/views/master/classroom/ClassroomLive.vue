@@ -16,7 +16,7 @@
 				<div class="row justify-content-center">
 					<div class="col-md-8">	
 						<div class="card card-custom shadow-none border">
-							<div class="card-header flex-wrap  pt-6 pb-0">
+							<div class="card-header flex-wrap p-4">
 									<h3 class="card-title align-items-start flex-column">
 									<span class="card-label font-weight-bolder text-dark">Kelas langsung</span>
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ classlive.created_at }}</span>
@@ -32,7 +32,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="card-body" v-html="classlive.body">
+							<div class="card-body p-4" v-html="classlive.body">
 								
 							</div>
 						</div>
@@ -50,7 +50,7 @@
 									<div class="alert-icon">
 										<i class="flaticon-businesswoman"></i>
 									</div>
-									<div class="alert-text">Jangan ragu berkomentar, bila ada yang ingin ditanyakan atau terlintas sesuatu dipikiranmu</div>
+									<div class="alert-text">Jangan ragu berkomentar, bila ada yang ingin ditanyakan atau terlintas dipikiranmu</div>
 									<div class="alert-close">
 										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 											<span aria-hidden="true">
