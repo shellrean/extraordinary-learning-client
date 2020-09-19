@@ -28,3 +28,16 @@ export default {
 	}
 }
 </script>
+<style lang="css">
+	@media (min-width: 992px){
+		.header-fixed .header {
+				position: fixed;
+				top: 0;
+				right: 0;
+				left: 0;
+				z-index: 97;
+				height: 60px;
+				transition: all 0.3s ease;
+		}
+		}
+</style>
