@@ -25,7 +25,7 @@
 						</div>
 					</div>
 
-					<div class="col-md-4" v-if="authenticated.role == '1' || authenticated.role == '0'">
+					<div class="" :class="authenticated.role == '1' || authenticated.role == '0' ? 'col-md-4' : ''" >
 						<DianOnlineStudent />
 					</div>
 				</div>

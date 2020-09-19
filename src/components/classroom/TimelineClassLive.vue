@@ -7,7 +7,7 @@
 					{{ liveclass.start_time }}
 				</div>
 				<div class="d-flex align-items-center">
-					<div class="symbol symbol-45 symbol-primary mr-5">
+					<div class="symbol symbol-45 symbol-primary symbol-circle mr-5">
 						<span class="symbol-label">
 							<span class="svg-icon svg-icon-lg svg-icon-primary">
 								<i class="flaticon-technology-2 text-white"></i>

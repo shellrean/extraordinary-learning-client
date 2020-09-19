@@ -4,7 +4,7 @@
 			<div class="card-body p-4">
 				<div class="d-flex align-items-center">
 					<div class="symbol symbol-45 symbol-light mr-5">
-						<b-button variant="primary" class="btn-icon"  v-b-toggle="'task_'+task.id">
+						<b-button variant="primary" class="btn-icon btn-circle"  v-b-toggle="'task_'+task.id">
 			 				<i class="flaticon-edit-1"></i>
 						</b-button>
 					</div>

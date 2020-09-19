@@ -219,7 +219,7 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon-presentation"></i>
+              <i class="menu-icon flaticon-home-2"></i>
               <span class="menu-text">Kelas</span>
             </a>
           </li>
@@ -259,7 +259,7 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon-notes"></i>
+              <i class="menu-icon flaticon-file-2"></i>
               <span class="menu-text">Materi</span>
             </a>
           </li>

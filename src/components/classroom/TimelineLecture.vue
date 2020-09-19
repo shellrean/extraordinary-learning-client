@@ -4,7 +4,7 @@
 			<div class="card-body p-4">
 				<div class="d-flex align-items-center">
 					<div class="symbol symbol-45 symbol-light mr-5">
-						<b-button variant="primary" class="btn-icon" v-b-toggle="'lecture_'+lecture.id">
+						<b-button variant="primary" class="btn-icon btn-circle" v-b-toggle="'lecture_'+lecture.id">
 			 			<i class="flaticon-file-2"></i>
 					</b-button>
 					</div>

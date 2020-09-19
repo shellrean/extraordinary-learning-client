@@ -13,7 +13,7 @@
 		</div>
 		<div class="d-flex flex-column-fluid">
 			<div class="container">
-				<div class="row">
+				<div class="row justify-content-center">
 					<div class="col-md-8">	
 						<div class="card card-custom shadow-none border">
 							<div class="card-header flex-wrap  pt-6 pb-0">
@@ -46,6 +46,19 @@
 						<div class="card-body" v-if="typeof classlive.settings != 'undefined' && classlive.settings.type == 'youtube'">
 							<youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
 						</div>
+							<div class="alert alert-custom alert-light-primary fade show mb-5">
+									<div class="alert-icon">
+										<i class="flaticon-businesswoman"></i>
+									</div>
+									<div class="alert-text">Jangan ragu berkomentar, bila ada yang ingin ditanyakan atau terlintas sesuatu dipikiranmu</div>
+									<div class="alert-close">
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+											<span aria-hidden="true">
+												<i class="ki ki-close"></i>
+											</span>
+										</button>
+									</div>
+								</div>
 						<StudentAttend/>
 					</div>
 				</div>

@@ -34,7 +34,7 @@
 									<h2 class="font-weight-bold">Sign In</h2>
 									<p class="text-muted font-weight-bold">Masukan email dan password anda</p>
 								</div>
-								<div class="alert alert-custom alert-light-primary fade show mb-5" role="alert" v-if="errors.invalid">
+								<div class="alert alert-custom alert-light-danger fade show mb-5" role="alert" v-if="errors.invalid">
 									<div class="alert-icon">
 										<i class="flaticon-warning"></i>
 									</div>
