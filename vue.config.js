@@ -1,4 +1,11 @@
+const CompressionPlugin = require('compression-webpack-plugin');
+
 module.exports = {
+  chainWebpack(config) {
+    config.plugins.delete('prefetch');
+
+    config.plugin('CompressionPlugin').use(CompressionPlugin);
+  },
 	pwa: {
     themeColor: "#130f40",
     msTileColor: "#130f40",
