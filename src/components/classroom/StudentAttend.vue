@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="card card-custom bg-light-warning gutter-b" v-if="authenticated.role =='1'">
+		<div class="card card-custom bg-light-warning gutter-b shadow-none border-warning" v-if="authenticated.role =='1'">
 			<!--begin::Header-->
 			<div class="card-header pt-3 border-0">
 				<h3 class="card-title align-items-start flex-column">
@@ -39,7 +39,7 @@
 			<!--end::Body-->
 		</div>
 
-		<div class="card card-custom bg-light-success gutter-b"  v-if="authenticated.role == '0' || authenticated.role =='1'">
+		<div class="card card-custom bg-light-success gutter-b shadow-none border-success"  v-if="authenticated.role == '0' || authenticated.role =='1'">
 			<!--begin::Header-->
 			<div class="card-header border-0 pt-3">
 				<h3 class="card-title align-items-start flex-column">

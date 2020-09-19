@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -42,7 +42,7 @@
 								<div class="row align-items-center">
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
-											<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" v-model="search"/>
+											<input type="text" class="form-control" placeholder="Cari guru..." id="kt_datatable_search_query" v-model="search"/>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
 											</span>
@@ -102,7 +102,7 @@
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
 								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model="perPage">
 									<option value="10">10</option>
 									<option value="20">20</option>
 									<option value="30">30</option>
@@ -120,14 +120,14 @@
 			<form class="">
 				<div class="form-group">
 					<label>NIP</label>
-					<input type="text"  class="form-control form-control-lg form-control-solid" v-model="user.uid">
+					<input type="text"  class="form-control" v-model="user.uid">
 				</div>
 				<div class="form-group">
 					<label>
 						Nama
 					</label>
 					<div>
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="user.name" :class="{ 'is-invalid' : errors.name }">
+						<input type="text" class="form-control" v-model="user.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -136,7 +136,7 @@
 						Email
 					</label>
 					<div>
-						<input type="email" class="form-control form-control-lg form-control-solid" v-model="user.email" :class="{ 'is-invalid' : errors.email }">
+						<input type="email" class="form-control" v-model="user.email" :class="{ 'is-invalid' : errors.email }">
 						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -145,7 +145,7 @@
 						Password
 					</label>
 					<div>
-						<input type="password" class="form-control form-control-lg form-control-solid" v-model="user.password" :class="{ 'is-invalid' : errors.password }">
+						<input type="password" class="form-control" v-model="user.password" :class="{ 'is-invalid' : errors.password }">
 						<div class="invalid-feedback" v-if="errors.password">{{ errors.password[0] }}</div>
 					</div>
 				</div>
@@ -159,7 +159,7 @@
 		      </b-button>
 		    </template>
 		</b-modal>
-		<b-modal id="modal-import" title="Import guru" size="lg">
+		<b-modal id="modal-import" title="Import guru">
 			<b-form-file
 		      v-model="file"
 		      :state="Boolean(file)"

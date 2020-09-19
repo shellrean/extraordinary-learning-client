@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<VuePerfectScrollbar
-			style="max-height: 60vh; position: relative;"
+			style="max-height: 50vh; position: relative;"
 		>
 		<div class="d-flex py-5" v-for="comment in comments">
 			<div class="symbol symbol-40 symbol-light-primary mr-5 mt-1">

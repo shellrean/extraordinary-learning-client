@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
 		<div class="col-md-8">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-body">
 					<div class="form-group">
 						<label>Body</label>
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="col-md-4">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none">
 				<div class="card-body">
 					<div class="form-group">
 						<label>Media</label>
@@ -101,6 +101,6 @@ export default {
 </script>
 <style >
 	div[contenteditable] {
-    outline: 1px solid #616161;
+    outline: 1px solid #E4E6EF
 }
 </style>

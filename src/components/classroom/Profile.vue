@@ -1,5 +1,5 @@
 <template>
-	<div class="card card-custom gutter-b">
+	<div class="card card-custom gutter-b border shadow-none">
 		<div class="card-body ribbon ribbon-clip ribbon-left">
 			<div class="ribbon-target" style="top: 12px;">
 				<span class="ribbon-inner bg-danger"></span>Lobi kelas
@@ -12,6 +12,7 @@
 						<div class="font-weight-bold text-dark-50 font-size-sm">{{ classroom.grade }}, {{ classroom.group }}</div>
 					</div>
 					<div class="pt-1" v-if="schedules.length !== 0">
+						<hr>
 						<div class="d-flex flex-center" v-if="authenticated.role == '1'">
 							<router-link :to="{ name: 'master.classroom.live.add', params: { id: $route.params.id }}" class="btn btn-primary font-weight-bolder font-size-sm py-3 px-14" v-b-tooltip.hover title="Mulai kelas anda sekarang">
 								Mulai Kelas
@@ -22,13 +23,13 @@
 			</div>
 		</div>
 		<div class="card-footer pt-4 pb-4 text-center">
-			<button class="btn btn-light-primary btn-sm mr-1" :class="isLoading ? 'spinner spinner-white spinner-right': ''" v-b-tooltip.hover title="Lihat daftar siswa kelas ini" @click="showStudent" :disabled="isLoading" v-if="authenticated.role == '1' || authenticated.role == '0'">
-				<i class="flaticon-users-1" ></i>
-				{{ isLoading ? '' : 'Murid kelas' }}
+			<button class="btn btn-light-primary btn-sm mr-1" v-b-tooltip.hover title="Lihat daftar siswa kelas ini" @click="showStudent" :disabled="isLoading" v-if="authenticated.role == '1' || authenticated.role == '0'">
+				<i class="flaticon-users" ></i>
+				{{ 'Murid kelas' }}
 			</button>
-			<button class="btn btn-light-info btn-sm" v-b-tooltip.hover title="Lihat daftar mata pelajaran kelas ini" :class="isLoading ? 'spinner spinner-white spinner-right': ''" @click="showSubject" :disabled="isLoading">
+			<button class="btn btn-light-info btn-sm" v-b-tooltip.hover title="Lihat daftar mata pelajaran kelas ini"  @click="showSubject" :disabled="isLoading">
 				<i class="flaticon-clipboard"></i>
-				{{ isLoading ? '' : 'Mata pelajaran' }}
+				{{ 'Mata pelajaran' }}
 			</button>
 		</div>
 		<b-modal id="modal-student" title="Siswa kelas" hide-footer size="lg">
@@ -38,7 +39,7 @@
 					style="max-height: 50vh; position: relative;"
 				>
 				<table class="table table-bordered table-stripped">
-					<tr  v-for="(student, index) in students">
+					<tr  v-for="(student, index) in students" :key="index">
 						<td>{{ index+1 }}</td>
 						<td>{{ student.student.uid }}</td>
 						<td>
@@ -60,7 +61,7 @@
 					style="max-height: 50vh; position: relative;"
 				>
 				<table class="table table-bordered">
-					<tr  v-for="(subject, index) in classroom_subjects">
+					<tr  v-for="(subject, index) in classroom_subjects" :key="index">
 						<td>{{ index+1 }}</td>
 						<td>{{ subject.subject.name }}</td>
 					</tr>

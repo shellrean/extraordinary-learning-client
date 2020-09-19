@@ -1,16 +1,16 @@
 <template>
 	<div>
-		<div class="card card-custom gutter-b" v-for="liveclass in classlives">
+		<div class="card card-custom gutter-b shadow-none border" v-for="liveclass in classlives">
 			<div class="card-body pt-4 pl-5 pr-4 pb-2 ribbon  ribbon-right">
-				<div class="ribbon-target bg-success" style="top: 10px; right: -2px;">
+				<div class="ribbon-target bg-primary" style="top: 10px; right: -2px;">
 					Kelas langsung <br>
 					{{ liveclass.start_time }}
 				</div>
 				<div class="d-flex align-items-center">
-					<div class="symbol symbol-45 symbol-light mr-5">
+					<div class="symbol symbol-45 symbol-primary mr-5">
 						<span class="symbol-label">
 							<span class="svg-icon svg-icon-lg svg-icon-primary">
-								<i class="flaticon-technology-2 text-primary"></i>
+								<i class="flaticon-technology-2 text-white"></i>
 							</span>
 						</span>
 					</div>

@@ -2,10 +2,10 @@
 	<div>
 		<div class="d-flex flex-column-fluid">
 			<div class="container">
-				<div class="row">
+				<div class="row justify-content-center">
 					<div class="col-md-8">	
-						<div class="card card-custom">
-							<div class="card-header flex-wrap border-0 pt-6 pb-0">
+						<div class="card card-custom shadow-none border">
+							<div class="card-header flex-wrap pt-6 pb-6">
 								<h3 class="card-title align-items-start flex-column">
 									<span class="card-label font-weight-bolder text-dark">{{ lecture.title }}</span>
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ lecture.created_at }}</span>
@@ -18,14 +18,14 @@
 								<iframe id="fred" title="PDF in an i-Frame" :src="`${baseURL}/storage/${lecture.addition}`" height="700px" width="100%" frameborder="0" scrolling="no" v-if="lecture.addition != null"></iframe>
 							</div>
 						</div>
-						<div class="card card-custom">
+						<div class="card card-custom shadow-none border">
 							<div class="card-body">
 								<DianComment />
 							</div>
 						</div>
 					</div>
 
-					<div class="col-md-4">
+					<div class="col-md-4" v-if="authenticated.role == '1' || authenticated.role == '0'">
 						<DianOnlineStudent />
 					</div>
 				</div>

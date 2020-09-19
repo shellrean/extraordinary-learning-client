@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -71,7 +71,7 @@
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
 								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.number="perPage">
 									<option value="10">10</option>
 									<option value="20">20</option>
 									<option value="30">30</option>
@@ -88,11 +88,11 @@
 		<b-modal id="modal-event" title="Kegiatan"  @hide="$store.commit('event/CLEAR_EVENT')" no-close-on-backdrop size="lg">
 			<div class="form-group">
 				<label>Judul</label>
-				<input type="text" class="form-control form-control-lg form-control-solid" v-model="event.title" :class="{ 'is-invalid' : errors.title }">
+				<input type="text" class="form-control" v-model="event.title" :class="{ 'is-invalid' : errors.title }">
 			</div>
 			<div class="form-group">
 				<label>Lokasi</label>
-				<input type="text" class="form-control form-control-lg form-control-solid" v-model="event.location" :class="{ 'is-invalid' : errors.location }">
+				<input type="text" class="form-control" v-model="event.location" :class="{ 'is-invalid' : errors.location }">
 			</div>
 			<div class="form-group">
 				<label>Kontent</label>
@@ -139,7 +139,7 @@ export default {
 				{ key: 'event', label: 'Kegiatan' },
 				{ key: 'actions', label: 'Aksi' }
 			],
-			howEditor: false,
+			showEditor: false,
 			editorConfig: {
 				embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
 		        extraPlugins: 'embed',

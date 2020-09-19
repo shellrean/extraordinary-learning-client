@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div v-if="typeof public_infos.data != 'undefined' && public_infos.data.length > 0">
-			<div class="card card-custom gutter-b" v-for="info in public_infos.data">
-				<div class="card-body">
+			<div class="card card-custom gutter-b shadow-none border" v-for="info in public_infos.data" :key="info.id">
+				<div class="card-body p-4">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light mr-5">
 							<span class="symbol-label">
@@ -22,8 +22,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="pt-3">
-						<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">{{ info.body }}</p>
+					<div class="pt-3" v-html="info.body">
 					</div>
 				</div>
 			</div>
@@ -39,10 +38,7 @@
 		<div v-else>
 			<div class="">
 				<div class="">
-					<div class="text-center">
-						<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
-					</div>
-					<p class="text-center">Tidak ada informasi yang dibagikan</p>
+					<p class="text-muted">Tidak ada informasi yang dibagikan</p>
 				</div>
 			</div>
 		</div>

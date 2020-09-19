@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div :class="bg ? 'container-fluid' : ''" v-if="typeof classlive.settings != 'undefined' && classlive.settings.type == 'jitsi'">	
-			<div class="card " :class="bg ? 'bg-dark' : ''" v-if="typeof classlive.settings != 'undefined'">
+			<div class="card shadow-none border" :class="bg ? 'bg-dark' : ''" v-if="typeof classlive.settings != 'undefined'">
 				<div class="text-center" :class="bg ? 'card-body' : ''">
 					<vue-jitsi-meet
 						ref="jitsiRef"
@@ -14,20 +14,20 @@
 		<div class="d-flex flex-column-fluid">
 			<div class="container">
 				<div class="row">
-					<div class="col-md-6">	
-						<div class="card card-custom">
-							<div class="card-header flex-wrap border-0 pt-6 pb-0">
+					<div class="col-md-8">	
+						<div class="card card-custom shadow-none border">
+							<div class="card-header flex-wrap  pt-6 pb-0">
 									<h3 class="card-title align-items-start flex-column">
-									<span class="card-label font-weight-bolder text-dark">Kelas langsung <span class="text-success">Online</span></span>
+									<span class="card-label font-weight-bolder text-dark">Kelas langsung</span>
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ classlive.created_at }}</span>
 								</h3>
 								<div class="card-toolbar" v-if="authenticated.role == '0' || authenticated.role == '1'">
 									<div class="form-group">
-										<button class="btn btn-light-primary mr-2" v-b-modal.modal-abcent v-b-tooltip.hover title="Lihat absensi hari ini">
-											<i class="flaticon2-indent-dots"></i> Lihat absen
+										<button class="btn btn-primary mr-2" v-b-modal.modal-abcent v-b-tooltip.hover title="Lihat absensi hari ini">
+											 Lihat absen
 										</button>
-										<button class="btn btn-light-danger" @click="closeClass" v-b-tooltip.hover title="Tutup kelas pada hari ini">
-											<i class="flaticon2-rocket-1"></i> Tutup Kelas
+										<button class="btn btn-light-primary" @click="closeClass" v-b-tooltip.hover title="Tutup kelas pada hari ini">
+											Tutup Kelas
 										</button>
 									</div>
 								</div>
@@ -36,13 +36,13 @@
 								
 							</div>
 						</div>
-						<div class="card card-custom">
+						<div class="card card-custom shadow-none border">
 							<div class="card-body">
 								<StudentComment />
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="card-body" v-if="typeof classlive.settings != 'undefined' && classlive.settings.type == 'youtube'">
 							<youtube :video-id="videoId" ref="youtube" @playing="playing"></youtube>
 						</div>

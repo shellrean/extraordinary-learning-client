@@ -1,27 +1,28 @@
 <template>
-	<div class="card card-custom gutter-b">
-		<div class="card-body">
+	<div class="card card-custom gutter-b shadow-none border">
+		<div class="card-body p-4">
 			<div class="d-flex align-items-center mb-5">
 				<div class="symbol symbol-40 symbol-light-success mr-5">
 					<span class="symbol-label">
 						<img src="/img/007-boy-2.svg" class="h-75 align-self-end" alt="" />
 					</span>
 				</div>
-				<span class="text-muted font-weight-bold font-size-lg">
+				<span class="text-dark font-weight-bold font-size-lg">
 					{{ authenticated.name }}<br>
 					<small>Selamat datang di kelas kami</small>
 				</span>
 			</div>
+			<hr>
 			<div class="d-flex align-items-center">
-				<b-button v-b-modal.modal-sharee variant="white" class="btn btn-hover-text-primary btn-hover-icon-primary btn-sm btn-text-dark-50 bg-hover-light-primary rounded font-weight-bolder font-size-sm p-2 mr-2" v-b-tooltip.hover title="Bagikan materi ke kelas ini">
-					<span class="svg-icon svg-icon-md svg-icon-dark-25 pr-2">
+				<b-button v-b-modal.modal-sharee variant="white" class="btn btn-hover-text-primary btn-hover-icon-primary btn-sm btn-text-dark-50 bg-hover-light-primary rounded font-size-sm p-2 mr-2" v-b-tooltip.hover title="Bagikan materi ke kelas ini">
+					<span class="svg-icon svg-icon-md svg-icon-dark-25">
 						<i class="flaticon-file-2"></i>
 					</span>
 					Bagikan materi
 				</b-button>
-				<b-button v-b-modal.modal-task variant="white"  class="btn btn-sm btn-text-dark-50 btn-hover-icon-primary btn-hover-text-primary bg-hover-light-primary font-weight-bolder rounded font-size-sm p-2" v-b-tooltip.hover title="Bagikan tugas ke kelas ini">
-					<span class="svg-icon svg-icon-md svg-icon-dark-25 pr-1">
-						<i class="flaticon-list"></i>
+				<b-button v-b-modal.modal-task variant="white"  class="btn btn-sm btn-text-dark-50 btn-hover-icon-primary btn-hover-text-primary bg-hover-light-primary rounded font-size-sm p-2" v-b-tooltip.hover title="Bagikan tugas ke kelas ini">
+					<span class="svg-icon svg-icon-md svg-icon-dark-25">
+						<i class="flaticon-edit-1"></i>
 					</span>
 					Bagikan tugas
 				</b-button>

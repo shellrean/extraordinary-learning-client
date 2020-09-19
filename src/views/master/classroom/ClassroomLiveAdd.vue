@@ -1,8 +1,8 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
-				<div class="card-header">
+			<div class="card card-custom shadow-none border">
+				<div class="card-header pt-6 pb-3">
 					<h3 class="card-title align-items-start flex-column">
 						<span class="card-label font-weight-bolder text-dark">Mulai kelas</span>
 						<span class="text-muted mt-1 font-weight-bold font-size-sm">Materi dari hati & pikiran serta dengan cinta</span>

@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -86,11 +86,11 @@
 		<b-modal id="modal-info" title="Informasi"  @hide="$store.commit('info/CLEAR_INFO')" no-close-on-backdrop>
 			<div class="form-group">
 				<label>Judul</label>
-				<input type="text" class="form-control form-control-lg form-control-solid" v-model="info.title" :class="{ 'is-invalid' : errors.title }">
+				<input type="text" class="form-control" v-model="info.title" :class="{ 'is-invalid' : errors.title }">
 			</div>
 			<div class="form-group">
 				<label>Kontent</label>
-				<textarea class="form-control form-control-lg form-control-solid" v-model="info.body" :class="{ 'is-invalid' : errors.body }"></textarea>
+				<ckeditor v-model="info.body" v-if="showEditor" :config="editorConfig" id="content" type="inline"></ckeditor>
 			</div>
 			<hr>
 			<b-form-checkbox v-model="info.status" value="1" switch>
@@ -111,6 +111,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { BButton, BPagination, BDropdown, BDropdownItem, BFormCheckbox } from 'bootstrap-vue'
 import { successToas, errorToas } from '@/core/entities/notif'
+import store from '@/store'
 
 export default {
 	name: 'InfoData',
@@ -124,7 +125,17 @@ export default {
 				{ key: 'no', label: '#' },
 				{ key: 'info', label: 'Informasi' },
 				{ key: 'actions', label: 'Aksi' }
-			]
+			],
+			showEditor: false,
+			editorConfig: {
+				embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
+		        extraPlugins: 'embed',
+		        allowedContent: true,
+		        fileTools_requestHeaders: {
+		        	'Accept': 'application/json',
+		        	'Authorization' : 'Bearer '+store.state.token
+		        }
+		    },
 		}
 	},
 	computed: {
@@ -192,6 +203,8 @@ export default {
 		}
 	},
 	created() {
+		this.showEditor = true
+
 		this.changeData()
 	},
 	watch: {
@@ -204,3 +217,9 @@ export default {
 	}
 }
 </script>
+</script>
+<style >
+	div[contenteditable] {
+    outline: 1px solid #616161;
+}
+</style>

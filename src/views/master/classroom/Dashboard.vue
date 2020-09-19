@@ -12,8 +12,8 @@
 								<ClassTimeline />
 							</div>
 							<div class="col-xxl-6">
-								<ClassStudentLoby />
 								<ScheduleToday />
+								<ClassStudentLoby />
 							</div>
 						</div>
 					</div>

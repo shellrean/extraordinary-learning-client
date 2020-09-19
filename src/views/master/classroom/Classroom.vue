@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -42,7 +42,7 @@
 								<div class="row align-items-center">
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
-											<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" v-model="search"/>
+											<input type="text" class="form-control" placeholder="Cari kelas..." id="kt_datatable_search_query" v-model="search"/>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
 											</span>
@@ -96,7 +96,7 @@
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
 								</div>
-								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.int="perPage">
+								<select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width: 75px;" v-model.number="perPage">
 									<option value="10">10</option>
 									<option value="20">20</option>
 									<option value="30">30</option>
@@ -117,7 +117,7 @@
 						Nama
 					</label>
 					<div>
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="classroom.name" :class="{ 'is-invalid' : errors.name }">
+						<input type="text" class="form-control" v-model="classroom.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</div>
 					</div>
 				</div>
@@ -126,7 +126,7 @@
 						Grade
 					</label>
 					<div>
-						<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="classroom.grade" :class="{ 'is-invalid' : errors.grade }">
+						<input type="number" class="form-control" v-model.number="classroom.grade" :class="{ 'is-invalid' : errors.grade }">
 						<div class="invalid-feedback" v-if="errors.grade">{{ errors.grade[0] }}</div>
 					</div>
 				</div>
@@ -135,7 +135,7 @@
 						Group
 					</label>
 					<div>
-						<input type="TEXT" class="form-control form-control-lg form-control-solid" v-model="classroom.group" :class="{ 'is-invalid' : errors.group }">
+						<input type="TEXT" class="form-control" v-model="classroom.group" :class="{ 'is-invalid' : errors.group }">
 						<div class="invalid-feedback" v-if="errors.group">{{ errors.group[0] }}</div>
 					</div>
 				</div>
@@ -144,8 +144,8 @@
 						Wali kelas
 					</label>
 					<div>
-						<select class="form-control form-control-lg form-control-solid" v-model="classroom.teacher_id">
-							<option :value="teacher.id" v-for="teacher in teachers.data">{{ teacher.name }}</option>
+						<select class="form-control" v-model="classroom.teacher_id">
+							<option :value="teacher.id" v-for="teacher in teachers.data" :key="teacher.id">{{ teacher.name }}</option>
 						</select>
 					</div>
 				</div>
@@ -154,20 +154,20 @@
 						Telegram ID
 					</label>
 					<div>
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="classroom.settings.telegram_id">
+						<input type="text" class="form-control" v-model="classroom.settings.telegram_id">
 					</div>
 				</div>
 			</form>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
 		      </b-button>
+		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Simpan' }}
+		      </b-button>
 		    </template>
 		</b-modal>
-		<b-modal id="modal-import" title="Import kelas" size="lg">
+		<b-modal id="modal-import" title="Import kelas">
 			<b-form-file
 		      v-model="file"
 		      :state="Boolean(file)"

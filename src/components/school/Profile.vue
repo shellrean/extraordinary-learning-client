@@ -1,9 +1,9 @@
 <template>
-	<div class="card card-custom gutter-b">
+	<div class="card card-custom gutter-b shadow-none border">
 		<div class="card-header  p-4 d-flex justify-content-between">
 			<div class="d-flex align-items-center">
 				<div class="symbol symbol-45 symbol-light-primary mr-5">
-					<b-button variant="primary"  v-b-toggle="'dent_1'">
+					<b-button variant="primary" class="btn-icon" v-b-toggle="'dent_1'">
 			 			<i class="flaticon2-talk"></i>
 					</b-button>
 				</div>

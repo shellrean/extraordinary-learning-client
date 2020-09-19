@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -36,7 +36,7 @@
 								<div class="row align-items-center">
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
-											<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" v-model="search"/>
+											<input type="text" class="form-control" placeholder="Cari materi..." id="kt_datatable_search_query" v-model="search"/>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
 											</span>

@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -42,7 +42,7 @@
 								<div class="row align-items-center">
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
-											<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" v-model="search"/>
+											<input type="text" class="form-control" placeholder="Cari siswa..." id="kt_datatable_search_query" v-model="search"/>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
 											</span>
@@ -129,14 +129,14 @@
 				</div>
 				<div class="form-group">
 					<label>NIS</label>
-					<input type="text" v-model="student.uid"  class="form-control form-control-lg form-control-solid">
+					<input type="text" v-model="student.uid"  class="form-control">
 				</div>
 				<div class="form-group">
 					<label>
 						Nama
 					</label>
 					<div>
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="student.name" :class="{ 'is-invalid' : errors.name }">
+						<input type="text" class="form-control" v-model="student.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -145,7 +145,7 @@
 						Email
 					</label>
 					<div>
-						<input type="email" class="form-control form-control-lg form-control-solid" v-model="student.email" :class="{ 'is-invalid' : errors.email }">
+						<input type="email" class="form-control" v-model="student.email" :class="{ 'is-invalid' : errors.email }">
 						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -154,7 +154,7 @@
 						Password
 					</label>
 					<div>
-						<input type="password" class="form-control form-control-lg form-control-solid" v-model="student.password" :class="{ 'is-invalid' : errors.password }">
+						<input type="password" class="form-control" v-model="student.password" :class="{ 'is-invalid' : errors.password }">
 						<div class="invalid-feedback" v-if="errors.password">{{ errors.password[0] }}</div>
 					</div>
 				</div>
@@ -168,7 +168,7 @@
 		      </b-button>
 		    </template>
 		</b-modal>
-		<b-modal id="modal-import" title="Import peserta" size="lg">
+		<b-modal id="modal-import" title="Import peserta">
 			<div class="form-group">
 				<label>Kelas</label>
 				<v-select label="name" :reduce="item => item.id" :options="classrooms.data" 

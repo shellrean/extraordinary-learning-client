@@ -1,5 +1,5 @@
 <template>
-	<div class="card card-custom gutter-b">
+	<div class="card card-custom gutter-b shadow-none border">
 		<div class="card-header align-items-center border-0 mt-4">
 			<h3 class="card-title align-items-start flex-column">
 				<span class="font-weight-bolder text-dark">Jadwal hari ini</span>
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 			</div>
-			<span v-if="schedules.length === 0">Tidak ada jadwal mengajar hari ini</span>
+			<span v-if="schedules.length === 0" class="text-muted">Tidak ada jadwal mengajar hari ini</span>
 		</div>
 	</div>
 </template>

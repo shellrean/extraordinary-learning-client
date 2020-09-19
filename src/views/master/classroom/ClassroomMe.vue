@@ -34,7 +34,7 @@
 			</div>
 			<div class="row" v-if="typeof authenticated.name != 'undefined' && typeof authenticated.classroom != 'undefined'">
 				<div class="col-md-5">
-					<div class="card card-custom card-stretch gutter-b">
+					<div class="card card-custom card-stretch gutter-b shadow-none">
 						<div class="card-body d-flex p-0 card-header-right ribbon ribbon-clip ribbon-left">
 							<div class="ribbon-target" style="top: 12px;">
 								<span class="ribbon-inner bg-warning"></span>Wali kelas
@@ -51,7 +51,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4" v-for="grade in groupedClass"> 
+				<div class="col-md-4" v-for="(grade, index) in groupedClass" :key="index"> 
 					<table class="table table-borderless table-sm">
 						<tr v-for="classroom in grade" :key="classroom.id">
 							<td>
@@ -91,9 +91,8 @@
 					</table>
 				</div>
 				<div class="col-md-12" v-if="groupedClass.length == 0">
-					<div class="text-center">
-						<img src="/media/svg/banner/svg-nodata4.svg" style="max-width: 230px">
-						<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas, silakan tambah kelas anda mengajar terlebih dahulu</p>
+					<div class="">
+						<p class="text-muted 5 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas, silakan tambah kelas anda mengajar terlebih dahulu</p>
 					</div>
 				</div>
 			</div>
@@ -103,11 +102,17 @@
 				<div class="form-group">
 					<label>Kelas</label>
 					<v-select label="name" :reduce="item => item.id" :options="classrooms.data" v-model="data.classroom_id" :filterable="false" @search="onSearchClassroom">
+						<template slot="no-options">
+					   	Cari kelas..
+					  </template>
 					</v-select>
 				</div>
 				<div class="form-group">
 					<label>Matpel</label>
 					<v-select label="name" :reduce="item => item.id" :options="subjects.data" v-model="data.subject_id" :filterable="false" @search="onSearchSubject">
+						<template slot="no-options">
+					   	Cari mata pelajaran..
+					  </template>
 					</v-select>
 				</div>
 			</form>
@@ -121,15 +126,15 @@
 		    </template>
 		</b-modal>
 		<b-modal id="modal-schedule" size="xl" title="Jadwal" @hide="id_show = null">
-			<template v-slot:modal-header="{ close }">
+			<template v-slot:modal-header="{  }">
 		    	<b-button variant="primary" @click="addSchedule(id_show)"><i class="flaticon2-add-square"></i> Tambah jadwal</b-button>
 		    </template>
 			<div class="container">
 				<div class="row">
-					<div class="col-md-4" v-for="days in filteredSchedules" >
+					<div class="col-md-4" v-for="(days,index) in filteredSchedules" :key="index">
 						<div class="card">
 							<div class="card-body p-4">
-								<div class="d-flex align-items-center mb-2" v-for="schedule in days">
+								<div class="d-flex align-items-center mb-2" v-for="schedule in days" :key="schedule.id">
 									<div class="d-flex flex-column flex-grow-1">
 										<span class="text-dark-75 font-weight-bold font-size-lg mb-1">{{ schedule.day | dayIndex }}</span>
 										<span class="text-muted font-weight-bold"><span class="badge badge-success">{{ schedule.from_time }}</span> - <span class="badge badge-secondary">{{ schedule.end_time }}</span></span>
@@ -150,7 +155,7 @@
 					</div>
 				</div>
 			</div>
-			<template v-slot:modal-footer="{ ok, cancel, hide }">
+			<template v-slot:modal-footer="{ cancel }">
 				<b-button size="sm" variant="secondary" @click="cancel()">
 			        Tutup
 			    </b-button>
@@ -173,7 +178,7 @@
 				<VueCtkDateTimePicker v-model="schedule.end_time" only-time format='HH:mm' formatted='HH:mm' label="Waktu berakhir" id="wkt_selesai"/>
 				<div class="text-danger" v-if="errors.end_time">{{ errors.end_time[0] }}</div>
 			</div>
-			<template v-slot:modal-footer="{ ok, cancel, hide }">
+			<template v-slot:modal-footer="{cancel }">
 			    <b-button size="sm" variant="secondary" @click="cancel()">
 			        Cancel
 			    </b-button>
@@ -186,7 +191,7 @@
 			<template v-slot:modal-header>
 				<div class="input-icon">
 					<select class="form-control form-control-solid" v-model="schedule_show_id">
-						<option :value="schedule.id" v-for="schedule in schedules">
+						<option :value="schedule.id" v-for="schedule in schedules" :key="schedule.id">
 							{{ schedule.day | dayIndex }} ({{ schedule.from_time.substring(0, 5) }} - {{ schedule.end_time.substring(0,5) }})
 						</option>
 					</select>
@@ -223,7 +228,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="(abcent,index) in abcents">
+							<tr v-for="(abcent,index) in abcents" :key="index">
 								<td>{{ index+1 }}</td>
 								<td>{{ abcent.user.name }}</td>
 								<td>{{ abcent.isabcent == 1 ? 'Hadir' : 'Tidak hadir' }}</td>
@@ -273,7 +278,7 @@
 					style="max-height: 50vh; position: relative;"
 				>
 				<table class="table table-bordered table-stripped">
-					<tr  v-for="(student, index) in students">
+					<tr  v-for="(student, index) in students" :key="student.id">
 						<td>{{ index+1 }}</td>
 						<td>{{ student.student.uid }}</td>
 						<td>

@@ -1,5 +1,5 @@
-<template>
-	<div class="card card-custom bg-light-success gutter-b" v-if="authenticated.role == '1' || authenticated.role == '0'">
+<template> 
+	<div class="card card-custom bg-light-success gutter-b shadow-none border-success" v-if="authenticated.role == '1' || authenticated.role == '0'">
 		<!--begin::Header-->
 		<div class="card-header pt-3 border-0">
 			<h3 class="card-title align-items-start flex-column">

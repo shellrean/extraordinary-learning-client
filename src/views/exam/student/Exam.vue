@@ -4,7 +4,7 @@
         :is-full-page="true" :loader="'bars'" :color="'#187DE4'"></loading>
 
         <div class="container">
-        	<div class="card card-custom">
+        	<div class="card card-custom shadow-none border">
                 <div class="card-header flex-wrap border-0 pt-6 pb-0">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label font-weight-bolder text-dark">Nomor {{ questionIndex + 1 }}</span>

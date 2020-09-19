@@ -1,5 +1,5 @@
 <template>
-	<div class="card card-custom bg-light-success gutter-b" v-if="authenticated.role == '1' || authenticated.role == '0'">
+	<div class="card card-custom bg-light-success gutter-b shadow-none border-success" v-if="authenticated.role == '1' || authenticated.role == '0'">
 		<!--begin::Header-->
 		<div class="card-header pt-3 border-0">
 			<!-- <h3 class="card-title font-weight-bolder text-success">Siswa & Guru sedang di lobi kelas</h3> -->
@@ -18,7 +18,7 @@
 			<VuePerfectScrollbar
 				style="max-height: 80vh; position: relative;"
 			>
-			<div class="d-flex align-items-center mb-8 mt-2" v-for=" user in users">
+			<div class="d-flex align-items-center mb-8 mt-2" v-for=" user in users" :key="user.id">
 				<!--begin::Symbol-->
 				<div class="symbol symbol-40 symbol-light mr-5">
 					<div class="symbol-label text-success">

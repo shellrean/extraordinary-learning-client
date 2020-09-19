@@ -1,41 +1,38 @@
 <template>
 	<div v-if="typeof classroom_tasks.data != 'undefined'">
-		<div class="card card-custom gutter-b" v-for="task in classroom_tasks.data">
-			<div class="card-body">
+		<div class="card card-custom shadow-none border gutter-b" v-for="task in classroom_tasks.data" :key="task.id">
+			<div class="card-body p-4">
 				<div class="d-flex align-items-center">
 					<div class="symbol symbol-45 symbol-light mr-5">
-						<span class="symbol-label">
-							<span class="svg-icon svg-icon-lg svg-icon-primary">
-								<i class="flaticon-list text-primary"></i>
-							</span>
-						</span>
+						<b-button variant="primary" class="btn-icon"  v-b-toggle="'task_'+task.id">
+			 				<i class="flaticon-edit-1"></i>
+						</b-button>
 					</div>
 					<div class="d-flex flex-column flex-grow-1">
-						<router-link :to="{ name: 'task.view', params: { id: task.task.id }}" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">{{ task.task.title }}</router-link>
+						<router-link :to="{ name: 'task.view', params: { id: task.task.id }}" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bold">{{ task.task.title }}</router-link>
 						<div class="d-flex">
 							<div class="d-flex align-items-center pr-5">
-								<span class="text-muted font-weight-bold">{{ task.created_at }}</span>
+								<span class="text-muted">{{ task.created_at }}</span>
 							</div>
 						</div>
 					</div>
-					<b-dropdown size="lg" v-if="authenticated.role == '1'" variant="link" toggle-class="text-decoration-none" no-caret>
+					<b-dropdown class="bg-hover-light-primary rounded-pill" v-if="authenticated.role == '1'" variant="link" toggle-class="text-decoration-none" no-caret>
 						<template v-slot:button-content>
-							<i class="flaticon-more-v2"></i>
+						<span class="flaticon-more-v5"></span>
 						</template>
 						<b-dropdown-item @click="deleteData(task.id)">Hapus</b-dropdown-item>
 					</b-dropdown>
 				</div>
+				<b-collapse :id="'task_'+task.id">
 				<div class="pt-3">
 					<p class="text-dark-75 font-size-lg font-weight-normal pt-5 mb-2">{{ task.body}}</p>
 				</div>
+				</b-collapse>
 			</div>
 		</div>
 		<div class="mt-7" v-if="classroom_tasks.data.length == 0 ">
 			<div class="">
-				<div class="text-center">
-					<img src="/media/svg/banner/svg-nodata1.svg" style="max-width: 130px">
-				</div>
-				<p class="text-center">Tidak ada tugas yang dibagikan</p>
+				<p class="text-muted">Tidak ada tugas yang dibagikan</p>
 			</div>
 		</div>
 		<b-pagination
@@ -51,7 +48,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { successToas, errorToas } from '@/core/entities/notif'
-import { BDropdownItem, BDropdown, BPagination } from 'bootstrap-vue'
+import { BDropdownItem, BDropdown, BPagination, BButton, BCollapse } from 'bootstrap-vue'
 
 export default {
 	name: 'TimelineTask',
@@ -61,7 +58,7 @@ export default {
 		}
 	},
 	components: {
-		BDropdownItem, BDropdown, BPagination
+		BDropdownItem, BDropdown, BPagination, BButton, BCollapse
 	},
 	computed: {
 		...mapGetters(['isLoading']),

@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <table class="table table-borderless table-sm">
                         <tr v-for="item in myclassrooms" :key="item.id">
                             <td>
@@ -55,11 +55,11 @@
                             </td>
                         </tr>
                         <tr v-if="myclassrooms.length === 0">
-                            <td>Tidak ada data kelas, silakan tambah terlebih daulu</td>
+                            <td class="text-muted">Tidak ada data kelas, silakan tambah terlebih daulu</td>
                         </tr>
                     </table>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
                         <div class="alert-icon">
                             <i class="flaticon-info"></i>

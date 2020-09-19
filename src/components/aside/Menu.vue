@@ -1,7 +1,7 @@
 <template>
 	<ul class="menu-nav">
 	    <router-link
-	      to="/dashboard"
+	      to="/d"
 	      v-slot="{ href, navigate, isActive, isExactActive }"
 	    >
 	      <li
@@ -239,7 +239,7 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon-notes"></i>
+              <i class="menu-icon flaticon-interface-11"></i>
               <span class="menu-text">Materi</span>
             </a>
           </li>

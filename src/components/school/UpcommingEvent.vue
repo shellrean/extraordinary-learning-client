@@ -1,16 +1,16 @@
 <template>
-	<div class="card card-custom gutter-b">
+	<div class="card card-custom gutter-b shadow-none border">
 		<!--begin::Header-->
 		<div class="card-header  p-4 d-flex justify-content-between">
 			<div class="d-flex align-items-center">
 				<div class="symbol symbol-45 symbol-light-primary mr-5">
-					<b-button variant="primary"  v-b-toggle="'dent_2'">
+					<b-button variant="primary" class="btn-icon"  v-b-toggle="'dent_2'">
 			 			<i class="flaticon-alert"></i>
 					</b-button>
 				</div>
 				<div class="d-flex flex-column flex-grow-1">
 					<span class="text-dark-75 mb-1 font-size-lg font-weight-bolder">
-						Kegiatang
+						Kegiatang <span class="badge badge-info">{{  public_events.length}}</span>
 					</span>
 					<div class="d-flex">
 						<div class="d-flex align-items-center pr-5">
@@ -23,9 +23,9 @@
 			</div>
 		</div>
 		<b-collapse :id="'dent_2'">
-		<div class="card-body pt-2" v-if="public_events.length > 0">
+		<div class="card-body pt-2 p-4" v-if="public_events.length > 0">
 			<!--begin::Item-->
-			<div class="d-flex align-items-center justify-content-between mb-10" v-for="event in public_events"> 
+			<div class="d-flex align-items-center justify-content-between mb-10" v-for="event in public_events" :key="event.id"> 
 				<!--end::Symbol-->
 				<!--begin::Text-->
 				<div class="d-flex align-items-center">
@@ -51,10 +51,7 @@
 			<!--end::Item-->
 		</div>
 		<div class="card-body" v-else>
-			<div class="text-center">
-				<img src="/media/svg/banner/svg-nodata3.svg" style="max-width: 130px">
-			</div>
-			<p class="text-center">Tidak ada kegiatan mendatang</p>
+			<p class="text-muted">Tidak ada kegiatan mendatang</p>
 		</div>
 		<!--end::Body-->
 		</b-collapse>

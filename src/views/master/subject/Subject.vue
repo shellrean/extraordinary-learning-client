@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -42,7 +42,7 @@
 								<div class="row align-items-center">
 									<div class="col-md-4 my-2 my-md-0">
 										<div class="input-icon">
-											<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" v-model="search"/>
+											<input type="text" class="form-control" placeholder="Cari matpel..." id="kt_datatable_search_query" v-model="search"/>
 											<span>
 												<i class="flaticon2-search-1 text-muted"></i>
 											</span>
@@ -113,7 +113,7 @@
 						Nama
 					</label>
 					<div>
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="subject.name" :class="{ 'is-invalid' : errors.name }">
+						<input type="text" class="form-control" v-model="subject.name" :class="{ 'is-invalid' : errors.name }">
 						<div class="invalid-feedback" v-if="errors.name">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -122,7 +122,7 @@
 						Deskripsi
 					</label>
 					<div >
-						<textarea  class="form-control form-control-lg form-control-solid" v-model="subject.description" :class="{ 'is-invalid' : errors.description }" placeholder="Optional"></textarea>
+						<textarea  class="form-control" v-model="subject.description" :class="{ 'is-invalid' : errors.description }" placeholder="Optional"></textarea>
 						<div class="invalid-feedback" v-if="errors.description">{{ errors.email[0] }}</div>
 					</div>
 				</div>
@@ -137,7 +137,7 @@
 		    </template>
 		</b-modal>
 
-		<b-modal id="modal-import" title="Import matpel" size="lg">
+		<b-modal id="modal-import" title="Import matpel">
 			<b-form-file
 		      v-model="file"
 		      :state="Boolean(file)"

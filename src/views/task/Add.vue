@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header pt-6">
 					<h3 class="card-title align-items-start flex-column">
 						<span class="card-label font-weight-bolder text-dark">Buat tugas</span>

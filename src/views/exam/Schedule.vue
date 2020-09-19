@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column-fluid">
 		<div class="container">
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-header flex-wrap border-0 pt-6 pb-0">
 					<div class="d-flex align-items-center">
 						<div class="symbol symbol-45 symbol-light-primary mr-5">
@@ -141,7 +141,7 @@
 			</div>
 			<div class="form-group">
 				<label>Nama</label>
-				<input type="text" class="form-control form-control-lg form-control-solid" v-model="schedule.name" :class="{ 'is-invalid' : errors.name }" placeholder="Nama ujian">
+				<input type="text" class="form-control" v-model="schedule.name" :class="{ 'is-invalid' : errors.name }" placeholder="Nama ujian">
 
 			</div>
 			<div class="form-group">
@@ -156,7 +156,7 @@
 			</div>
 			<div class="form-group">
 				<label>Durasi</label>
-				<input type="number" class="form-control form-control-lg form-control-solid" v-model.number="schedule.duration" :class="{ 'is-invalid' : errors.duration }" placeholder="Menit">
+				<input type="number" class="form-control" v-model.number="schedule.duration" :class="{ 'is-invalid' : errors.duration }" placeholder="Menit">
 			</div>
 			<hr>
 			<div class="row">
@@ -172,11 +172,11 @@
 				</div>
 			</div>
 			<template v-slot:modal-footer="{ cancel }">
-		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
-		        {{ isLoading ? 'Processing...' : 'Simpan' }}
-		      </b-button>
 		      <b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        Cancel
+		      </b-button>
+		      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
+		        {{ isLoading ? 'Processing...' : 'Simpan' }}
 		      </b-button>
 		    </template>
 		</b-modal>

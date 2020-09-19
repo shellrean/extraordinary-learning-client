@@ -93,19 +93,19 @@ Vue.use(VueRouter)
     children: [
       {
         path: '',
-        redirect: '/dashboard'
+        redirect: '/d'
       },
       {
-        path: '/dashboard',
+        path: '/d',
         name: 'home',
         component: Dashboard,
       },
       {
-        path: 'master',
+        path: 'm',
         component: MasterIndex,
         children: [
           {
-            path: 'user',
+            path: 'u',
             component: UserIndex,
             children: [
               {
@@ -116,7 +116,7 @@ Vue.use(VueRouter)
             ]
           },
           {
-            path: 'student',
+            path: 's',
             component: StudentIndex,
             children: [
               {
@@ -127,7 +127,7 @@ Vue.use(VueRouter)
             ]
           },
           {
-            path: 'classroom',
+            path: 'c',
             component: ClassroomIndex,
             children: [
               {
@@ -141,12 +141,12 @@ Vue.use(VueRouter)
                 component: ClassroomMe
               },
               {
-                path: 'me/:id/schedule',
+                path: 'me/:id/sc',
                 name: 'master.classroom.me.schedule',
                 component: ClassroomSchedule
               },
               {
-                path: ':id/dashboard',
+                path: ':id/d',
                 name: 'master.classroom.dashboard',
                 component: ClassroomDashboard
               },
@@ -173,7 +173,7 @@ Vue.use(VueRouter)
             ]
           },
           {
-            path: 'subject',
+            path: 'sub',
             component: SubjectIndex,
             children: [
               {
@@ -191,7 +191,7 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'info',
+        path: 'i',
         component: InfoIndex,
         children: [
           {
@@ -202,7 +202,7 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'event',
+        path: 'e',
         component: EventIndex,
         children: [
           {
@@ -218,7 +218,7 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'standart',
+        path: 'stand',
         component: StandartIndex,
         children: [
           {
@@ -229,7 +229,7 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'paper',
+        path: 'p',
         component: PaperIndex,
         children: [
           {
@@ -240,7 +240,7 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'lecture',
+        path: 'l',
         component: LectureIndex,
         children: [
           {
@@ -254,12 +254,12 @@ Vue.use(VueRouter)
             component: LectureAdd
           },
           {
-            path: ':id/view',
+            path: ':id/v',
             name: 'lecture.view',
             component: LectureView
           },
           {
-            path: ':id/edit',
+            path: ':id/e',
             name: 'lecture.edit',
             component: LectureEdit
           },
@@ -271,7 +271,7 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'task',
+        path: 't',
         component: TaskIndex,
         children: [
           {
@@ -285,22 +285,22 @@ Vue.use(VueRouter)
             component: TaskAdd
           },
           {
-            path: ':id/view',
+            path: ':id/v',
             name: 'task.view',
             component: TaskView
           },
           {
-            path: ':id/edit',
+            path: ':id/e',
             name: 'task.edit',
             component: TaskEdit
           },
           {
-            path: ':id/check',
+            path: ':id/c',
             name: 'task.check',
             component: TaskCheck
           },
           {
-            path: ':id/result',
+            path: ':id/r',
             name: 'task.result',
             component: TaskResult
           },
@@ -312,18 +312,18 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'report',
+        path: 'r',
         component: ReportIndex,
         children: [
           {
-            path: 'absent',
+            path: 'a',
             name: 'report.abcent',
             component: ReportAbcent
           }
         ]
       },
       {
-        path: 'setting',
+        path: 'set',
         component: SettingIndex,
         children: [
           {
@@ -332,14 +332,14 @@ Vue.use(VueRouter)
             component: SettingDashboard
           },
           {
-            path: 'school',
+            path: 'sch',
             name: 'setting.school',
             component: SettingSchool
           }
         ]
       },
       {
-        path: 'exam',
+        path: 'ex',
         component: ExamIndex,
         children: [
           {
@@ -348,37 +348,37 @@ Vue.use(VueRouter)
             component: ExamBank
           },
           {
-            path: 'bank/:id/questions',
+            path: 'bank/:id/q',
             name: 'exam.bank.questions',
             component: ExamBankQuestion
           },
           {
-            path: 'bank/:id/question/add',
+            path: 'bank/:id/q/add',
             name: 'exam.bank.question.add',
             component: ExamBankQuestionAdd
           },
           {
-            path: 'bank/:id/question/:id_question/edit',
+            path: 'bank/:id/q/:id_question/e',
             name: 'exam.bank.question.edit',
             component: ExamBankQuestionEdit
           },
           {
-            path: 'bank/:id/import',
+            path: 'bank/:id/i',
             name: 'exam.bank.question.import',
             component: ExamBankQuestionImport
           },
           {
-            path: 'schedule',
+            path: 'sc',
             name: 'exam.schedule',
             component: ExamSchedule
           },
           {
-            path: 'schedule/:id/check',
+            path: 'sc/:id/c',
             name: 'exam.schedule.check',
             component: ExamEsayCheck
           },
           {
-            path: 'schedule/:id/point',
+            path: 'sc/:id/point',
             name: 'exam.schedule.point',
             component: ExamPoint
           }
@@ -387,7 +387,7 @@ Vue.use(VueRouter)
     ]
   },
   {
-    path: '/exam',
+    path: '/ex',
     component: ExamLayout,
     meta: { requiresAuth: true },
     children: [
@@ -397,7 +397,7 @@ Vue.use(VueRouter)
         component: ExamDash
       },
       {
-        path: 'waitingroom',
+        path: 'wait',
         name: 'exam.prepare',
         component: ExamWait
       },

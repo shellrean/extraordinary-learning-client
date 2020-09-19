@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
 		<div class="col-md-8">	
-			<div class="card card-custom">
+			<div class="card card-custom shadow-none border">
 				<div class="card-body">
 					<div class="form-group">
 						<label>Body</label>
@@ -16,12 +16,12 @@
 				<div class="card-body">
 					<div class="form-group">
 						<label>Judul</label>
-						<input type="text" class="form-control form-control-lg form-control-solid" v-model="task.title"  :class="{ 'is-invalid' : errors.title }">
+						<input type="text" class="form-control" v-model="task.title"  :class="{ 'is-invalid' : errors.title }">
 						<div class="invalid-feedback" v-if="errors.title">{{ errors.title[0] }}</div>
 					</div>
 					<div class="form-group">
 						<label>Jenis tugas</label>
-						<select class="form-control form-control-lg form-control-solid" v-model="task.type"  :class="{ 'is-invalid' : errors.type }">
+						<select class="form-control" v-model="task.type"  :class="{ 'is-invalid' : errors.type }">
 							<option value="0">Gambar upload</option>
 							<option value="1">File upload</option>
 							<option value="2">Esay</option>
@@ -76,6 +76,6 @@ export default {
 </script>
 <style >
 	div[contenteditable] {
-    outline: 1px solid #616161;
+    outline: 1px solid #E4E6EF
 }
 </style>

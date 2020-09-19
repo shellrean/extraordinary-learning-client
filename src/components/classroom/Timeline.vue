@@ -2,7 +2,7 @@
 	<div>
 		<ShareToClass v-if="authenticated.role == '1'"/>
 		<TimelineClassLive />
-		<b-tabs align="center">
+		<b-tabs align="">
 	    	<b-tab title="Materi" active>
 				<TimelineLecture class="mt-5"/>
 	      	</b-tab>
