@@ -404,7 +404,7 @@
             ]"
           >
             <a :href="href" class="menu-link" @click="navigate">
-              <i class="menu-icon flaticon2-console"></i>
+              <i class="menu-icon flaticon-settings-1"></i>
               <span class="menu-text">Setting</span>
             </a>
           </li>

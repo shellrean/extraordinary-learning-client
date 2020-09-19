@@ -25,7 +25,7 @@
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
-								<i class="flaticon-tool-1"></i>
+								<i class="flaticon-upload-1"></i>
 								Import
 							</b-button>
 							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
@@ -71,19 +71,16 @@
                         					<span class="symbol-label font-size-h4 font-weight-bold" v-else>{{ row.item.name.charAt(0) }}</span>								
                         				</div>								
                         				<div class="ml-4">									
-                        					<div class="text-dark-75 font-weight-bolder font-size-lg mb-0" v-text="row.item.name"></div>									
-                        					<span class="text-muted font-weight-bold" v-text="row.item.email"></span>								
+                        					<div class="text-dark-75 font-weight-bold font-size-lg mb-0" v-text="row.item.name"></div>									
+                        					<span class="text-muted" v-text="row.item.email"></span>								
                         				</div>							
                         			</div>
                         		</span>
                         	</template>
-                        	<template v-slot:cell(status)="row">
-                        		<span class="label label-lg font-weight-bold  label-light-info label-inline">{{ row.item.isactive == 0 ? 'In- active' : 'Active' }}</span>
-                        	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
+                        		<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
 									<template v-slot:button-content>
-									    <i class="flaticon-squares-4"></i>
+									    <span class="flaticon-squares-4"></span>
 									</template>
 									<b-dropdown-item  @click="getUserData(row.item.id)" >Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteTeacher(row.item.id)">Hapus</b-dropdown-item>
@@ -206,7 +203,6 @@ export default {
 				{ key: 'user', label: 'User', shortable: true },
 				{ key: 'id', label: 'ID' },
 				{ key: 'uid', label: 'NIP' },
-				{ key: 'status', label: 'Status' },
 				{ key: 'actions', label: 'Aksi' }
 			],
 			search: '',
@@ -310,3 +306,8 @@ export default {
 	}
 }
 </script>
+<style>
+	.table > tbody > tr > td {
+     vertical-align: middle;
+}
+</style>

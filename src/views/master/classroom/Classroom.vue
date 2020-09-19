@@ -25,7 +25,7 @@
 					<div class="card-toolbar">
 						<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
 							<b-button variant="light-primary" v-b-modal.modal-import class="font-weight-bolder font-size-sm mr-2">
-								<i class="flaticon-tool-1"></i>
+								<i class="flaticon-upload-1"></i>
 								Import
 							</b-button>
 							<b-button variant="primary" v-b-modal.modal-create class="font-weight-bolder font-size-sm">
@@ -68,16 +68,16 @@
                         					<span class="symbol-label font-size-h4 font-weight-bold">{{ row.item.grade }}</span>								
                         				</div>								
                         				<div class="ml-4 d-flex flex-column">									
-                        					<router-link :to="{ name: 'master.classroom.dashboard', params: { id: row.item.id }}" v-b-tooltip.hover title="Ke lobi kelas" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-0" v-text="row.item.name"></router-link>				
-                        					<span class="text-muted font-weight-bold" v-text="row.item.group"></span>	
+                        					<router-link :to="{ name: 'master.classroom.dashboard', params: { id: row.item.id }}" v-b-tooltip.hover title="Ke lobi kelas" class="text-dark-75 font-weight-bold text-hover-primary font-size-lg mb-0" v-text="row.item.name"></router-link>				
+                        					<span class="text-muted" v-text="row.item.group"></span>	
                         				</div>							
                         			</div>
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret class="bg-hover-light-primary rounded-pill btn-icon" >
 									<template v-slot:button-content>
-									    <i class="flaticon-squares-4"></i>
+									    <span class="flaticon-squares-4"></span>
 									</template>
 									<b-dropdown-item  @click="getClassroom(row.item.id)" >Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteClassroom(row.item.id)">Hapus</b-dropdown-item>
@@ -307,3 +307,8 @@ export default {
 	}
 }
 </script>
+<style>
+	.table > tbody > tr > td {
+     vertical-align: middle;
+}
+</style>

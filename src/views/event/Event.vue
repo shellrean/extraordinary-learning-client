@@ -50,9 +50,9 @@
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon" >
 									<template v-slot:button-content>
-									    <i class="flaticon-squares-4"></i>
+									    <span class="flaticon-squares-4"></span>
 									</template>
 									<b-dropdown-item @click="getData(row.item.id)">Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteData(row.item.id)">Hapus</b-dropdown-item>
