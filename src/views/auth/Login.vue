@@ -2,7 +2,7 @@
 	<!--begin::Main-->
 		<div class="d-flex flex-column flex-root">
 			<!--begin::Login-->
-			<div class="login login-6 login-signin-on login-signin-on d-flex flex-row-fluid" id="kt_login">
+			<div class="login login-6 login-signin-on login-signin-on d-flex flex-row-fluid  bgi-size-cover bgi-position-top bgi-no-repeat" style="background-image: url('/img/bg/bg-3.jpg');">
 				<div class="d-flex flex-column flex-lg-row flex-row-fluid text-center" style="background-image: url(assets/media/bg/bg-3.jpg);">
 					<!--begin:Aside-->
 					<div class="d-flex w-100 flex-center p-15" v-if="typeof school.settings != 'undefined'">
@@ -34,7 +34,7 @@
 									<h2 class="font-weight-bold">Sign In</h2>
 									<p class="text-muted font-weight-bold">Masukan email dan password anda</p>
 								</div>
-								<div class="alert alert-custom alert-light-danger fade show mb-5" role="alert" v-if="errors.invalid">
+								<div class="alert alert-custom alert-light-primary fade show mb-5" role="alert" v-if="errors.invalid">
 									<div class="alert-icon">
 										<i class="flaticon-warning"></i>
 									</div>
@@ -58,7 +58,7 @@
 										<div class="invalid-feedback" v-if="errors.password">{{ errors.password[0] }} </div>
 									</div>
 									<div class="text-center mt-15">
-										<button id="kt_login_signin_submit" class="btn btn-primary btn-pill shadow-sm py-4 px-9 font-weight-bold" :disabled="isLoading" @click="postLogin">{{ isLoading ? 'Processing...' : 'Sign In' }}</button>
+										<button id="kt_login_signin_submit" class="btn btn-primary shadow-sm py-4 px-9 font-weight-bold" :disabled="isLoading" @click="postLogin">{{ isLoading ? 'Processing...' : 'Sign In' }}</button>
 									</div>
 								</form>
 							</div>
