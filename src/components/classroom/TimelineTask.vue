@@ -9,7 +9,9 @@
 						</b-button>
 					</div>
 					<div class="d-flex flex-column flex-grow-1">
-						<router-link :to="{ name: 'task.view', params: { id: task.task.id }}" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bold">{{ task.task.title }}</router-link>
+						<router-link :to="{ name: 'task.view', params: { id: task.task.id }}" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bold">
+							{{ task.task.title }} <span class="badge badge-success" v-if="authenticated.role == 1 && task.task.status == true">selesai</span>
+						</router-link>
 						<div class="d-flex">
 							<div class="d-flex align-items-center pr-5">
 								<span class="text-muted">{{ task.created_at }}</span>

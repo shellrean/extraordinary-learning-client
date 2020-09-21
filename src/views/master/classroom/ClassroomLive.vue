@@ -26,10 +26,10 @@
 								</h3>
 								<div class="card-toolbar" v-if="authenticated.role == '0' || authenticated.role == '1'">
 									<div class="form-group">
-										<button class="btn btn-primary mr-2" v-b-modal.modal-abcent v-b-tooltip.hover title="Lihat absensi hari ini">
+										<button class="btn btn-primary mr-2" @click="modalAbcent" :disabled="isLoading" v-b-tooltip.hover title="Lihat absensi hari ini">
 											 Lihat absen
 										</button>
-										<button class="btn btn-light-primary" @click="closeClass" v-b-tooltip.hover title="Tutup kelas pada hari ini">
+										<button class="btn btn-light-primary" @click="closeClass" v-b-tooltip.hover title="Tutup kelas pada hari ini" :disabled="isLoading">
 											Tutup Kelas
 										</button>
 									</div>
@@ -88,7 +88,7 @@
                 	{{ row.item.reason | textReason }}
                 </template>
 								<template v-slot:cell(actions)="row">
-                    <b-button variant="secondary" class="btn-icon" size="sm" @click="getAbcent(row.item.id)" v-if="authenticated.role == '1'">
+                    <b-button variant="secondary" class="btn-icon" size="sm" @click="getAbcent(row.item.id)" v-if="authenticated.role == '1'" :disabled="isLoading">
 											<i class="flaticon-edit"></i>
 										</b-button>
 								</template>
@@ -129,6 +129,69 @@
 			      </b-button>
 			    </template>
 		</b-modal>
+		<b-modal id="modal-close-room" size="lg" @hide="wizard_index = 0" title="Penutupan kelas hari ini">
+			<div v-if="wizard_index == 0">
+					<div class="alert alert-custom alert-light-primary fade show mb-5">
+									<div class="alert-icon">
+										<i class="flaticon-notes"></i>
+									</div>
+									<div class="alert-text">Buat <strong>catatan</strong> tentang pembelajaran kali ini <br> bila tidak ada kosongkan saja</div>
+									<div class="alert-close">
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+											<span aria-hidden="true">
+												<i class="ki ki-close"></i>
+											</span>
+										</button>
+									</div>
+								</div>
+				<div class="form-group">
+					<label>Catatan</label>
+					<ckeditor v-model="data.note" v-if="showEditor" :config="editorConfig"  type="inline"></ckeditor>	
+				</div>
+			</div>
+			<div v-if="wizard_index == 1">
+				<table class="table table-border">
+					<tr>
+						<td>Jumlah Siswa</td>
+						<td>{{ students.length }}</td>
+					</tr>
+					<tr>
+						<td>Peserta Hadir</td>
+						<td>{{ this.filteredAbcent.filter(item => item.isAbcent == 1 ).length }}</td>
+					</tr>
+					<tr>
+						<td>Peserta Tidak Hadir</td>
+						<td>{{ this.filteredAbcent.filter(item => item.isAbcent == 0 ).length }}</td>
+					</tr>
+				</table>
+			</div>
+			<div v-if="wizard_index == 2">
+					<div class="alert alert-custom alert-light-primary fade show mb-5">
+									<div class="alert-icon">
+										<i class="flaticon-profile-1"></i>
+									</div>
+									<div class="alert-text">Terimakasih untuk pelajaran hari ini</div>
+									<div class="alert-close">
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+											<span aria-hidden="true">
+												<i class="ki ki-close"></i>
+											</span>
+										</button>
+									</div>
+								</div>
+			</div>
+			<template v-slot:modal-footer="{ cancel }">
+				<b-button variant="secondary" :disabled="isLoading" @click="wizard_index -= 1" v-if="wizard_index !== 0">
+					Sebelumnya
+				</b-button>
+				<b-button variant="primary" :disabled="isLoading" @click="wizard_index += 1" v-if="wizard_index !== 2">
+					Selanjutnya
+				</b-button>
+				<b-button variant="success" :disabled="isLoading" @click="finishedClass" v-if="wizard_index === 2">
+					Tutup kelas
+				</b-button>
+			</template>
+		</b-modal>
 	</div>
 </template>
 <script>
@@ -139,6 +202,7 @@ import { successToas, errorToas } from '@/core/entities/notif'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { JitsiMeet } from '@mycure/vue-jitsi-meet';
 import { BDropdown, BDropdownItem, BButton } from 'bootstrap-vue'
+import store from '@/store'
 
 export default {
 	name: 'ClassroomLive',
@@ -164,7 +228,21 @@ export default {
 				"Izin",
 				"Masalah"
 			],
-			edit_absent: {}
+			edit_absent: {},
+			wizard_index: 0,
+			showEditor: false,
+			editorConfig: {
+				embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
+				extraPlugins: 'embed',
+				allowedContent: true,
+				fileTools_requestHeaders: {
+					'Accept': 'application/json',
+					'Authorization' : 'Bearer '+store.state.token
+				}
+			},
+			data: {
+				note: ''
+			}	
 		}
 	},
 	components: {
@@ -189,7 +267,7 @@ export default {
 	computed: {
 		...mapGetters(['isLoading']),
 		...mapState('user',['authenticated']),
-		...mapState('classroom',['classlive']),
+		...mapState('classroom',['classlive', 'students']),
 		...mapState('abcent',['abcents']),
 		...mapState('channel',['socket']),
 		filteredAbcent() {
@@ -233,26 +311,28 @@ export default {
 
     	},
     	closeClass() {
-    		this.$swal({
-                title: 'Informasi',
-                text: "Kelas akan ditutup, pastikan seluruh siswa sudah terabsen",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#c3c3c3',
-                confirmButtonText: 'Lanjutkan!'
-            }).then(async (result) => {
-                if (result.value) {
+    		// this.$swal({
+        //         title: 'Informasi',
+        //         text: "Kelas akan ditutup, pastikan seluruh siswa sudah terabsen",
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#3085d6',
+        //         cancelButtonColor: '#c3c3c3',
+        //         confirmButtonText: 'Lanjutkan!'
+        //     }).then(async (result) => {
+        //         if (result.value) {
                    try {
-                   		await this.stopLiveClassroom(this.$route.params.id)
+										 this.$bvModal.show('modal-close-room')
+										 this.showEditor = true
+                   		// await this.stopLiveClassroom(this.$route.params.id)
 
-                   		this.socket.emit('close_classroom')
-                   		this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id }})
+                   		// this.socket.emit('close_classroom')
+                   		// this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id }})
                    } catch (error) {
                    		this.$bvToast.toast(error.message, errorToas())
                    }
-                }
-            })
+            //     }
+            // })
     	},
     	onIFrameLoad () {
       		// do stuff
@@ -273,6 +353,28 @@ export default {
 				.catch((error) => {
 					this.$bvToast.toast(error.message, errorToas())
 				})
+			},
+			modalAbcent() {
+				this.getAbcentToday({
+					schedule_id: this.classlive.schedule_id
+				})
+				.then((res) => {
+					this.$bvModal.show('modal-abcent')
+				})
+				.catch((err) => {
+					this.$bvToast.toast(error.message, errorToas())
+				})
+			},
+			async finishedClass() {
+				try {
+					await this.stopLiveClassroom({
+						id: this.$route.params.id,
+						note: this.data.note
+					})
+					this.socket.emit('close_classroom')
+				} catch (error) {
+					this.$bvToast.toast(error.message, errorToas())
+				}
 			}
 	},
 	async created() {
@@ -305,6 +407,9 @@ export default {
 			user: this.authenticated,
 			channel: this.channel
 		});
+		this.socket.on('close_classroom', () => {
+			this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id }})
+		})
 	},
 	watch: {
 		async classlive() {
@@ -331,11 +436,17 @@ export default {
 				this.$bvToast.toast(error.message, errorToas())
 			}
 		}
+	},
+	destroyed() {
+		this.socket.close()
 	}
 }
 </script>
 <style>
 	.table > tbody > tr > td {
      vertical-align: middle;
+}
+	div[contenteditable] {
+    outline: 1px solid #E4E6EF
 }
 </style>

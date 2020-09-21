@@ -251,7 +251,7 @@ const actions = {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async(resolve, reject) => {
 			try {
-				let network = await $axios.post(`classrooms/live/${payload}/stop`)
+				let network = await $axios.post(`classrooms/live/${payload.id}/stop`, payload)
 
 				commit('SET_LOADING' ,false, { root: true })
 				resolve(network.data.data)
