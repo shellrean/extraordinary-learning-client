@@ -311,31 +311,15 @@ export default {
 
     	},
     	closeClass() {
-    		// this.$swal({
-        //         title: 'Informasi',
-        //         text: "Kelas akan ditutup, pastikan seluruh siswa sudah terabsen",
-        //         icon: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#c3c3c3',
-        //         confirmButtonText: 'Lanjutkan!'
-        //     }).then(async (result) => {
-        //         if (result.value) {
-                   try {
-										 this.$bvModal.show('modal-close-room')
-										 this.showEditor = true
-                   		// await this.stopLiveClassroom(this.$route.params.id)
-
-                   		// this.socket.emit('close_classroom')
-                   		// this.$router.push({ name: 'master.classroom.dashboard', params: { id: this.classlive.classroom_id }})
-                   } catch (error) {
-                   		this.$bvToast.toast(error.message, errorToas())
-                   }
-            //     }
-            // })
+      	try {
+				 this.$bvModal.show('modal-close-room')
+				 this.showEditor = true
+      	} catch (error) {
+      			this.$bvToast.toast(error.message, errorToas())
+      	}
     	},
     	onIFrameLoad () {
-      		// do stuff
+				
 			},
 			getAbcent(id) {
 				let index = this.abcents.map(item => item.id).indexOf(id)

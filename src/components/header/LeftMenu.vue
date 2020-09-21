@@ -14,7 +14,7 @@
 		</button>
 
 		<!--begin::Logo-->
-		<a href="#"  v-if="typeof school.settings != 'undefined'">
+		<a href="/"  v-if="typeof school.settings != 'undefined'">
 			<img :src="`${baseURL}/storage/${school.settings.logo}`"  class="logo-sticky max-h-35px" v-if="typeof school.settings.logo != 'undefined'">
 			<img alt="Logo" src="/img/logo.ico" class="logo-sticky max-h-35px" v-else />
 		</a>
