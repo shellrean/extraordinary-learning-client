@@ -5,7 +5,6 @@
 				<div class="d-flex flex-column flex-md-row">
 					<div class="flex-md-row-auto w-md-275px w-xl-325px">
 						<SchoolProfile/>
-						<ScheduleToday v-if="authenticated.role == '1'"/>
 					</div>
 					<div class="flex-md-row-fluid ml-md-6 ml-lg-8">
 						<div class="row">
@@ -14,6 +13,7 @@
 							</div>
 							<div class="col-xxl-6">
 								<SchoolEvent />
+								<ScheduleToday v-if="authenticated.role == '1'"/>
 							</div>
 						</div>
 					</div>
