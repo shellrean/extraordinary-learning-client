@@ -50,17 +50,9 @@ export default {
         ...mapGetters(['isLoading']),
         ...mapState('classroom', ['myclassrooms', 'schedules']),
         classrooms() {
-			const result = []
-			const map = new Map()
-			for (const item of this.myclassrooms) {
-				if(!map.has(item.classroom.id)) {
-					map.set(item.classroom.id, true);
-					result.push(item)
-				}
-			}
-			return result.map(item => ({
-				id: item.classroom.id,
-				name: item.classroom.name
+			return this.myclassrooms.map(item => ({
+                id: item.id,
+				name: item.subject.name + '-'+item.classroom.name
 			}));
 		},
     },
