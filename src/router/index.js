@@ -78,6 +78,9 @@ const ExamWait = () => import('@/views/exam/student/Waiting')
 const ExamDoing = () => import('@/views/exam/student/Exam')
 const ExamFinish = () => import('@/views/exam/student/Finish')
 
+const RecapIndex = () => import('@/views/recap/Index')
+const RecapDashboard = () => import('@/views/recap/Dashboard')
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -381,6 +384,18 @@ Vue.use(VueRouter)
             path: 'sc/:id/point',
             name: 'exam.schedule.point',
             component: ExamPoint
+          }
+        ]
+      },
+      {
+        path: '/r',
+        component: RecapIndex,
+        meta: { requiresAuth: true },
+        children: [
+          {
+            path: 'd',
+            name: 'recap.dashboard',
+            component: RecapDashboard
           }
         ]
       }
