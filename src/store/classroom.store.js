@@ -13,6 +13,7 @@ const state = () => ({
 			
 		}
 	},
+	classroom_subject: {},
 	schedule: {},
 	myclassrooms: [],
 	students: [],
@@ -146,11 +147,11 @@ const actions = {
 			}
 		})
 	},
-	createNewClassroomSubject({ commit, state }, payload) {
+	createNewClassroomSubject({ commit, state }) {
 		commit('SET_LOADING', true, { root: true })
 		return new Promise(async (resolve, reject) => {
 			try {
-				let network = await $axios.post(`classrooms/mine`, payload)
+				let network = await $axios.post(`classrooms/mine`, state.classroom_subject)
 
 				commit('SET_LOADING', false, { root: true })
 				resolve(network.data)
