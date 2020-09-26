@@ -23,39 +23,38 @@
 						</div>
 					</div>
 					<div class="card-toolbar">
-						<div class="dropdown dropdown-inline">
-							<router-link :to="{ name: 'exam.bank' }" class="btn btn-light-primary mr-2" v-b-tooltip.hover title="Kembali ke daftar banksoal">
-								<i class="flaticon2-left-arrow-1"></i>Kembali
-							</router-link>
-							<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
-								<template v-slot:button-content>
-									<b-button variant="primary">
-										<i class="flaticon2-add-square"></i>
-										Tambah soal
-									</b-button>
-								</template>
-								<b-dropdown-item  @click="addQuestion(1)">
-									Pilihan ganda
-								</b-dropdown-item>
-								<b-dropdown-item @click="addQuestion(2)">
-									Esay
-								</b-dropdown-item>
-								<b-dropdown-item v-b-modal.modal-import>
-									Import dari file .docx
-								</b-dropdown-item>
-							</b-dropdown>
-						</div>
+						<router-link :to="{ name: 'exam.bank' }" class="btn btn-light-primary mr-2" v-b-tooltip.hover title="Kembali ke daftar banksoal">
+							<i class="flaticon2-left-arrow-1"></i>Kembali
+						</router-link>
+						<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret>
+							<template v-slot:button-content>
+								<b-button variant="primary">
+									<i class="flaticon2-add-square"></i>
+									Tambah soal
+								</b-button>
+							</template>
+							<b-dropdown-item  @click="addQuestion(1)">
+								Pilihan ganda
+							</b-dropdown-item>
+							<b-dropdown-item @click="addQuestion(2)">
+								Esay
+							</b-dropdown-item>
+							<b-dropdown-item v-b-modal.modal-import>
+								Import dari file .docx
+							</b-dropdown-item>
+						</b-dropdown>
 					</div>
 				</div>
 			</div>
 			<div class="row">
+				<transition name="fade">
 				<div class="col-md-8" v-if="typeof questions.data != 'undefined'">
 					<div class="card" v-for="(row,index) in questions.data">
 						<div class="card-header p-4 pb-0">
 							
 					 		<div class="d-flex align-items-center">
-					 			<b-button size="sm" variant="white" v-b-toggle="'question_'+row.id" v-b-tooltip.hover title="Toggle detail soal">
-					 				<i class="flaticon2-talk"></i>
+					 			<b-button size="sm" variant="white" class="btn-icon" v-b-toggle="'question_'+row.id" v-b-tooltip.hover title="Toggle detail soal">
+					 				<i class="flaticon2-circle-vol-2"></i>
 					 			</b-button>
 					 			<div class="d-flex flex-column flex-grow-1">
 					 				<div>
@@ -64,8 +63,8 @@
 					 				</div>
 								</div>
 								<div>
-									<b-button variant="white" size="sm" v-b-tooltip.hover title="Edit soal" @click="getData(row.id)"><small><i class="flaticon2-contract"></i> Edit</small></b-button>
-									<b-button variant="white" size="sm" v-b-tooltip.hover title="Hapus soal" @click="deleteData(row.id)"><small><i class="flaticon2-trash"></i></small></b-button>
+									<b-button variant="light-warning" class="mr-1" size="sm" v-b-tooltip.hover title="Edit soal" @click="getData(row.id)"><small><i class="flaticon2-contract"></i> Edit</small></b-button>
+									<b-button variant="light-danger" size="sm" v-b-tooltip.hover title="Hapus soal" @click="deleteData(row.id)"><small><i class="flaticon2-trash"></i></small></b-button>
 								</div>
 					 		</div>
 						</div>
@@ -111,10 +110,12 @@
 						</div>
 					</div>
 				</div>
+				</transition>
 				<div class="col-md-4">
-					<div class="card gutter-b" v-if="typeof question_bank.code != 'undefined'">
+					<transition name="fade">
+					<div class="card gutter-b" v-if="question_bank.subject_id != null">
 						<div class="card-header p-4 border-0 pb-0">
-							<div class="d-flex align-items-center mb-2">
+							<div class="d-flex align-items-center mb-1">
 								<div class="symbol symbol-40 symbol-light-primary mr-5">
 									<span class="symbol-label">
 										<i class="flaticon2-soft-icons-1 text-primary"></i>
@@ -142,6 +143,17 @@
 							</span>
 						</div>
 					</div>	
+					</transition>
+					<transition name="fade">
+					<div class="card gutter-b" v-if="typeof question_bank.standart_data != 'undefined' && question_bank.standart_data != null">
+						<div class="card-body p-4">
+							<strong>{{question_bank.standart_data.code }}</strong>
+							<div v-html="question_bank.standart_data.body">
+
+							</div>
+						</div>
+					</div>	
+					</transition>
 				</div>
 			</div>
 		</div>
@@ -154,10 +166,10 @@
 			</div>
 			</VuePerfectScrollbar>
 			<template v-slot:modal-footer="{ ok, cancel, hide }">
-		      	<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
+		      	<b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        	Cancel
 		      	</b-button>
-				<b-button variant="success" @click="submit" :disabled="isLoading">
+				<b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">
 		        	{{ isLoading ? 'Processing...' : 'Simpan' }}
 		      	</b-button>
 			</template>
@@ -172,10 +184,10 @@
 			></b-form-file>
 			<a :href="baseURL+'/download/format-input-soal-doc.docx'" download>Download template import</a>
 			<template v-slot:modal-footer="{ ok, cancel, hide }">
-		      	<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
+		      	<b-button size="sm" variant="secondary" @click="cancel()" :disabled="isLoading">
 		        	Cancel
 		      	</b-button>
-				<b-button variant="success" @click="submitFileImport" :disabled="isLoading">
+				<b-button size="sm" variant="primary" @click="submitFileImport" :disabled="isLoading">
 		        	{{ isLoading ? 'Processing...' : 'Import' }}
 		      	</b-button>
 			</template>
@@ -331,6 +343,10 @@ export default {
 		perPage() {
 			this.changeData()
 		}
+	},
+	destroyed() {
+		this.$store.state.question.questions = []
+		this.$store.commit('question/CLEAR_QUESTION_BANK')
 	}
 }
 </script>

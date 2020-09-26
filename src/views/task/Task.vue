@@ -73,7 +73,7 @@
                         	<template v-slot:cell(actions)="row">
 	                        	<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
 									<template v-slot:button-content>
-									   <span class="flaticon-squares-4"></span>
+									   <span class="flaticon-more text-secondary"></span>
 									</template>
 									<b-dropdown-item :to="{ name: 'task.view', params: { id: row.item.id }}">Lihat</b-dropdown-item>
 									<b-dropdown-item @click="sharee(row.item.id)">Bagikan</b-dropdown-item>

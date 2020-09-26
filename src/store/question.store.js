@@ -75,6 +75,7 @@ const mutations = {
 			mc_option_count: 4,
 			mc_count: 0,
 			esay_count: 0,
+			standart: '',
 			percentage: {
 				mc: 100,
 				esay: 0

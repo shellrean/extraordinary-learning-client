@@ -12,8 +12,9 @@
 			<div class="" v-if="question.type == '1'">
 				<div class="">
 					<div class="form-group">
-						<table class="table table-borderless">
-							<tr v-for="(option, index) in question.options" :key="index" v-if="show_list">
+						<transition name="fade">
+						<table class="table table-borderless" v-if="show_list">
+							<tr v-for="(option, index) in question.options" :key="index">
 								<td width="20px">
 									<label class="radio radio-lg radio-success">
 										<input type="radio" checked="checked" :value="index" v-model="question.correct">
@@ -24,14 +25,15 @@
 									<ckeditor v-model="question.options[index]" v-if="showEditor" :config="editorConfig" type="inline"></ckeditor>
 								</td>
 								<td width="20px">
-									<button class="btn btn-white btn-sm" @click="removeOption(index)" v-if="![0,1].includes(index)">
-										<i class="flaticon2-trash"></i>
+									<button class="btn btn-light-danger btn-icon btn-sm" @click="removeOption(index)" v-if="![0,1].includes(index)">
+										<i class="flaticon-cancel"></i>
 									</button>
 								</td>
 							</tr>
 						</table>
+						</transition>
 						<div class="d-flex">
-							<button class="btn btn-light btn-block" @click="addOption"> Tambah opsi</button>
+							<button class="btn btn-light-success btn-sm" @click="addOption"><i class="flaticon2-add"></i> Tambah opsi</button>
 						</div>
 					</div>
 				</div>
@@ -76,10 +78,9 @@ export default {
 	},
 	methods: {
 		change() {
-			console.log('change');
+
 		},
 		async removeOption(index) {
-			console.log(index)
 			if(index !== -1) {
 				this.show_list = false
 				await this.$store.commit('question/REMOVE_QUESTION_OPTION', index)

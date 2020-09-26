@@ -33,9 +33,10 @@
 				</div>
 			</div>
 			<div class="row">
+				<transition name="fade">
 				<div class="col-md-8" v-if="typeof question_banks.data != 'undefined'">
 					<table class="table table-borderless table-sm">
-						<tr v-for="row in question_banks.data">
+						<tr v-for="row in question_banks.data" :key="row.id">
 							<td>
 								<div class="card ">
 									<div class="card-header p-0 d-flex justify-content-between">
@@ -98,7 +99,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4">
+				</transition>
+				<transition name="fade">
+				<div class="col-md-4" v-if="typeof question_banks.data != 'undefined'">
 					<div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
                         <div class="alert-icon">
                             <i class="flaticon-warning"></i>
@@ -116,74 +119,89 @@
                         </div>
                     </div>
 				</div>
+				</transition>
 			</div>
 		</div>
-		<b-modal id="modal-create" title="Banksoal" @hide="$store.commit('question/CLEAR_QUESTION_BANK')" no-close-on-backdrop>
-			<div class="form-group">
-				<label>Mata pelajaran</label>
-				<v-select label="name" :reduce="item => item.id" :options="subjects" v-model="question_bank.subject_id">
-				</v-select>
-				<span class="text-danger" v-if="errors.subject_id">{{ errors.subject_id[0] }}</span>
-			</div>
-			<div class="form-group">
-				<label>Nama banksoal</label>
-				<input type="text" class="form-control" :class="{ 'is-invalid' : errors.code }" v-model="question_bank.code">
-				<div class="invalid-feedback" v-if="errors.code">{{ errors.code[0] }}</div>
-			</div>
-			<div class="form-group">
-				<label>Jumlah soal pilihan ganda</label>
-				<div class="input-group">
-					<div class="input-group-prepend" v-show="question_bank.mc_count > 0">
-						<button class="btn btn-light-primary" type="button" @click="question_bank.mc_count -= 1">
-							<strong>-</strong>
-						</button>
-					</div>
-					<input type="number" class="form-control" :class="{ 'is-invalid' : errors.mc_count }" v-model.number="question_bank.mc_count">
-					<div class="input-group-append">
-						<button class="btn btn-light-success" type="button" @click="question_bank.mc_count += 1">
-							<strong>+</strong>
-						</button>
-					</div>
+		<b-modal id="modal-create" title="Banksoal" @hide="function() { $store.commit('question/CLEAR_QUESTION_BANK'); index_create = 0; $store.commit('CLEAR_ERROR') }" no-close-on-backdrop>
+			<div v-if="index_create == 0">
+				<div class="form-group">
+					<label>Mata pelajaran</label>
+					<v-select label="name" :reduce="item => item.id" :options="subjects" v-model="question_bank.subject_id">
+					</v-select>
+					<span class="text-danger" v-if="errors.subject_id">{{ errors.subject_id[0] }}</span>
+				</div>
+				<div class="form-group">
+					<label>Nama banksoal</label>
+					<input type="text" class="form-control" :class="{ 'is-invalid' : errors.code }" v-model="question_bank.code">
+					<div class="invalid-feedback" v-if="errors.code">{{ errors.code[0] }}</div>
+				</div>
+				<div class="form-group">
+					<label>Kopetensi Dasar</label>
+					<input type="text" class="form-control" v-model="question_bank.standart" placeholder="Tulis nomor kompetensi (opsional)">
 				</div>
 			</div>
-			<div class="form-group">
-				<label>Jumlah soal esay</label>
-				<div class="input-group">
-					<div class="input-group-prepend" v-show="question_bank.esay_count > 0">
-						<button class="btn btn-light-primary" type="button" @click="question_bank.esay_count -= 1">
-							<strong>-</strong>
-						</button>
-					</div>
-					<input type="number" class="form-control" :class="{ 'is-invalid' : errors.esay_count }" v-model.number="question_bank.esay_count">
-					<div class="input-group-append">
-						<button class="btn btn-light-success" type="button" @click="question_bank.esay_count += 1">
-							<strong>+</strong>
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>% Pilihan ganda</label>
-						<input type="number" class="form-control" v-model.number="question_bank.percentage.mc" @input="checkTotal">
+			<div v-if="index_create == 1">
+				<div class="form-group">
+					<label>Jumlah soal pilihan ganda</label>
+					<div class="input-group">
+						<div class="input-group-prepend" v-show="question_bank.mc_count > 0">
+							<button class="btn btn-light-primary" type="button" @click="question_bank.mc_count -= 1">
+								<strong>-</strong>
+							</button>
+						</div>
+						<input type="number" class="form-control" :class="{ 'is-invalid' : errors.mc_count }" v-model.number="question_bank.mc_count">
+						<div class="input-group-append">
+							<button class="btn btn-light-success" type="button" @click="question_bank.mc_count += 1">
+								<strong>+</strong>
+							</button>
+						</div>
 					</div>
 				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>% Esay</label>
-						<input type="number" class="form-control" v-model.number="question_bank.percentage.esay" @input="checkTotal">
+				<div class="form-group">
+					<label>Jumlah soal esay</label>
+					<div class="input-group">
+						<div class="input-group-prepend" v-show="question_bank.esay_count > 0">
+							<button class="btn btn-light-primary" type="button" @click="question_bank.esay_count -= 1">
+								<strong>-</strong>
+							</button>
+						</div>
+						<input type="number" class="form-control" :class="{ 'is-invalid' : errors.esay_count }" v-model.number="question_bank.esay_count">
+						<div class="input-group-append">
+							<button class="btn btn-light-success" type="button" @click="question_bank.esay_count += 1">
+								<strong>+</strong>
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="alert bg-light-primary" v-show="total_error">
-				Total harus 100 !!!
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>% Pilihan ganda</label>
+							<input type="number" class="form-control" v-model.number="question_bank.percentage.mc" @input="checkTotal">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>% Esay</label>
+							<input type="number" class="form-control" v-model.number="question_bank.percentage.esay" @input="checkTotal">
+						</div>
+					</div>
+				</div>
+				<div class="alert bg-light-primary" v-show="total_error">
+					Total harus 100 !!!
+				</div>
 			</div>
 			<template v-slot:modal-footer="{ cancel }">
-				<b-button variant="secondary" @click="cancel()" :disabled="isLoading">
-                	Tutup
+				<b-button variant="secondary" size="sm" @click="cancel()" :disabled="isLoading" v-if="index_create == 0">
+                	Cancel
              	</b-button>
-				<b-button variant="success" @click="submit" :disabled="isLoading" v-if="!total_error">
+				<b-button variant="secondary" size="sm" @click="index_create -= 1" :disabled="isLoading" v-if="index_create > 0">
+					Sebelumnya
+				</b-button>
+				<b-button variant="primary" size="sm"  @click="index_create += 1" :disabled="isLoading" v-if="index_create < 1">
+					Selanjutnya
+				</b-button>
+				<b-button variant="primary" size="sm"  @click="submit" :disabled="isLoading" v-if="!total_error && index_create == 1">
 					{{ isLoading ? 'Processing...' : 'Simpan' }}
 				</b-button>
 			</template>
@@ -210,7 +228,8 @@ export default {
 			{ key: 'details', label: 'Detail' },
 			{ key: 'code', label: 'Kode' },
 			{ key: 'actions' }
-		]
+		],
+		index_create: 0
 	}),
 	computed: {
 		...mapGetters(['isLoading']),
@@ -226,13 +245,21 @@ export default {
 			}
 		},
 		subjects() {
-			return this.myclassrooms.map((item) => {
+			const result = []
+			const map = new Map()
+			for (const item of this.myclassrooms) {
+				if(!map.has(item.subject.id)) {
+					map.set(item.subject.id, true);
+					result.push(item)
+				}
+			}
+			return result.map(item =>{
 				return {
 					id: item.subject.id,
 					name: item.subject.name
 				}
-			})
-		}
+			});
+		},
 	},
 	methods: {
 		...mapActions('question',['getDataQuestionBanks', 'createDataQuestionBank', 'getDataQuestionBank', 'deleteDataQuestionBank', 'updateDataQuestionBank', 'duplicateDataQuestionBank']),
@@ -258,6 +285,9 @@ export default {
 				this.$bvToast.toast('Banksoal ditambahkan', successToas())
 				this.changeData()
 				this.$bvModal.hide('modal-create')
+			})
+			.catch((error) => {
+				this.$bvToast.toast(error.message, errorToas())
 			})
 		},
 		checkTotal() {

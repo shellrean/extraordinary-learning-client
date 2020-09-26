@@ -24,6 +24,7 @@ const mutations = {
 			date: payload.date,
 			start_time: payload.start_time,
 			duration: payload.duration/60,
+			type: payload.type,
 			setting: payload.setting
 		}
 	},
