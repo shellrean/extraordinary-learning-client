@@ -22,7 +22,7 @@
             <input type="date" class="form-control" v-model="end">
         </div>
         <div class="form-group">
-            <b-button block variant="primary" @click="recapData" :disabled="isLoading">Download</b-button>
+            <a traget="_blank" :disabled="isLoading" :href="`${baseURL}/api/v1/download/excel/recap-abcent?c=${classroom}&f=${from}&e=${end}&s=${schedule_id}`" class="btn btn-block btn-primary" download="">Download</a>
         </div>
     </div>
 </template>
@@ -41,17 +41,19 @@ export default {
     data() {
         return {
             classroom_id: '',
+            classroom: '',
             schedule_id: '',
             from: '',
             end: ''
         }
     },
     computed: {
-        ...mapGetters(['isLoading']),
+        ...mapGetters(['isLoading','baseURL']),
         ...mapState('classroom', ['myclassrooms', 'schedules']),
         classrooms() {
 			return this.myclassrooms.map(item => ({
                 id: item.id,
+                classroom_id: item.classroom.id,
 				name: item.subject.name + '-'+item.classroom.name
 			}));
 		},
@@ -96,10 +98,15 @@ export default {
     },
     watch : {
         classroom_id(val) {
-            this.getDataSchedules(val)
-            .catch((error) => {
-                this.$bvToast.toast(error.message, errorToas())
-            })
+            let index = this.classrooms.map(item => item.id).indexOf(val);
+            if(index !== -1) {
+                let data = this.classrooms[index]
+                this.classroom = data.classroom_id
+                this.getDataSchedules(val)
+                .catch((error) => {
+                    this.$bvToast.toast(error.message, errorToas())
+                })
+            }
         }
     }
 }
