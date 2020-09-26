@@ -278,6 +278,9 @@ export default {
 					this.changeData()
 					this.$bvModal.hide('modal-create')
 				})
+				.catch((error) => {
+					this.$bvToast.toast(error.message, errorToas())
+				})
 				return;
 			}
 			this.createDataQuestionBank()
