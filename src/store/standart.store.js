@@ -14,7 +14,9 @@ const mutations = {
 		state.standart = payload
 	},
 	CLEAR_DATA_STANDART(state) {
-		state.standart = {}
+		state.standart.type = ''
+		state.standart.code = ''
+		state.standart.body = ''
 	},
 	SET_SANDART_PAGE(state, payload) {
 		state.standart_page = payload
@@ -26,9 +28,10 @@ const actions = {
 		return new Promise(async (resolve, reject) => {
 			try {
 				let perPage = typeof payload.perPage != 'undefined' ? payload.perPage : ''
+				let subject = typeof payload.subject != 'undefined' ? payload.subject : ''
 				commit('SET_LOADING', true, { root: true })
 
-				let network = await $axios.get(`standarts?page=${state.standart_page}&perPage=${perPage}`)
+				let network = await $axios.get(`standarts?s=${subject}&page=${state.standart_page}&perPage=${perPage}`)
 
 				commit('ASSIGN_DATA_STANDARTS', network.data.data)
 				commit('SET_LOADING', false, { root: true })

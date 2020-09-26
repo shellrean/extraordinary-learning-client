@@ -27,16 +27,13 @@
             <div class="row">
                 <div class="col-md-8">
                     <table class="table table-borderless table-sm">
-                        <tr v-for="item in myclassrooms" :key="item.id">
+                        <tr v-for="item in filteredClassrooms" :key="item.id">
                             <td>
                                 <div class="card">
                                     <div class="card-header p-0 d-flex justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <b-button squared class="mr-1" variant="light-success" size="sm" @click="showSyllabus(item.id)" v-b-tooltip.hover.d50 title="Silabus" :disabled="isLoading">
-                                                <i class="flaticon-list-2"></i> Silabus
-                                            </b-button>
-                                            <b-button squared class="mr-1" variant="light-info" size="sm" @click="showLessonPlan(item.id)" v-b-tooltip.hover.d50 title="RPP" :disabled="isLoading">
-                                                <i class="flaticon-list-2"></i> RPP
+                                            <b-button squared class="mr-1" variant="light-primary" size="sm" @click="manageClassroom(item.classroom.id)" v-b-tooltip.hover.d50 title="Silabus" :disabled="isLoading">
+                                                <i class="flaticon-list-2"></i> Manage
                                             </b-button>
                                         </div>
                                     </div>
@@ -45,16 +42,14 @@
                                     <div class="card-body p-4 rounded-0">
                                         <div class="d-flex align-items-center">
                                             <div class="d-flex flex-column font-weight-bold">
-                                                <span class="text-dark mb-1 font-size-lg">{{ item.subject.name }}</span>
-                                                <span class="text-muted">{{ item.classroom.name }}</span>
+                                                <span class="text-dark mb-1 font-size-lg">{{ item.classroom.name }}</span>
                                             </div>
-                                            <a href="#" class="stretched-link"></a>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <tr v-if="myclassrooms.length === 0">
+                        <tr v-if="filteredClassrooms.length === 0">
                             <td class="text-muted">Tidak ada data kelas, silakan tambah terlebih daulu</td>
                         </tr>
                     </table>
@@ -79,6 +74,24 @@
                 </div>
             </div>
         </div>
+        <b-modal id="modal-manage" title="Manage" size="xl" @hide="classroomSubject = []" hide-footer>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr v-for="(classroom, index) in classroomSubject" :key="index">
+                        <td width="40px">{{ index + 1}}</td>
+                        <td>{{ classroom.subject.name }}</td>
+                        <td>
+                            <b-button squared class="mr-1" variant="light-primary" size="sm" @click="showSyllabus(classroom.id)" v-b-tooltip.hover.d50 title="Silabus" :disabled="isLoading">
+                                <i class="flaticon-list-2"></i> Manage
+                            </b-button>
+                            <b-button squared class="mr-1" variant="light-info" size="sm" @click="showLessonPlan(classroom.id)" v-b-tooltip.hover.d50 title="RPP" :disabled="isLoading">
+                                <i class="flaticon-list-2"></i> RPP
+                            </b-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </b-modal>
         <b-modal id="modal-syllabus" title="Silabus" size="lg" @hide="$store.commit('paper/CLEAR_DATA_PAPERS')" hide-footer>
             <Syllabus :id="show_id"/>
         </b-modal>
@@ -102,12 +115,24 @@ export default {
     },
     data() {
         return {
-            show_id: null
+            show_id: null,
+            classroomSubject: []
         }
     },
     computed: {
         ...mapGetters(['isLoading']),
-        ...mapState('classroom', ['myclassrooms'])
+        ...mapState('classroom', ['myclassrooms']),
+        filteredClassrooms() {
+			const result = []
+			const map = new Map()
+			for (const item of this.myclassrooms) {
+				if(!map.has(item.classroom.id)) {
+					map.set(item.classroom.id, true);
+					result.push(item)
+				}
+			}
+			return result;
+		},
     },
     methods: {
         ...mapActions('classroom', ['getDataClassromMine']),
@@ -131,6 +156,10 @@ export default {
             .catch((error) => {
                 this.$bvToast.toast(error.message, errorToas())
             })
+        },
+        manageClassroom(id) {
+            this.classroomSubject = this.myclassrooms.filter(item => item.classroom.id == id)
+            this.$bvModal.show('modal-manage')
         }
     },
     created() {
@@ -141,3 +170,8 @@ export default {
     }
 }
 </script>
+<style>
+	.table > tbody > tr > td {
+     vertical-align: middle;
+}
+</style>

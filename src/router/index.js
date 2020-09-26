@@ -221,7 +221,7 @@ Vue.use(VueRouter)
         ]
       },
       {
-        path: 'stand',
+        path: 'rt',
         component: StandartIndex,
         children: [
           {
