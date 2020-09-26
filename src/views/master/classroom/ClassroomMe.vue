@@ -43,6 +43,9 @@
 								<b-button squared variant="light-success" size="sm" v-if="typeof authenticated.classroom != 'undefined' && authenticated.classroom.id == classroom.classroom.id" @click="getStudents(authenticated.classroom.id)" :disabled="isLoading" v-b-tooltip.hover title="Daftar siswa kelas" >
 									<i class="flaticon-user"></i> Siswa kelas
 								</b-button>
+								<b-button squared variant="light-info" size="sm" v-b-tooltip.hover title="Ke lobi kelas" :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" >
+									<i class="flaticon-home-2"></i> Dashboard
+								</b-button>
 							</div>
 						</div>
 					</div>

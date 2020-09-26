@@ -46,19 +46,44 @@
 											</div>
 										</div>
 									</div>
+									<a href="#" @click="manageStandart(item.subject.id)" class="stretched-link" :disabled="isLoading"></a>
 								</div>
               </td>
             </tr>
           </table>
 				</div>
+				<div class="col-md-4">
+          <div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+            <div class="alert-icon">
+              <i class="flaticon-info"></i>
+            </div>
+            <div class="alert-text">
+              <strong>Informasi</strong><br>
+              Klik manage untuk menambah kompetensi dasar dan kompetensi inti baru 
+            </div>
+            <div class="alert-close">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">
+                  <i class="ki ki-close"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
 			</div>
 		</div>
 		<b-modal id="modal-manage" size="xl" title="Manage" hide-footer>
 			<template v-slot:modal-header>
-				<b-button variant="primary" v-b-modal.modal-create>
-					<i class="flaticon2-add-square"></i>
-					Tambah Kompetensi Inti
-				</b-button>
+				<div>
+					<b-button variant="primary" class="mr-1" v-b-modal.modal-create>
+						<i class="flaticon2-add-square"></i>
+						Tambah Kompetensi Inti
+					</b-button>
+					<a :href="`${baseURL}/api/v1/download/excel/standart?u=${authenticated.id}&s=${standart.subject_id}`" class="btn btn-success" v-if="standarts.length !== 0" download="">
+						<i class="flaticon-download"></i>
+						Download excel
+					</a>
+				</div>
 			</template>
 			<div class="row">
 				<div class="col-md-12">
@@ -200,8 +225,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['isLoading']),
+		...mapGetters(['isLoading','baseURL']),
 		...mapState('classroom', ['myclassrooms']),
+		...mapState('user', ['authenticated']),
 		...mapState('standart',['standart','standarts']),
     filteredSubjects() {
 			const result = []

@@ -46,6 +46,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <a href="#" @click="manageClassroom(item.classroom.id)" class="stretched-link"></a>
                                 </div>
                             </td>
                         </tr>
@@ -82,7 +83,7 @@
                         <td>{{ classroom.subject.name }}</td>
                         <td>
                             <b-button squared class="mr-1" variant="light-primary" size="sm" @click="showSyllabus(classroom.id)" v-b-tooltip.hover.d50 title="Silabus" :disabled="isLoading">
-                                <i class="flaticon-list-2"></i> Manage
+                                <i class="flaticon-list-2"></i> Silabus
                             </b-button>
                             <b-button squared class="mr-1" variant="light-info" size="sm" @click="showLessonPlan(classroom.id)" v-b-tooltip.hover.d50 title="RPP" :disabled="isLoading">
                                 <i class="flaticon-list-2"></i> RPP

@@ -9,7 +9,7 @@
                     <a :href="`${baseURL}/storage/${paper.file_location}`" download="" target="_blank" v-b-tooltip.hover.d50  :title="paper.body">{{ paper.file_location }}</a>
                 </td>
                 <td>
-                    <b-button size="sm" variant="secondary" @click="remove(paper.id)" :disabled="isLoading"><i class="flaticon2-trash"></i> Hapus</b-button>
+                    <b-button size="sm" variant="light-danger" @click="remove(paper.id)" :disabled="isLoading"><i class="flaticon2-trash"></i> Hapus</b-button>
                 </td>
             </tr>
             <tr v-if="papers.length === 0">
