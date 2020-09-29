@@ -28,6 +28,7 @@
         <div class="col-md-8">
           <div class="list-group">
             <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapAbcent">Rekapitulasi Absensi</a>
+            <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapResultExam">Rekapitulasi Hasil Ulangan</a>
           </div>
         </div>
         <div class="col-md-4">
@@ -53,17 +54,21 @@
     <b-modal id="modal-recap-abcent" title="Rekapitulasi absensi" hide-footer>
       <RecapAbcent />
     </b-modal>
+    <b-modal id="modal-recap-result-exam" title="Rekapitulasi hasil ulangan" hide-footer>
+      <RecapResultExam />
+    </b-modal>
   </div>
 </template>
 <script>
 import RecapAbcent from './RecapAbcent'
+import RecapResultExam from './RecapResultExam'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { BButton } from 'bootstrap-vue'
 
 export default {
   name: 'RecapDashboard',
   components: {
-    RecapAbcent, BButton
+    RecapAbcent, BButton, RecapResultExam
   },
   computed: {
     ...mapGetters(['isLoading'])
@@ -71,6 +76,9 @@ export default {
   methods: {
     recapAbcent() {
       this.$bvModal.show('modal-recap-abcent');
+    },
+    recapResultExam() {
+      this.$bvModal.show('modal-recap-result-exam');
     }
   }
 }

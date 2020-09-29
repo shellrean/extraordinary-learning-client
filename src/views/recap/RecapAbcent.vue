@@ -22,7 +22,7 @@
             <input type="date" class="form-control" v-model="end">
         </div>
         <div class="form-group">
-            <a traget="_blank" :disabled="isLoading" :href="`${baseURL}/api/v1/download/excel/recap-abcent?c=${classroom}&f=${from}&e=${end}&s=${schedule_id}`" class="btn btn-block btn-primary" download="">Download</a>
+            <a traget="_blank" :disabled="isLoading" :href="`${baseURL}/api/v1/download/excel/recap/abcent?c=${classroom}&f=${from}&e=${end}&s=${schedule_id}`" class="btn btn-block btn-primary" download="">Download</a>
         </div>
     </div>
 </template>
