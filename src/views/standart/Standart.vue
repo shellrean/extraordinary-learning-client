@@ -79,7 +79,7 @@
 						<i class="flaticon2-add-square"></i>
 						Tambah Kompetensi Inti
 					</b-button>
-					<a :href="`${baseURL}/api/v1/download/excel/standart?u=${authenticated.id}&s=${standart.subject_id}`" class="btn btn-success" v-if="standarts.length !== 0" download="">
+					<a :href="`${baseURL}/api/v1/download/excel/standart?u=${authenticated.id}&s=${standart.subject_id}&token=${authenticated.token_download}`" class="btn btn-success" v-if="standarts.length !== 0" download="">
 						<i class="flaticon-download"></i>
 						Download excel
 					</a>

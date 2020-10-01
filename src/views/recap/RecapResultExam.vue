@@ -10,8 +10,8 @@
       <v-select label="name" :reduce="item => item.id" :options="schedules.data" v-model="schedule_ids" multiple>
 			</v-select>
     </div>
-    <div class="form-group">
-      <a traget="_blank" :disabled="isLoading" :href="`${baseURL}/api/v1/download/excel/recap/result/exams?c=${classroom_id}&e=${schedule_ids.toString()}`" class="btn btn-block btn-primary" download="">Download</a>
+    <div class="form-group" v-if="classroom_id != '' && schedule_ids != ''">
+      <a traget="_blank" :disabled="isLoading" :href="`${baseURL}/api/v1/download/excel/recap/result/exams?c=${classroom_id}&e=${schedule_ids.toString()}&token=${authenticated.token_download}`" class="btn btn-block btn-primary" download="">Download</a>
     </div>
   </div>
 </template>
@@ -37,6 +37,7 @@ export default {
     ...mapGetters(['isLoading','baseURL']),
     ...mapState('classroom', ['myclassrooms', 'schedules']),
     ...mapState('exam_schedule', ['schedules']),
+    ...mapState('user', ['authenticated']),
     classrooms() {
 			const result = []
 			const map = new Map()

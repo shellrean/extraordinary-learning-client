@@ -7,11 +7,14 @@
         </div>
         <div class="form-group">
             <label>Jadwal</label>
-            <select class="form-control" v-model="schedule_id">
-			    <option :value="schedule.id" v-for="schedule in schedules" :key="schedule.id">
-			    	{{ schedule.day | dayIndex }} ({{ schedule.from_time.substring(0, 5) }} - {{ schedule.end_time.substring(0,5) }})
-			    </option>
-			</select>
+            <v-select label="id" :reduce="item => item.id" :options="schedules" v-model="schedule_id" multiple>
+                <template v-slot:option="option">
+                    {{ option.day | dayIndex }} ({{ option.from_time.substring(0, 5) }} - {{ option.end_time.substring(0,5) }})
+                </template>
+                <template v-slot:selected-option="option">
+                    {{ option.day | dayIndex }} ({{ option.from_time.substring(0, 5) }} - {{ option.end_time.substring(0,5) }})
+                </template>
+			</v-select>
         </div>
         <div class="form-group">
             <label>Dari</label>
@@ -21,8 +24,8 @@
             <label>Sampai</label>
             <input type="date" class="form-control" v-model="end">
         </div>
-        <div class="form-group">
-            <a traget="_blank" :disabled="isLoading" :href="`${baseURL}/api/v1/download/excel/recap/abcent?c=${classroom}&f=${from}&e=${end}&s=${schedule_id}`" class="btn btn-block btn-primary" download="">Download</a>
+        <div class="form-group" v-if="classroom != '' && from != '' && end != '' && schedule_id != ''">
+            <a traget="_blank" :disabled="isLoading" :href="`${baseURL}/api/v1/download/excel/recap/abcent?c=${classroom}&f=${from}&e=${end}&s=${schedule_id.toString()}&token=${authenticated.token_download}`" class="btn btn-block btn-primary" download="">Download</a>
         </div>
     </div>
 </template>
@@ -50,6 +53,7 @@ export default {
     computed: {
         ...mapGetters(['isLoading','baseURL']),
         ...mapState('classroom', ['myclassrooms', 'schedules']),
+        ...mapState('user', ['authenticated']),
         classrooms() {
 			return this.myclassrooms.map(item => ({
                 id: item.id,
