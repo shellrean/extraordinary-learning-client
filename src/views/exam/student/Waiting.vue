@@ -85,7 +85,7 @@ export default {
                     if(this.schedules.length == 1) {
                         index = 0;    
                     } else {
-                        index = this.schedules.map(item => item.id).indexOf(this.ujian.exam_schedule_id)
+                        index = this.schedules.map(item => item.id).indexOf(this.active.exam_schedule_id)
                     }
                     if(index !== -1) {
                         this.datad = this.schedules[index]

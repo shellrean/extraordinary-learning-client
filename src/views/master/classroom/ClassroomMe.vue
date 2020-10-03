@@ -364,7 +364,29 @@ export default {
 		manageClassroom(id) {
 			this.classroomSubject = this.myclassrooms.filter(item => item.classroom.id == id);
 			this.$bvModal.show('modal-manage');
-		}
+		},
+		async deleteClassroomSubject(id) {
+			this.$swal({
+          title: 'Informasi',
+          text: "Kelas akan dihapus beserta dengan data yang terkait",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#c3c3c3',
+          confirmButtonText: 'Lanjutkan!'
+      }).then(async (result) => {
+      	if (result.value) {
+					try {
+						await this.deleteDataClassroomSubject(id)
+						this.$bvToast.toast('Kelas berhasil dihapus', successToas())
+						this.$bvModal.hide('modal-manage')
+						this.changeData()
+					} catch (error) {	
+						this.$bvToast.toast(error.message, errorToas())
+					}
+      	}	
+      })
+		},
 	},
 	created() {
 		this.changeData()

@@ -199,7 +199,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon2-crisp-icons"></i>
+            <i class="menu-icon flaticon-folder"></i>
             <span class="menu-text">Perangkat</span>
           </a>
         </li>
@@ -219,7 +219,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon-file-2"></i>
+            <i class="menu-icon flaticon-folder"></i>
             <span class="menu-text">Standart</span>
           </a>
         </li>
@@ -259,7 +259,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon-interface-11"></i>
+            <i class="menu-icon flaticon-folder"></i>
             <span class="menu-text">Materi</span>
           </a>
         </li>
@@ -299,7 +299,7 @@
           ]"
         >
           <a :href="href" class="menu-link" @click="navigate">
-            <i class="menu-icon flaticon-edit-1"></i>
+            <i class="menu-icon flaticon-folder"></i>
              <span class="menu-text">Tugas</span>
           </a>
         </li>
@@ -312,7 +312,7 @@
     v-if="$role('1')"
     >
       <a href="#" class="menu-link menu-toggle">
-        <i class="menu-icon flaticon-list-1"></i>
+        <i class="menu-icon flaticon-folder"></i>
         <span class="menu-text">Ulangan</span>
       </a>
       <div class="menu-submenu">

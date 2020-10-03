@@ -29,6 +29,7 @@
           <div class="list-group">
             <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapAbcent">Rekapitulasi Absensi</a>
             <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapResultExam">Rekapitulasi Hasil Ulangan</a>
+            <!-- <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapResultExam">Rekapitulasi Hasil Tugas</a> -->
           </div>
         </div>
         <div class="col-md-4">

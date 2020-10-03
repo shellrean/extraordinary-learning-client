@@ -61,7 +61,7 @@
                         </tr>
                     </table>
                 </div>
-                <div class="card-footer p-4">
+                <div class="card-footer p-4" v-if="filleds[questionIndex]">
                     <div class="d-flex justify-content-between ">
                         <b-button variant="primary" class="sebelum" size="md"
                         @click="prev()" v-if="questionIndex != 0" :disabled="isLoading">
