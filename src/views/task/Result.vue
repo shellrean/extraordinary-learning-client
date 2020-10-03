@@ -54,11 +54,7 @@
 							<div class="col-lg-9 col-xl-8">
 								<div class="row align-items-center">
 									<div class="col-md-5 my-2 my-md-0">
-										<!-- <div class="input-icon"> -->
-											<!-- <span>
-												<i class="flaticon2-search-1 text-muted"></i>
-											</span>
-										</div> -->
+										
 										<div class="input-group mb-3">
 											<select class="form-control" v-model="classroom_id">
 												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms" :key="classroom.id">{{ classroom.classroom.name }}</option>

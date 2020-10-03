@@ -27,9 +27,9 @@
       <div class="row mt-2">
         <div class="col-md-8">
           <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapAbcent">Rekapitulasi Absensi</a>
-            <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapResultExam">Rekapitulasi Hasil Ulangan</a>
-            <!-- <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click="recapResultExam">Rekapitulasi Hasil Tugas</a> -->
+            <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click.prevent="recapAbcent">Rekapitulasi Absensi</a>
+            <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click.prevent="recapResultExam">Rekapitulasi Hasil Ulangan</a>
+            <a href="#" class="list-group-item list-group-item-action" :disabled="isLoading" @click.prevent="recapResultTask">Rekapitulasi Hasil Tugas</a>
           </div>
         </div>
         <div class="col-md-4">
@@ -58,18 +58,22 @@
     <b-modal id="modal-recap-result-exam" title="Rekapitulasi hasil ulangan" hide-footer>
       <RecapResultExam />
     </b-modal>
+    <b-modal id="modal-recap-result-task" title="Rekapitulasi hasil tugas" hide-footer>
+      <RecapResultTask />
+    </b-modal>
   </div>
 </template>
 <script>
 import RecapAbcent from './RecapAbcent'
 import RecapResultExam from './RecapResultExam'
+import RecapResultTask from './RecapResultTask'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { BButton } from 'bootstrap-vue'
 
 export default {
   name: 'RecapDashboard',
   components: {
-    RecapAbcent, BButton, RecapResultExam
+    RecapAbcent, BButton, RecapResultExam, RecapResultTask
   },
   computed: {
     ...mapGetters(['isLoading'])
@@ -80,6 +84,9 @@ export default {
     },
     recapResultExam() {
       this.$bvModal.show('modal-recap-result-exam');
+    },
+    recapResultTask() {
+      this.$bvModal.show('modal-recap-result-task');
     }
   }
 }

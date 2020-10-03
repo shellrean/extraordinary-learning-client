@@ -41,7 +41,7 @@
 													<option :value="classroom.classroom.id" v-for="classroom in myclassrooms" :key="classroom.id">{{ classroom.classroom.name }}</option>
 												</select>
 											<div class="input-group-append">
-												<button class="btn btn-primary" type="button" @click="getData">Tampilkan</button>
+												<button class="btn btn-primary" type="button" @click="getData" :disabled="isLoading">Tampilkan</button>
 											</div>
 										</div>
 									</div>
@@ -57,36 +57,32 @@
                         :items="classroom_submit_tasks"
                         >
                         	<template v-slot:cell(name)="row">
-                        		<span>
+                        		<span @click.prevent="showData(row.item.id)">
                         			<div class="d-flex align-items-center">
-                        				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">
-                        					<span class="symbol-label font-size-h4 font-weight-bold ">
-                        						{{ row.item.student.name.charAt(0) }}
-                        					</span>
-                        				</div>
-                        				<div class="ml-4 d-flex flex-column">
+                        				<div class="d-flex flex-column">
                         					<a href="#" @click.prevent="showData(row.item.id)" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.student.name"></a>
-                        					<span class="text-muted">{{ row.item.created_at }}</span>
+                        					<span class="text-muted" >{{ row.item.created_at }}</span>
                         				</div>
                         			</div>
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-	                        	<b-dropdown size="lg"  variant="link" toggle-class="text-decoration-none" no-caret>
+	                        	<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
 									<template v-slot:button-content>
-									    <i class="flaticon-more"></i>
+									    <span class="flaticon-more text-secondary"></span>
 									</template>
+									<b-dropdown-item @click="showData(row.item.id)">Lihat</b-dropdown-item>
 									<b-dropdown-item @click="deleteAssignment(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
                     		<div class="d-flex align-items-center py-3">
+							<span class="badge badge-primary">Total {{ classroom_submit_tasks.length }} data</span>
 								<div class="d-flex align-items-center" v-if="isLoading">
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
 								</div>
-							<span class="badge badge-primary">Total {{ classroom_submit_tasks.length }} data</span>
 							</div>
                     	</div>
 					</div>
@@ -97,7 +93,7 @@
 			      style="max-height: 60vh; position: relative;"
 			    >
 			    	<div  v-if="typeof use_data.content != 'undefined'">
-						<div v-for="file in use_data.content.file">
+						<div v-for="file in use_data.content.file" :key="file.id">
 							<img :src="`${baseURL}/storage/attachment/${file}`" class="img-thumbnail"  v-if="file.match(/jpg.*/) || file.match(/png.*/)">
 							<a :href="`${baseURL}/storage/attachment/${file}`" target="_blank" v-else>{{ file }}</a>
 						</div>
@@ -106,8 +102,8 @@
 			    		
 			    	</div>
 				</VuePerfectScrollbar>
-				<div class="form-group mb-3">
-				  <input type="number" :min="0" :max="100" class="form-control form-control-lg form-control-solid" placeholder="Nilai: 0 - 100" v-model.number="point">
+				<div class="form-group mb-3 mt-5">
+				  <input type="number" :min="0" :max="100" class="form-control" placeholder="Nilai: 0 - 100" v-model.number="point">
 				</div>
 				<template v-slot:modal-footer="{ cancel }">
 			      <b-button size="sm" variant="primary" @click="submit" :disabled="isLoading">

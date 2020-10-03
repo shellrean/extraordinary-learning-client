@@ -155,6 +155,9 @@ export default {
 		.catch((error) => {
 			this.$bvToast.toast(error.message, errorToas())
 		})
+	},
+	destroyed() {
+		this.$store.state.result.results = []
 	}
 }
 </script>

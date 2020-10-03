@@ -30,7 +30,7 @@
 					</div>
 					<div class="form-group">
 						<label>Deadline</label>
-						<VueCtkDateTimePicker v-model="task.deadline" format='YYYY-MM-DD hh:mm'/>
+						<VueCtkDateTimePicker v-model="task.deadline" format='YYYY-MM-DD HH:mm' formatted="YYYY-MM-DD HH:mm"/>
 					</div>
 				</div>
 			</div>
