@@ -55,7 +55,7 @@
                         >
                        		 <template v-slot:cell(title)="row">
                         		<span>
-                        			<div class="d-flex align-items-center" @click="$router.push({ name: 'task.view', params: { id: row.item.id }})">
+                        			<div class="d-flex align-items-center" @click="$router.push({ name: 'task.view', params: { id: row.item.id }})" role="button">
                         				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">					
                         					<span class="symbol-label font-size-h4 font-weight-bold ">
                         						<i class="flaticon-edit-1 text-primary"></i>
@@ -71,6 +71,7 @@
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
+														<div class="text-right">
 														<b-button variant="light-primary" class="btn-icon" size="sm mr-1" @click="sharee(row.item.id)" v-b-tooltip.hover title="Bagikan tugas ke kelas"><i class="flaticon2-paper-plane"></i></b-button>
 														<b-button variant="light-primary" class="btn-icon" size="sm mr-1" :to="{ name: 'task.check', params: { id: row.item.id }}" v-b-tooltip.hover title="Koreksi tugas"><i class="flaticon2-rectangular"></i></b-button>
 														<b-button variant="light-primary" class="btn-icon" size="sm mr-1" :to="{ name: 'task.result', params: { id: row.item.id }}" v-b-tooltip.hover title="Lihat hasil nilai"><i class="flaticon2-crisp-icons"></i></b-button>
@@ -82,6 +83,7 @@
 									<b-dropdown-item :to="{ name: 'task.edit', params: { id: row.item.id }}">Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteTask(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
+														</div>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">

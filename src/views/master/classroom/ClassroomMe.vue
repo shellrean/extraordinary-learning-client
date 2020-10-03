@@ -33,43 +33,66 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-4" v-for="(classroom, index) in filteredClassrooms" :key="index">
-					<div class="card">
-						<div class="card-header p-0 d-flex justify-content-between">
-							<div class="d-flex align-items-center">
-								<b-button squared variant="light-primary" size="sm" :disabled="isLoading" @click="manageClassroom(classroom.classroom.id)" v-b-tooltip.hover title="Manage" >
-									<i class="flaticon-list-2"></i> Manage
-								</b-button>
-								<b-button squared variant="light-success" size="sm" v-if="typeof authenticated.classroom != 'undefined' && authenticated.classroom.id == classroom.classroom.id" @click="getStudents(authenticated.classroom.id)" :disabled="isLoading" v-b-tooltip.hover title="Daftar siswa kelas" >
-									<i class="flaticon-user"></i> Siswa kelas
-								</b-button>
-								<b-button squared variant="light-info" size="sm" v-b-tooltip.hover title="Ke lobi kelas" :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" >
-									<i class="flaticon-home-2"></i> Dashboard
-								</b-button>
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-8" v-if="filteredClassrooms.length == 0">
+							<div class="">
+								<p class="text-muted 5 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas, silakan tambah kelas anda mengajar terlebih dahulu</p>
 							</div>
 						</div>
-					</div>
-					<div class="card" >
-					 	<div class="card-body p-4 ribbon ribbon-clip ribbon-right">
-							<div class="ribbon-target" style="top: 5px;" v-if="typeof authenticated.classroom != 'undefined' && authenticated.classroom.id == classroom.classroom.id">
-								<span class="ribbon-inner bg-primary"></span>Wali kelas
-							</div>
-							<div class="d-flex align-items-center">
-								<div class="d-flex flex-column flex-grow-1 font-weight-bold">
-									<span class="text-dark mb-1 font-size-lg">
-										{{ classroom.classroom.name }}
-									</span>
+						<div class="col-md-8" v-for="(classroom, index) in filteredClassrooms" :key="index">
+							<div class="card">
+								<div class="card-header p-0 d-flex justify-content-between">
+									<div class="d-flex align-items-center">
+										<b-button squared variant="light-primary" size="sm" :disabled="isLoading" @click="manageClassroom(classroom.classroom.id)" v-b-tooltip.hover title="Manage" >
+											<i class="flaticon-list-2"></i> Manage
+										</b-button>
+										<b-button squared variant="light-success" size="sm" v-if="typeof authenticated.classroom != 'undefined' && authenticated.classroom.id == classroom.classroom.id" @click="getStudents(authenticated.classroom.id)" :disabled="isLoading" v-b-tooltip.hover title="Daftar siswa kelas" >
+											<i class="flaticon-user"></i> Siswa kelas
+										</b-button>
+										<b-button squared variant="light-info" size="sm" v-b-tooltip.hover title="Ke lobi kelas" :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" >
+											<i class="flaticon-home-2"></i> Dashboard
+										</b-button>
+									</div>
 								</div>
 							</div>
-							<router-link :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" class="stretched-link"></router-link>
+							<div class="card" >
+								<div class="card-body p-4 ribbon ribbon-clip ribbon-right">
+									<div class="ribbon-target" style="top: 5px;" v-if="typeof authenticated.classroom != 'undefined' && authenticated.classroom.id == classroom.classroom.id">
+										<span class="ribbon-inner bg-primary"></span>Wali kelas
+									</div>
+									<div class="d-flex align-items-center">
+										<div class="d-flex flex-column flex-grow-1 font-weight-bold">
+											<span class="text-dark mb-1 font-size-lg">
+												{{ classroom.classroom.name }}
+											</span>
+										</div>
+									</div>
+									<router-link :to="{ name: 'master.classroom.dashboard', params: { id: classroom.classroom_id }}" class="stretched-link"></router-link>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="alert alert-custom alert-light-primary fade show mb-5" role="alert">
+							<div class="alert-icon">
+								<i class="flaticon-info"></i>
+							</div>
+							<div class="alert-text">
+								<strong>Informasi</strong><br>
+							Klik manage untuk mengatur jadwal dan laporam absensi
+							</div>
+							<div class="alert-close">
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">
+										<i class="ki ki-close"></i>
+									</span>
+								</button>
+							</div>
+						</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12" v-if="filteredClassrooms.length == 0">
-					<div class="">
-						<p class="text-muted 5 font-size-lg font-weight-normal pt-5 mb-2">Tidak ada kelas, silakan tambah kelas anda mengajar terlebih dahulu</p>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 		<b-modal id="modal-create" title="Kelas">
@@ -90,13 +113,13 @@
 						<td width="40px">{{ index + 1 }}</td>
 						<td>{{ classroom.subject.name }}</td>
 						<td>
-							<b-button squared class="mr-1" variant="light-success" size="sm" @click="getSchedules(classroom.id)" v-b-tooltip.hover title="Daftar jadwal" :disabled="isLoading">
+							<b-button class="mr-1" variant="light-success" size="sm" @click="getSchedules(classroom.id)" v-b-tooltip.hover title="Daftar jadwal" :disabled="isLoading">
 								<i class="flaticon-list-2"></i> Jadwal
 							</b-button>
-							<b-button squared class="mr-1" variant="light-warning" size="sm" @click="modalAbsent(classroom.id)" v-b-tooltip.hover title="Laporan absensi" :disabled="isLoading">
+							<b-button class="mr-1" variant="light-warning" size="sm" @click="modalAbsent(classroom.id)" v-b-tooltip.hover title="Laporan absensi" :disabled="isLoading">
 								<i class="flaticon-interface-10"></i> Laporan
 							</b-button>
-							<b-button squared variant="light-danger" size="sm" @click="deleteClassroomSubject(classroom.id)" v-b-tooltip.hover title="Hapus kelas" :disabled="isLoading">
+							<b-button variant="light-danger" size="sm" @click="deleteClassroomSubject(classroom.id)" v-b-tooltip.hover title="Hapus kelas" :disabled="isLoading">
 								<i class="flaticon2-trash"></i> Hapus
 							</b-button>
 						</td>

@@ -55,7 +55,7 @@
                         >
                         	<template v-slot:cell(title)="row">
                         		<span>
-                        			<div class="d-flex align-items-center">
+                        			<div class="d-flex align-items-center" @click="$router.push({ name: 'lecture.view', params: { id: row.item.id }})" role="button">
                         				<div class="symbol symbol-40 symbol-light-primary symbol-sm flex-shrink-0">					
                         					<span class="symbol-label font-size-h4 font-weight-bold ">
                         						<i class="flaticon-earth-globe text-primary"></i>
@@ -70,15 +70,17 @@
                         	</template>
                         	
                         	<template v-slot:cell(actions)="row">
-                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
+														<div class="text-right">
+														<b-button variant="light-primary" class="btn-icon" size="sm mr-1"  @click="shareeLecutre(row.item.id)" v-b-tooltip.hover title="Bagikan materi ke kelas"><i class="flaticon2-paper-plane"></i></b-button>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon"  v-b-tooltip.hover title="Menu lainnya">
 									<template v-slot:button-content>
 									    <span class="flaticon-more text-secondary"></span>
 									</template>
 									<b-dropdown-item  :to="{ name: 'lecture.view', params: { id: row.item.id }}">Lihat</b-dropdown-item>
-									<b-dropdown-item @click="shareeLecutre(row.item.id)">Bagikan</b-dropdown-item>
 									<b-dropdown-item :to="{ name: 'lecture.edit', params: { id: row.item.id}}" >Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteLecture(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
+														</div>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">

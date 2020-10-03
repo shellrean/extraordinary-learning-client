@@ -23,7 +23,7 @@
 						{{ student.student.name }}
 					</td>
 					<td width="110px">
-						<b-button size="sm" variant="secondary" @click="deleteFromClassroom(student.student.id, authenticated.classroom.id)" :disabled="isLoading">
+						<b-button size="sm" variant="light-danger" @click="deleteFromClassroom(student.student.id, authenticated.classroom.id)" :disabled="isLoading">
 							<i class="flaticon2-trash"></i> Hapus
 						</b-button>
 					</td>

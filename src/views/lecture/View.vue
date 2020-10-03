@@ -6,6 +6,10 @@
 					<div class="col-md-8">	
 						<div class="card card-custom shadow-none border">
 							<div class="card-header flex-wrap pt-6 pb-6">
+								<div class="d-flex align-items-center" v-if="isLoading">
+									<div class="mr-2 text-muted">Loading...</div>
+									<div class="spinner spinner-primary mr-10"></div>
+								</div>
 								<h3 class="card-title align-items-start flex-column">
 									<span class="card-label font-weight-bolder text-dark">{{ lecture.title }}</span>
 									<span class="text-muted mt-1 font-weight-bold font-size-sm">{{ lecture.created_at }}</span>
@@ -58,6 +62,9 @@ export default {
 		} catch (error) {
 
 		}
+	},
+	destroyed() {
+		this.$store.state.lecture.lecture = {}
 	}
 }
 </script>

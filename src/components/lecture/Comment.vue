@@ -104,5 +104,8 @@ export default {
 			this.scrollToEnd()
 		})
 	},
+	destroyed() {
+		this.$store.state.lecture.comments = []
+	}
 }
 </script>

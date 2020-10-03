@@ -96,13 +96,12 @@
 							</template>
 							<template v-slot:cell(actions)="row">
 								<div class="text-right">
-
-                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
+									<b-button variant="light-primary" class="btn-icon" size="sm mr-1" :to="{ name: 'exam.schedule.check', params: { id: row.item.id }}" v-b-tooltip.hover title="Koreksi jawaban esay siswa"><i class="flaticon2-rectangular"></i></b-button>
+									<b-button variant="light-primary" class="btn-icon" size="sm mr-1" :to="{ name: 'exam.schedule.point', params: { id: row.item.id }}" v-b-tooltip.hover title="Lihat hasil ulangan"><i class="flaticon2-crisp-icons"></i></b-button>
+                        		<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon"  v-b-tooltip.hover title="Menu lainnya">
 									<template v-slot:button-content>
 									    <span class="flaticon-more text-secondary"></span>
 									</template>
-									<b-dropdown-item :to="{ name: 'exam.schedule.point', params: { id: row.item.id }}">Hasil</b-dropdown-item>
-									<b-dropdown-item :to="{ name: 'exam.schedule.check', params: { id: row.item.id }}">Koreksi esay</b-dropdown-item>
 									<b-dropdown-item @click="getData(row.item.id)">Edit</b-dropdown-item>
 									<b-dropdown-item @click="deleteData(row.item.id)">Hapus</b-dropdown-item>
 								</b-dropdown>
