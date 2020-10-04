@@ -24,27 +24,10 @@
 					</div>
 					<div class="card-toolbar">
 						<div class="">
-							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary">
+							<router-link :to="{ name: 'task.index' }" class="btn btn-light-primary mr-2">
 								<i class="flaticon2-left-arrow-1"></i>Kembali
 							</router-link>
-							<b-dropdown  variant="link" toggle-class="text-decoration-none" no-caret v-if="classroom_id != ''">
-								<template v-slot:button-content>
-									<b-button variant="primary" class="font-weight-bolder font-size-sm">
-										<i class="flaticon-interface-11"></i>
-										Export/Cetak
-									</b-button>
-								</template>
-								<b-dropdown-item @click="print">Cetak/Pdf</b-dropdown-item>
-								<b-dropdown-item>
-									 <download-excel
-	                                :data = "classroom_results"
-	                                :fields="json_fields"
-	                                :name="'Hasil tugas.xls'"
-	                            >
-	                                Download hasil ujian
-	                            </download-excel>
-								</b-dropdown-item>
-							</b-dropdown>
+							<a class="btn btn-success" :href="`${baseURL}/api/v1/download/excel/result/task?t=${$route.params.id}&c=${classroom_id}&token=${authenticated.token_download}`" target="_blank" download v-if="classroom_id != '' && classroom_id != null"><i class="flaticon-download"></i> Download excel</a>
 						</div>
 					</div>
 				</div>
@@ -55,24 +38,18 @@
 								<div class="row align-items-center">
 									<div class="col-md-5 my-2 my-md-0">
 										
-										<div class="input-group mb-3">
-											<select class="form-control" v-model="classroom_id">
-												<option :value="classroom.classroom.id" v-for="classroom in myclassrooms" :key="classroom.id">{{ classroom.classroom.name }}</option>
-											</select>
-											<div class="input-group-append">
-									<button @click="getData" :disabled="isLoading" class="btn btn-primary">Tampilkan</button>
-											</div>
-										</div>
+											<v-select label="name" :reduce="item => item.id" :options="classrooms" v-model="classroom_id">
+
+											</v-select>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="table-responsive-md" id="printMe">
+					<div class="table-responsive-md" id="printMe" v-if="classroom_id !=  '' && classroom_id != null && classroom_results.length !== 0">
 						<b-table 
-						bordered
+						small
                         id="table-transition-example" 
-                        show-empty
                         :fields="fields"
                         :items="classroom_results"
                         >
@@ -89,6 +66,7 @@
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
                     		<div class="d-flex align-items-center py-3">
+													<span class="badge badge-primary mr-1">Total {{ classroom_results.length }} data</span>
 								<div class="d-flex align-items-center" v-if="isLoading">
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
@@ -96,6 +74,8 @@
 							</div>
                     	</div>
                 	</div>
+					<p class="text-muted" v-if="classroom_id != '' && classroom_id != null && classroom_results.length == 0">Tidak ada nilai tugas untuk saat ini, silakan koreksi terlebih daulu untuk melihat nilai</p>
+				<p class="text-muted" v-if="classroom_id == '' || classroom_id == null"><i class="flaticon2-information"></i> Pilih kelas yang ingin ditampilkan</p>
 				</div>
 			</div>
 		</div>
@@ -105,30 +85,41 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { errorToas, successToas } from '@/core/entities/notif'
 import { BDropdown, BDropdownItem, BButton } from 'bootstrap-vue'
-import downloadExcel from 'vue-json-excel';
+import VSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
 export default {
 	name: 'TaskResult',
 	components: {
-		BDropdownItem, BDropdown, BButton, downloadExcel
+		BDropdownItem, BDropdown, BButton, VSelect
 	},
 	data: () => ({
 		classroom_id: '',
 		fields: [
-			{ key: 'uid', label: 'NIS' },
+			{ key: 'student.uid', label: 'NIS' },
 			{ key: 'name', label:'Nama' },
-			{ key: 'result', label: 'Hasil' }
+			{ key: 'result', label: 'Nilai' }
 		],
-		json_fields: {
-			'NIS': 'uid',
-			'NAMA PESERTA DIDIK': 'name',
-			'NILAI': 'result.point'
-		}
 	}),
 	computed: {
-		...mapGetters(['isLoading']),
+		...mapState('user',['authenticated']),
+		...mapGetters(['isLoading','baseURL']),
 		...mapState('task', ['classroom_results']),
-		...mapState('classroom', ['myclassrooms'])
+		...mapState('classroom', ['myclassrooms']),
+		classrooms() {
+			const result = []
+			const map = new Map()
+			for (const item of this.myclassrooms) {
+				if(!map.has(item.classroom.id)) {
+					map.set(item.classroom.id, true);
+					result.push(item)
+				}
+			}
+			return result.map(item => ({
+				id: item.classroom.id,
+				name: item.classroom.name
+		}));
+		}
 	},
 	methods: {
 		...mapActions('task', ['getDataClassroomTaskResults']),
@@ -151,6 +142,13 @@ export default {
 		.catch((error) => {
 			this.$bvToast.toast(error.message, errorToas())
 		})
+	},
+	watch: {
+		classroom_id(val) {
+			if(val != '' && val != null) {
+				this.getData()
+			}
+		}
 	}
 }
 </script>

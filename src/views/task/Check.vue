@@ -36,20 +36,15 @@
 							<div class="col-lg-9 col-xl-8">
 								<div class="row align-items-center">
 									<div class="col-md-5 my-2 my-md-0">
-											<div class="input-group mb-3">
-												<select class="form-control" v-model="classroom_id">
-													<option :value="classroom.classroom.id" v-for="classroom in myclassrooms" :key="classroom.id">{{ classroom.classroom.name }}</option>
-												</select>
-											<div class="input-group-append">
-												<button class="btn btn-primary" type="button" @click="getData" :disabled="isLoading">Tampilkan</button>
-											</div>
-										</div>
+											<v-select label="name" :reduce="item => item.id" :options="classrooms" v-model="classroom_id">
+
+											</v-select>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="table-responsive-md">
+					<div class="table-responsive-md"  v-if="classroom_id !=  '' && classroom_id != null && classroom_submit_tasks.length !== 0">
 						<b-table 
                         id="table-transition-example" 
                         show-empty
@@ -57,7 +52,7 @@
                         :items="classroom_submit_tasks"
                         >
                         	<template v-slot:cell(name)="row">
-                        		<span @click.prevent="showData(row.item.id)">
+                        		<span @click.prevent="showData(row.item.id)" role="button">
                         			<div class="d-flex align-items-center">
                         				<div class="d-flex flex-column">
                         					<a href="#" @click.prevent="showData(row.item.id)" class="text-dark-75 text-hover-primary font-weight-bolder font-size-lg mb-0" v-text="row.item.student.name"></a>
@@ -67,18 +62,21 @@
                         		</span>
                         	</template>
                         	<template v-slot:cell(actions)="row">
-	                        	<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
-									<template v-slot:button-content>
-									    <span class="flaticon-more text-secondary"></span>
-									</template>
-									<b-dropdown-item @click="showData(row.item.id)">Lihat</b-dropdown-item>
-									<b-dropdown-item @click="deleteAssignment(row.item.id)">Hapus</b-dropdown-item>
-								</b-dropdown>
+														<div class="text-right">
+
+															<b-dropdown variant="link" toggle-class="text-decoration-none" no-caret  class="bg-hover-light-primary rounded-pill btn-icon">
+										<template v-slot:button-content>
+												<span class="flaticon-more text-secondary"></span>
+										</template>
+										<b-dropdown-item @click="showData(row.item.id)">Lihat</b-dropdown-item>
+										<b-dropdown-item @click="deleteAssignment(row.item.id)">Hapus</b-dropdown-item>
+									</b-dropdown>
+														</div>
                         	</template>
                     	</b-table>
                     	<div class="d-flex justify-content-between align-items-center flex-wrap mt-5">
                     		<div class="d-flex align-items-center py-3">
-							<span class="badge badge-primary">Total {{ classroom_submit_tasks.length }} data</span>
+							<span class="badge badge-primary mr-1">Total {{ classroom_submit_tasks.length }} data</span>
 								<div class="d-flex align-items-center" v-if="isLoading">
 									<div class="mr-2 text-muted">Loading...</div>
 									<div class="spinner spinner-primary mr-10"></div>
@@ -86,6 +84,8 @@
 							</div>
                     	</div>
 					</div>
+						<p class="text-muted" v-if="classroom_id != '' && classroom_id != null && classroom_submit_tasks.length == 0">Tidak ada tugas yang dapat dikoreksi saat ini atau siswa belum ada yang mengumpulkan</p>
+											<p class="text-muted" v-if="classroom_id == '' || classroom_id == null"><i class="flaticon2-information"></i> Pilih kelas yang ingin ditampilkan</p>
 				</div>
 			</div>
 			<b-modal id="modal-assign" title="Tugas siswa" size="lg">
@@ -119,11 +119,13 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import { errorToas, successToas } from '@/core/entities/notif'
 import { BButton, BDropdown, BDropdownItem} from 'bootstrap-vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import VSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
 export default {
 	name: 'TaskCheck',
 	components: {
-		BButton, BDropdown, BDropdownItem, VuePerfectScrollbar
+		BButton, BDropdown, BDropdownItem, VuePerfectScrollbar, VSelect
 	},
 	data: () => ({
 		classroom_id: '',
@@ -137,7 +139,21 @@ export default {
 	computed: {
 		...mapGetters(['isLoading','baseURL']),
 		...mapState('task', ['classroom_submit_tasks']),
-		...mapState('classroom', ['myclassrooms'])
+		...mapState('classroom', ['myclassrooms']),
+		classrooms() {
+			const result = []
+			const map = new Map()
+			for (const item of this.myclassrooms) {
+				if(!map.has(item.classroom.id)) {
+					map.set(item.classroom.id, true);
+					result.push(item)
+				}
+			}
+			return result.map(item => ({
+				id: item.classroom.id,
+				name: item.classroom.name
+			}));
+		},
 	},
 	methods: {
 		...mapActions('task', ['getDataUncheckedTask', 'deleteDataStudentTask', 'createNewTaskResult']),
@@ -201,6 +217,13 @@ export default {
 		.catch((error) => {
 			this.$bvToast.toast(error.message, errorToas())
 		})
+	},
+	watch: {
+		classroom_id(val) {
+			if(val != '' && val != null) {
+				this.getData()
+			}
+		}
 	}
 }
 </script>
