@@ -137,7 +137,7 @@
 						<div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
 					</div>
 				</div>
-				<div class="form-group" v-if="typeof user.id == 'undefined'">
+				<div class="form-group">
 					<label>
 						Password
 					</label>
