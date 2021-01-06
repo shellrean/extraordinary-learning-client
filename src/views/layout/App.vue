@@ -61,38 +61,44 @@ export default {
 	},
 	async created() {
 		try {
-			this.center.open();
-			this.channel = process.env.VUE_APP_KEY
-			if(typeof this.authenticated.name != 'undefined') {
-				this.center.emit('getin', {
-					user: this.authenticated,
-					channel: this.channel
-				});
+			if(process.env.VUE_APP_IS_CENTERED == true) {
+				this.center.open();
+				this.channel = process.env.VUE_APP_KEY
+				if(typeof this.authenticated.name != 'undefined') {
+					this.center.emit('getin', {
+						user: this.authenticated,
+						channel: this.channel
+					});
+				}
 			}
-
+			
 		} catch (error) {
 			this.$bvToast.toast(error.message, errorToas())
 		}
 	},
 	watch: {
 		authenticated() {
-			this.center.emit('getin', {
-				user: this.authenticated,
-				channel: this.channel
-			});
+			if(process.env.VUE_APP_IS_CENTERED == true) {
+				this.center.emit('getin', {
+					user: this.authenticated,
+					channel: this.channel
+				});
+			}
 		}
 	},
 	destroyed() {
-        this.center.emit('exit', { channel: this.channel })
-        this.center.close()
+		if(process.env.VUE_APP_IS_CENTERED == true) {
+			this.center.emit('exit', { channel: this.channel })
+        	this.center.close()
+		}
     },
 }
 </script>
 <style lang="css">
 	.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
+  		transition: opacity .5s;
+	}
+	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  		opacity: 0;
+	}
 </style>
