@@ -4,11 +4,11 @@ Extraordinary Learning Client adalah aplikasi client untuk manajemen pembelajara
 
 # Features!
 Umum
-    1. Dashboard
+## Dashboard
         - Menampilkan data sekolah
         - Menampilkan informasi
         - Menampilkan kegiatan mendatang
-Administrator
+## Administrator
     1. Siswa
         - Tambah siswa
         - Edit siswa
@@ -40,7 +40,7 @@ Administrator
         - Hapus kegiatan
     7. Setting
         - Edit data sekolah
-Guru
+## Guru
     1. Kelas
         - Tambah kelas mengajar
         - Hapus kelas mengajar
@@ -81,7 +81,7 @@ Guru
         - Filter tanggal
         - Export excel
         - Print/pdf 
-Siswa
+## Siswa
     1. Dashboard kelas
         - Tugas
         - Materi
@@ -92,7 +92,7 @@ Siswa
         - Pengumpulan tugas
     4. Ulangan
         - Mengerjakan ulangan
-Tambahan
+## Tambahan
     1. Notifikasi kepada kelas yang bersangkutan dari telegram saat membagikan materi & tugas
     2. Deadline tugas
     3. Tugas support image/file, esay
