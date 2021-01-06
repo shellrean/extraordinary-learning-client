@@ -1,4 +1,4 @@
-# ExtraordinaryCBT
+# ExtraordinaryLMS
 
 Extraordinary Learning Client adalah aplikasi client untuk manajemen pembelajaran jarak jauh, untuk absensi, materi, tugas, ujian sampai rekapitulasi dan analisis. dikemas dengan absensi yang otomatis, chat dan online siswa realtime.
 
